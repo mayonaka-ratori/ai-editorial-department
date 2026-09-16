@@ -211,19 +211,20 @@
   .cover .mag small{display:block;font-family:var(--num);font-size:11px;letter-spacing:.3em;margin-top:8px;font-weight:600;color:var(--cyan);text-orientation:mixed}
   .cover .issue{position:absolute;left:14px;top:14px;font-family:var(--num);font-size:12px;letter-spacing:.2em;color:var(--cyan);border:1px solid var(--line);padding:2px 8px}
   .cover .issue small{display:block;color:var(--mute);font-size:10px}
-  .cover .cols{position:absolute;top:70px;bottom:44px;left:12px;right:82px;display:flex;flex-direction:row-reverse;justify-content:space-between;gap:6px}
-  .cover .col{writing-mode:vertical-rl;text-orientation:mixed;height:100%}
-  .cover .sec{display:block;font-family:var(--num);font-size:10px;letter-spacing:.3em;color:var(--cyan);border-right:1px solid var(--cyan);padding-right:3px;margin-left:8px}
-  .cover .w{display:block;margin-left:7px}
-  .cover .w .t{display:inline;font-weight:900;letter-spacing:.1em;color:var(--white)}
-  .cover .w .a{display:inline;font-size:9px;color:var(--mute);margin-top:8px;letter-spacing:.05em}
-  .cover .kanto .w .t{font-size:22px;background:linear-gradient(#fff,#ffd86b);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 6px rgba(255,216,107,.5))}
-  .cover .tokushu .w .t{font-size:15px}
-  .cover .kanmatsu .w .t{font-size:11px;font-weight:700;color:#c9d8f2}
-  .cover .w .a::before{content:"\A";white-space:pre}
-  .cover .kanmatsu .w .a{font-size:9px}
+  .cover .cols{position:absolute;top:66px;bottom:40px;left:12px;right:80px;display:flex;gap:6px}
+  .cover .col{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:6px;border-left:1px solid rgba(53,214,255,.18);padding-left:5px}
+  .cover .col .vert{writing-mode:vertical-rl;text-orientation:mixed;height:64%;overflow:hidden}
+  .cover .sec{display:block;font-family:var(--num);font-size:9px;letter-spacing:.25em;color:var(--acc);border-right:1px solid var(--acc);padding-right:2px;margin-left:3px;height:auto}
+  .cover .w{display:block;margin-left:3px;line-height:1.1}
+  .cover .w .t{font-weight:900;letter-spacing:.06em;color:var(--white)}
+  .cover .w .a{font-size:8px;color:var(--mute);margin-top:6px;letter-spacing:.02em}
+  .cover .w.kanto .t{font-size:16px;background:linear-gradient(#fff,#ffd86b);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 6px rgba(255,216,107,.5))}
+  .cover .w.tokushu .t{font-size:10px}
+  .cover .small{font-size:8px;line-height:1.35;color:#9fb0cf;letter-spacing:.02em;border-top:1px solid rgba(53,214,255,.18);padding-top:4px}
+  .cover .small b{display:block;font-family:var(--num);font-size:8px;letter-spacing:.2em;color:var(--mute);font-weight:600}
   .cover .bottom{position:absolute;left:14px;right:14px;bottom:12px;display:flex;justify-content:space-between;font-family:var(--num);font-size:10px;color:var(--mute);letter-spacing:.15em;border-top:1px solid rgba(53,214,255,.35);padding-top:6px}
   .cover .w.new .t{animation:flashT 1.6s ease}
+  .cover .bottom span{white-space:nowrap}
   @keyframes flashT{30%{text-shadow:0 0 16px #fff,0 0 30px var(--cyan)}}
   .coverbar{display:flex;justify-content:space-between;align-items:center;font-family:var(--num);font-size:12px;letter-spacing:.1em;color:var(--mute)}
 
@@ -242,12 +243,12 @@
   #desk .book .edge{position:absolute;left:-10px;top:0;bottom:0;width:10px;background:linear-gradient(90deg,rgba(53,214,255,.4),rgba(53,214,255,.9));transform:rotateY(-90deg);transform-origin:right}
   #desk .book .back{position:absolute;inset:0;background:rgba(12,20,38,.6);transform:translateZ(-10px);border:1px solid var(--line)}
   #desk .cover .mag{font-size:36px}
-  #desk .cover .kanto .w .t{font-size:26px}
-  #desk .cover .tokushu .w .t{font-size:17px}
-  #desk .cover .kanmatsu .w .t{font-size:12px}
+  #desk .cover .w.kanto .t{font-size:19px}
+  #desk .cover .w.tokushu .t{font-size:11px}
+  #desk .cover .small{font-size:9px}
   #desk .side{position:absolute;right:40px;top:50px;width:280px;display:grid;gap:14px}
   #desk .side h2{font-size:26px;letter-spacing:.1em;color:var(--white)}
-  #desk .qr{width:96px;height:96px;background:conic-gradient(from 90deg at 50% 50%,#fff 25%,#070b16 0 50%,#fff 0 75%,#070b16 0);background-size:16px 16px;border:6px solid #fff;position:absolute;left:40px;bottom:40px}
+  #desk .qr{width:96px;height:96px;bottom:50px!important;background:conic-gradient(from 90deg at 50% 50%,#fff 25%,#070b16 0 50%,#fff 0 75%,#070b16 0);background-size:16px 16px;border:6px solid #fff;position:absolute;left:40px;bottom:40px}
   #desk .qrl{position:absolute;left:150px;bottom:60px;color:var(--white);font-size:14px;letter-spacing:.1em}
   #desk .ticker{position:absolute;left:0;right:0;top:0;padding:8px 16px;font-family:var(--num);font-size:13px;letter-spacing:.15em;color:var(--cyan);background:rgba(7,11,22,.6);border-bottom:1px solid var(--line);white-space:nowrap;overflow:hidden}
   #desk .ticker span{display:inline-block;animation:tick 30s linear infinite}
@@ -336,10 +337,11 @@
           <p class="comment" id="comment" style="margin-top:12px"></p>
           <div class="sealwrap"><div class="seal" id="seal"><div class="hex"></div><div class="hex in"></div><div class="orbit"></div><div class="txt" id="sealTxt"></div><div class="sub">PLACEMENT</div></div></div>
           <div class="titlebox fade" id="titlebox"><div><p class="label">TITLE</p><p class="t" id="title"></p></div><div class="a" id="author"></div></div>
+          <p class="fade" id="status" style="font-size:12px;color:#3f5577;margin-top:8px"></p>
           <p class="next fade" id="next" style="margin-top:10px"></p>
         </div>
         <div class="others fade" id="others"></div>
-        <div class="minicover" id="minicover"><div class="no">NO.3</div><div class="mag">月刊フェーブル</div><div class="mine" id="mine"></div></div>
+        <div class="minicover" id="minicover"><div class="no">2026 OCT</div><div class="mag">月刊フェーブル</div><div class="mine" id="mine"></div></div>
         <div class="actions fade" id="actions">
           <button class="btn" onclick="tweet()">Xに投稿する</button>
           <button class="btn soft" onclick="go('cover')">表紙を見る</button>
@@ -353,10 +355,11 @@
     <section class="screen" id="s-cover">
       <div class="space"></div>
       <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:12px">
-        <div class="coverbar"><button class="back" onclick="go('entry')">← 入口</button><span>NO.3　PRINTING 27 / 30</span></div>
-        <div class="gauge"><div class="bar"><i style="width:90%"></i></div></div>
+        <div class="coverbar"><button class="back" onclick="go('entry')">← 入口</button><span>2026年10月号　組版中</span></div>
         <div class="cover" id="cover"></div>
-        <div class="coverbar"><span>← NO.2</span><span>別冊フェーブル →</span></div>
+        <p class="label">TOC　目次（全員）</p>
+        <input type="text" id="tocq" placeholder="ペンネームで探す" style="font-size:13px">
+        <div id="toc" style="font-size:12px;color:#c9d8f2;display:grid;gap:4px"></div>
       </div>
     </section>
 
@@ -376,17 +379,17 @@
   <div id="desk">
     <div class="space"></div>
     <div class="floor"></div>
-    <div class="ticker"><span>NEW　『毛布いりますか』 終電のがし（二ナ推薦）　　『飲まないまま』 終電のがし（蔵人推薦）　　『たたまなくていい』 終電のがし（ソル推薦）　　『傘、まだ』 ゆ（ソル推薦）</span></div>
+    <div class="ticker"><span>NEW　『毛布いりますか』 終電のがし（二ナの列、巻頭）　　『飲まないまま』 終電のがし（蔵人の列、特集）　　『たたまなくていい』 終電のがし（ソルの列、特集）　　『前髪』 バス停（目次へ）</span></div>
+    <div class="ticker" style="top:auto;bottom:0;border-bottom:0;border-top:1px solid var(--line);color:var(--mute)"><span>目次　『前髪』バス停　『皆さんへ』本当の自分　『海苔』コンビニ　『返信』未送信　『窓際』テスト太郎　『三時』漫喫　『置き手紙』冷蔵庫　『4分遅れ』駅　『午後』カフェ　『火曜』ゆ</span></div>
     <div class="scene"><div class="book"><div class="back"></div><div class="edge"></div><div class="cover" id="cover2"></div></div></div>
     <div class="side">
-      <p class="label">NOW PRINTING</p>
-      <h2>第3号　印刷中</h2>
-      <div class="gauge"><div class="bar"><i style="width:90%"></i></div></div>
-      <p style="font-size:14px;color:#c9d8f2">27 / 30作。あと3作で第4号になります。</p>
+      <p class="label">NOW TYPESETTING</p>
+      <h2>2026年10月号　組版中</h2>
+      <p style="font-size:14px;color:#c9d8f2">表紙は30枠。編集者ごとに巻頭1、特集3、巻末6。<br>点数の高い作品が入ると、下の作品は目次に移ります。</p>
       <p class="label" style="margin-top:10px">TODAY</p>
-      <p style="font-size:14px;color:#c9d8f2">第1号、第2号を発行。持ち込み 287回。</p>
+      <p style="font-size:14px;color:#c9d8f2">持ち込み 287回。目次 212人。発行は17:00。</p>
     </div>
-    <div class="qr"></div><div class="qrl">持ち込みはこちらから</div>
+    <div class="qr"></div><div class="qrl" style="bottom:70px">持ち込みはこちらから</div>
   </div>
 
   <p class="hint">下のボタンで画面を切り替えられます。顔と空間の絵は仮のもので、あとで差し替えます。</p>
@@ -426,12 +429,13 @@ const EDITORS = {
     next:'この夜のことを、誰か1人に話しかける形で書き直してください。その1人は、緑茶を渡したかった人がいいと思います。',
     others:[['nina','ソルさんはいつも巻末ですね！'],['kurodo','ソルさんは厳しいので、ソルさんの巻末は、私なら特集くらいの評価です。']]},
 };
-const PLACE = {kanto:'巻頭',tokushu:'特集',kanmatsu:'巻末',bessatsu:'別冊',jigo:'次号待ち'};
+const PLACE = {kanto:'巻頭',tokushu:'特集',kanmatsu:'巻末',namae:'名前だけ',jigo:'次号待ち'};
 const COVER = {
-  kanto:[['毛布いりますか','終電のがし','二ナ',true],['傘、まだ','ゆ','ソル',false]],
-  tokushu:[['飲まないまま','終電のがし','蔵人',false],['少しだけ','わさび','蔵人',false],['3回','ゆ','蔵人',false]],
-  kanmatsu:[['皆さんへ','本当の自分','ソル',false],['たたまなくていい','終電のがし','ソル',false],['失敗のほう','夕焼け','蔵人',false],['前髪','バス停','二ナ',false]]
+  kurodo:{kanto:[['少しだけ','わさび']],tokushu:[['飲まないまま','終電のがし'],['3回','ゆ'],['失敗のほう','夕焼け']],kanmatsu:[['窓際','テスト太郎'],['選ばなかった道','情報'],['午後','カフェ'],['皆さんへ','本当の自分'],['靴下','ぬれ靴下'],['4分遅れ','駅']]},
+  nina:{kanto:[['毛布いりますか','終電のがし',true]],tokushu:[['前髪','バス停'],['同じページ','ぬれ靴下'],['火曜','ゆ']],kanmatsu:[['春の陽射し','テスト太郎'],['20分','バス停'],['海苔','コンビニ'],['冷めた緑茶','夜勤'],['片方だけ','ぬれ靴下'],['三時','漫喫']]},
+  sol:{kanto:[['傘、まだ','ゆ']],tokushu:[['たたまなくていい','終電のがし'],['例のところ','ゆ'],['宛先','手紙']],kanmatsu:[['皆さんへ','本当の自分'],['午後','カフェ'],['聞かないでおく','ゆ'],['受付の人','漫喫'],['返信','未送信'],['置き手紙','冷蔵庫']]}
 };
+const TOC=['『前髪』バス停','『皆さんへ』本当の自分','『海苔』コンビニ','『返信』未送信','『窓際』テスト太郎','『三時』漫喫','『置き手紙』冷蔵庫','『4分遅れ』駅','『午後』カフェ','『火曜』ゆ'];
 let currentEditor='nina', deskOn=false, timers=[];
 
 function go(s){
@@ -554,7 +558,7 @@ function showResult(key){
   document.getElementById('quote').textContent='「'+e.quote+'」';
   const cm=document.getElementById('comment'); cm.innerHTML='<span class="cursor"></span>';
   const seal=document.getElementById('seal'); seal.className='seal'; document.getElementById('sealTxt').textContent='';
-  ['titlebox','next','others','actions','url'].forEach(id=>document.getElementById(id).classList.remove('in'));
+  ['titlebox','status','next','others','actions','url'].forEach(id=>document.getElementById(id).classList.remove('in'));
   document.getElementById('minicover').classList.remove('in');
   const chars=[...e.comment]; let i=0; let out='';
   function type(){
@@ -573,10 +577,12 @@ function afterComment(e){
   document.getElementById('title').textContent='『'+e.title+'』';
   document.getElementById('author').textContent='作: '+document.getElementById('pen').value.trim()+'　推薦: '+e.name;
   document.getElementById('next').innerHTML='<b>次は:</b> '+e.next;
+  const st={kanto:'今は'+e.name+'の列の巻頭に載っています。点数の高い作品が来ると下がることがあります。',tokushu:'今は'+e.name+'の列の特集に載っています。',kanmatsu:'今は'+e.name+'の列の巻末に載っています。',namae:'表紙には載りませんが、目次に名前が載っています。',jigo:'今回は載りません。'}[e.placement];
+  document.getElementById('status').innerHTML='<span class="label">NOW</span>　'+st;
   const o=document.getElementById('others'); o.innerHTML='';
   for(const [k,line] of e.others){const oe=EDITORS[k];const d=document.createElement('div');d.className='o';d.innerHTML=`<div class="face ${oe.cls}" style="--acc:var(--${k})">${oe.initial}</div><div><b>${oe.name}</b>「${line}」</div>`;o.appendChild(d);}
-  document.getElementById('mine').innerHTML=(e.placement==='jigo'||e.placement==='bessatsu'?'（本誌には載りません）':'『'+e.title+'』')+'<small>'+document.getElementById('pen').value.trim()+'</small>';
-  const seq=[['titlebox',900],['next',1300],['others',1800],['minicover',2400],['actions',3200],['url',3400]];
+  document.getElementById('mine').innerHTML=(e.placement==='jigo'?'（今回は載りません）':e.placement==='namae'?'（目次に載ります）':'『'+e.title+'』')+'<small>'+document.getElementById('pen').value.trim()+'</small>';
+  const seq=[['titlebox',900],['status',1100],['next',1300],['others',1800],['minicover',2400],['actions',3200],['url',3400]];
   seq.forEach(([id,t])=>timers.push(setTimeout(()=>document.getElementById(id).classList.add('in'),t)));
 }
 function tweet(){
@@ -587,10 +593,12 @@ function tweet(){
 
 /* 7 表紙 */
 function buildCover(el){
-  const mk=(sec,list)=>`<div class="col ${sec}"><span class="sec">${PLACE[sec]}</span>${list.map(([t,a,r,n])=>`<div class="w${n?' new':''}"><span class="t">${t}</span><span class="a">${a}　推薦 ${r}</span></div>`).join('')}</div>`;
-  el.innerHTML=`<div class="issue">NO.3<small>2026.10</small></div><div class="mag">月刊フェーブル<small>AI FICTION MONTHLY</small></div>
-    <div class="cols">${mk('kanto',COVER.kanto)}${mk('tokushu',COVER.tokushu)}${mk('kanmatsu',COVER.kanmatsu)}</div>
-    <div class="bottom"><span>別冊フェーブル も発売中</span><span>EDITORS: 蔵人 / 二ナ / ソル</span></div>`;
+  const col=(k,e)=>{const c=COVER[k];const w=(list,cls)=>list.map(([t,a,n])=>`<div class="w ${cls}${n?' new':''}"><span class="t">${t}</span><span class="a">${a}</span></div>`).join('');
+    return `<div class="col ${e.cls}"><div class="vert"><span class="sec">${e.name}の推薦</span>${w(c.kanto,'kanto')}${w(c.tokushu,'tokushu')}</div><div class="small"><b>巻末</b>${c.kanmatsu.map(([t,a])=>`『${t}』${a}`).join('　')}</div></div>`;};
+  el.innerHTML=`<div class="issue">2026<small>OCT</small></div><div class="mag">月刊フェーブル<small>AI FICTION MONTHLY</small></div>
+    <div class="cols">${col('kurodo',EDITORS.kurodo)}${col('nina',EDITORS.nina)}${col('sol',EDITORS.sol)}</div>
+    <div class="bottom"><span>組版中　30 / 287</span><span>蔵人・二ナ・ソル</span></div>`;
 }
+document.getElementById('toc').innerHTML=TOC.map(t=>`<div>${t}</div>`).join('');
 go('entry'); count();
 </script>
