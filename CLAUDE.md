@@ -34,3 +34,4 @@
 - docs/concept.md が企画の最新版。決まったことと、まだ決まっていないことを分けて書く。
 - docs/wireframes.md が画面の配置、docs/tech.md が技術の定義、docs/design.md が見た目と演出。作るときはこの3つに従う。
 - docs/samples.md が結果の例。編集者の言葉の見本として使う。
+- mock/index.html が画面のモック。docs/image-prompts.md が絵を作るための指示文。
