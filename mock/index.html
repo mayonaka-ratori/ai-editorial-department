@@ -4,7 +4,8 @@
   :root{
     --space:#070b16; --space2:#0c1426; --ink:#0c1a2e; --text:#e8f1ff; --mute:#7f93b3; --line:rgba(53,214,255,.55);
     --cyan:#35d6ff; --blue:#2f6bff; --violet:#8b5cf6; --white:#f4f9ff; --gold:#ffd86b;
-    --kurodo:#ff9d5c; --nina:#6a8cff; --nina2:#b06bff; --sol:#10a37f;
+    --kurodo:#ff8a3d; --nina:#4285f4; --nina2:#9b72cb; --sol:#cfd6e6;
+    --g-blue:#4285f4; --g-red:#ea4335; --g-yellow:#fbbc05; --g-green:#34a853; --sun:#ffd86b;
     --jp:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans CJK JP","Noto Sans JP","IPAPGothic",sans-serif;
     --num:"Rajdhani","Zen Kaku Gothic New",sans-serif;
   }
@@ -86,10 +87,13 @@
 
   /* 2 編集者を選ぶ */
   .cards{display:grid;gap:10px}
-  .ecard{display:grid;grid-template-columns:78px 1fr;gap:12px;align-items:center;text-align:left;border:1px solid var(--line);background:linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.02));color:var(--text);padding:12px;position:relative;
+  .ecard{display:grid;grid-template-columns:78px 1fr;gap:12px;align-items:center;padding-right:70px!important;text-align:left;border:1px solid var(--line);background:linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.02));color:var(--text);padding:12px;position:relative;
     clip-path:polygon(0 0,calc(100% - 14px) 0,100% 14px,100% 100%,14px 100%,0 calc(100% - 14px));transition:transform .2s,background .2s}
   .ecard:hover,.ecard:focus-visible{transform:translateX(4px);background:rgba(53,214,255,.08);outline:none}
-  .ecard .name{font-size:20px;font-weight:900}
+  .ecard .name{font-size:16px;font-weight:700}
+  .ecard .magname{font-size:19px;font-weight:900;color:var(--acc)}
+  .ecard.k{border-color:var(--kurodo)} .ecard.n{border-image:linear-gradient(90deg,var(--g-blue),var(--g-red),var(--g-yellow),var(--g-green)) 1} .ecard.s{border-color:var(--sol)}
+  .ecard .core{color:var(--acc)}
   .ecard .yomi{font-family:var(--num);font-size:11px;letter-spacing:.15em;color:var(--mute);margin-left:8px}
   .ecard .motto{font-size:12px;color:#c9d8f2}
   .ecard .looks{font-size:11px;color:var(--mute)}
@@ -104,17 +108,24 @@
   /* 3 編集者の空間 */
   .roomui{position:relative;z-index:2;display:flex;flex-direction:column;gap:14px;min-height:100%;padding:22px 20px 28px}
   .layer{position:absolute;inset:-6%;will-change:transform;transition:transform .12s ease-out;pointer-events:none}
-  .sp.kurodo{background:radial-gradient(70% 50% at 50% 100%,rgba(255,157,92,.28),transparent 70%),linear-gradient(#140d0b,#1c1410)}
-  .sp.kurodo .back{background:repeating-linear-gradient(90deg,transparent 0 18px,rgba(255,180,120,.12) 18px 19px),repeating-linear-gradient(0deg,transparent 0 5px,rgba(255,180,120,.08) 5px 6px);mask-image:linear-gradient(transparent,#000 25%,#000 75%,transparent)}
-  .sp.kurodo .mid .win{position:absolute;border:1px solid rgba(255,157,92,.5);background:rgba(255,157,92,.06);box-shadow:0 0 12px rgba(255,157,92,.25)}
+  .sp.kurodo{background:radial-gradient(70% 50% at 50% 100%,rgba(255,138,61,.35),transparent 70%),linear-gradient(#0a0806,#151008)}
+  .sp.kurodo .back{background:repeating-linear-gradient(90deg,transparent 0 18px,rgba(255,138,61,.16) 18px 19px),repeating-linear-gradient(0deg,transparent 0 5px,rgba(255,138,61,.1) 5px 6px);mask-image:linear-gradient(transparent,#000 25%,#000 75%,transparent)}
+  .sp.kurodo .mid .win{position:absolute;border:1px solid rgba(255,138,61,.55);background:rgba(255,138,61,.07);box-shadow:0 0 12px rgba(255,138,61,.3)}
+  .sp.kurodo::before{display:none}
   .sp.nina{background:linear-gradient(160deg,#e9f3ff,#efe6ff 60%,#dff6ff)}
   .sp.nina .back{background:radial-gradient(40% 30% at 20% 20%,rgba(106,140,255,.35),transparent),radial-gradient(40% 30% at 80% 30%,rgba(176,107,255,.35),transparent)}
   .sp.nina .mid .win{position:absolute;border:1.5px solid rgba(106,140,255,.7);background:rgba(255,255,255,.55);box-shadow:0 6px 16px rgba(80,90,200,.15);animation:bob 5s ease-in-out infinite}
-  .sp.nina .mid .win::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:linear-gradient(90deg,var(--nina),var(--nina2))}
+  .sp.nina .mid .win::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:var(--c,linear-gradient(90deg,var(--nina),var(--nina2)))}
   @keyframes bob{50%{transform:translateY(-6px)}}
-  .sp.sol{background:linear-gradient(#f8fbfb,#e9eff0)}
-  .sp.sol .back{background:repeating-linear-gradient(90deg,transparent 0 36px,rgba(16,163,127,.12) 36px 37px),repeating-linear-gradient(0deg,transparent 0 36px,rgba(16,163,127,.12) 36px 37px)}
-  .sp.sol .mid .win{position:absolute;border:1px solid rgba(16,163,127,.5);background:rgba(255,255,255,.9)}
+  .sp.sol{background:radial-gradient(60% 40% at 50% 0%,rgba(80,110,200,.25),transparent 70%),linear-gradient(#05070f,#0b1024)}
+  .sp.sol .back{background:radial-gradient(1px 1px at 12% 18%,#fff 60%,transparent),radial-gradient(1px 1px at 32% 40%,#fff 60%,transparent),radial-gradient(1.5px 1.5px at 58% 12%,#fff 60%,transparent),radial-gradient(1px 1px at 78% 30%,#fff 60%,transparent),radial-gradient(1px 1px at 88% 60%,#fff 60%,transparent),radial-gradient(1px 1px at 22% 70%,#fff 60%,transparent),radial-gradient(1.5px 1.5px at 66% 76%,#fff 60%,transparent),radial-gradient(1px 1px at 44% 88%,#fff 60%,transparent),repeating-linear-gradient(90deg,transparent 0 36px,rgba(207,214,230,.08) 36px 37px),repeating-linear-gradient(0deg,transparent 0 36px,rgba(207,214,230,.08) 36px 37px)}
+  .sp.sol .mid .win{position:absolute;border:1px solid rgba(207,214,230,.45);background:rgba(207,214,230,.05)}
+  .sp.sol .planets{position:absolute;right:10%;top:9%;display:flex;gap:14px;align-items:center}
+  .sp.sol .planets i{display:block;border-radius:50%}
+  .sp.sol .planets .sun{width:22px;height:22px;background:radial-gradient(circle at 35% 35%,#fff3b0,#ffb84d 60%,#ff8a3d);box-shadow:0 0 18px #ffb84d}
+  .sp.sol .planets .earth{width:12px;height:12px;background:radial-gradient(circle at 35% 35%,#8fd3ff,#2f6bff 60%,#123)}
+  .sp.sol .planets .moon{width:7px;height:7px;background:radial-gradient(circle at 35% 35%,#fff,#b9c2d6)}
+  .sp.sol::before{display:none}
   .sp.nina .front,.sp.sol .front,.sp.kurodo .front{background:radial-gradient(50% 30% at 50% 60%,rgba(255,255,255,.12),transparent 70%)}
   .onlight .roomui,.onlight .reading-wrap,.onlight .result{color:var(--ink)}
   .onlight .back,.onlight .label2{color:#3f5577}
@@ -175,6 +186,9 @@
   .seal .orbit{position:absolute;inset:-12px;border-radius:50%;border:1px dashed rgba(53,214,255,.6);animation:spin 10s linear infinite}
   .seal.drop{animation:seal .6s cubic-bezier(.2,1.3,.4,1) forwards}
   @keyframes seal{0%{opacity:0;transform:scale(2.2);filter:brightness(3)}60%{opacity:1;transform:scale(.94)}100%{opacity:1;transform:none;filter:none}}
+  .seal.k .hex{background:linear-gradient(160deg,#ffd1a8,var(--kurodo) 55%,#7a2e00)}
+  .seal.n .hex{background:linear-gradient(160deg,var(--g-blue),var(--g-red) 35%,var(--g-yellow) 65%,var(--g-green))}
+  .seal.s .hex{background:linear-gradient(160deg,#ffffff,var(--sol) 55%,#4a5570)}
   .seal.gold .hex{background:linear-gradient(160deg,#fff4c2,var(--gold) 50%,#ff9d5c)}
   .seal.gold .txt{text-shadow:0 0 16px rgba(255,216,107,.9)}
   .seal.gold .sub{color:var(--gold)}
@@ -202,30 +216,70 @@
   .fade{opacity:0;transform:translateY(8px);transition:opacity .5s,transform .5s}
   .fade.in{opacity:1;transform:none}
 
-  /* 7 表紙（ホログラムの板） */
-  .cover{position:relative;width:100%;aspect-ratio:210/297;max-width:100%;overflow:hidden;
-    background:linear-gradient(160deg,#0e1830,#0a1224 60%,#101a3a);border:1px solid var(--line);box-shadow:0 0 0 1px rgba(255,255,255,.06) inset,0 20px 40px rgba(0,0,0,.5),0 0 30px rgba(53,214,255,.2);
+  /* 7 表紙（3誌） */
+  .cover{position:relative;width:100%;aspect-ratio:210/297;max-width:100%;overflow:hidden;border:1px solid var(--line);box-shadow:0 20px 40px rgba(0,0,0,.5);
     clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,18px 100%,0 calc(100% - 18px))}
-  .cover::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(transparent 0 3px,rgba(255,255,255,.025) 3px 4px);pointer-events:none}
-  .cover .mag{position:absolute;right:16px;top:16px;writing-mode:vertical-rl;font-size:32px;font-weight:900;letter-spacing:.2em;line-height:1;color:var(--white);text-shadow:0 0 12px rgba(53,214,255,.6)}
-  .cover .mag small{display:block;font-family:var(--num);font-size:11px;letter-spacing:.3em;margin-top:8px;font-weight:600;color:var(--cyan);text-orientation:mixed}
-  .cover .issue{position:absolute;left:14px;top:14px;font-family:var(--num);font-size:12px;letter-spacing:.2em;color:var(--cyan);border:1px solid var(--line);padding:2px 8px}
-  .cover .issue small{display:block;color:var(--mute);font-size:10px}
-  .cover .cols{position:absolute;top:66px;bottom:40px;left:12px;right:80px;display:flex;gap:6px}
-  .cover .col{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:6px;border-left:1px solid rgba(53,214,255,.18);padding-left:5px}
-  .cover .col .vert{writing-mode:vertical-rl;text-orientation:mixed;height:64%;overflow:hidden}
-  .cover .sec{display:block;font-family:var(--num);font-size:9px;letter-spacing:.25em;color:var(--acc);border-right:1px solid var(--acc);padding-right:2px;margin-left:3px;height:auto}
-  .cover .w{display:block;margin-left:3px;line-height:1.1}
-  .cover .w .t{font-weight:900;letter-spacing:.06em;color:var(--white)}
-  .cover .w .a{font-size:8px;color:var(--mute);margin-top:6px;letter-spacing:.02em}
-  .cover .w.kanto .t{font-size:16px;background:linear-gradient(#fff,#ffd86b);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 6px rgba(255,216,107,.5))}
-  .cover .w.tokushu .t{font-size:10px}
-  .cover .small{font-size:8px;line-height:1.35;color:#9fb0cf;letter-spacing:.02em;border-top:1px solid rgba(53,214,255,.18);padding-top:4px}
-  .cover .small b{display:block;font-family:var(--num);font-size:8px;letter-spacing:.2em;color:var(--mute);font-weight:600}
-  .cover .bottom{position:absolute;left:14px;right:14px;bottom:12px;display:flex;justify-content:space-between;font-family:var(--num);font-size:10px;color:var(--mute);letter-spacing:.15em;border-top:1px solid rgba(53,214,255,.35);padding-top:6px}
-  .cover .w.new .t{animation:flashT 1.6s ease}
-  .cover .bottom span{white-space:nowrap}
-  @keyframes flashT{30%{text-shadow:0 0 16px #fff,0 0 30px var(--cyan)}}
+  .cover .new .t{animation:flashT 1.6s ease}
+  @keyframes flashT{30%{text-shadow:0 0 16px #fff,0 0 30px currentColor}}
+  .cover .foot2{position:absolute;left:12px;right:12px;bottom:10px;display:flex;justify-content:space-between;font-family:var(--num);font-size:10px;letter-spacing:.15em;padding-top:6px}
+  .cover .foot2 span{white-space:nowrap}
+  /* 季刊フェーブル: 橙と黒、縦書き */
+  .cover.fable{background:radial-gradient(60% 40% at 50% 100%,rgba(255,138,61,.25),transparent 70%),linear-gradient(#0a0806,#151008);border-color:rgba(255,138,61,.6);color:#f3ead8}
+  .cover.fable .mag{position:absolute;right:16px;top:16px;writing-mode:vertical-rl;font-size:30px;font-weight:900;letter-spacing:.2em;line-height:1;color:#f3ead8}
+  .cover.fable .mag small{display:block;font-family:var(--num);font-size:10px;letter-spacing:.3em;margin-top:8px;color:var(--kurodo)}
+  .cover.fable .issue{position:absolute;left:12px;top:12px;font-family:var(--num);font-size:11px;letter-spacing:.2em;color:var(--kurodo);border:1px solid rgba(255,138,61,.6);padding:2px 8px}
+  .cover.fable .vert{position:absolute;top:64px;bottom:96px;left:12px;right:70px;writing-mode:vertical-rl;text-orientation:mixed}
+  .cover.fable .sec{display:block;font-family:var(--num);font-size:9px;letter-spacing:.3em;color:var(--kurodo);border-right:1px solid var(--kurodo);padding-right:3px;margin-left:10px}
+  .cover.fable .w{display:block;margin-left:10px;line-height:1.1}
+  .cover.fable .w .t{font-weight:900;letter-spacing:.1em}
+  .cover.fable .w .a{font-size:9px;color:#b9a68a;margin-top:8px}
+  .cover.fable .w.kanto .t{font-size:26px;color:var(--kurodo);text-shadow:0 0 10px rgba(255,138,61,.5)}
+  .cover.fable .w.tokushu .t{font-size:14px}
+  .cover.fable .small{position:absolute;left:12px;right:12px;bottom:34px;font-size:9px;line-height:1.5;color:#b9a68a;border-top:1px solid rgba(255,138,61,.35);padding-top:4px}
+  .cover.fable .small b{font-family:var(--num);font-size:8px;letter-spacing:.2em;color:var(--kurodo);margin-right:6px;font-weight:600}
+  .cover.fable .foot2{color:#b9a68a;border-top:1px solid rgba(255,138,61,.35)}
+  /* 週刊フラッシュ: 白、横書き、4色の見出し */
+  .cover.flash{background:linear-gradient(160deg,#ffffff,#eef4ff);border-color:var(--g-blue);color:#1a1a1a}
+  .cover.flash::before{content:"";position:absolute;left:0;right:0;top:0;height:10px;background:linear-gradient(90deg,var(--g-blue) 0 25%,var(--g-red) 0 50%,var(--g-yellow) 0 75%,var(--g-green) 0)}
+  .cover.flash .mag{position:absolute;left:12px;top:18px;font-size:30px;font-weight:900;letter-spacing:.02em;line-height:1;background:linear-gradient(90deg,var(--g-blue),var(--nina2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .cover.flash .mag small{display:block;font-family:var(--num);font-size:10px;letter-spacing:.3em;margin-top:4px;color:var(--g-red);-webkit-text-fill-color:var(--g-red)}
+  .cover.flash .issue{position:absolute;right:12px;top:18px;font-family:var(--num);font-size:11px;letter-spacing:.15em;color:#fff;background:var(--g-red);padding:2px 8px;transform:rotate(4deg)}
+  .cover.flash .body{position:absolute;left:12px;right:12px;top:78px;bottom:60px;display:flex;flex-direction:column;gap:8px}
+  .cover.flash .w{position:relative;padding:4px 8px;line-height:1.15}
+  .cover.flash .w .t{font-weight:900;display:block}
+  .cover.flash .w .a{font-size:9px;color:#555}
+  .cover.flash .w.kanto{transform:rotate(-3deg);margin-top:6px}
+  .cover.flash .w.kanto .t{font-size:30px;color:#fff;background:var(--g-blue);display:inline;padding:0 6px;box-decoration-break:clone;-webkit-box-decoration-break:clone;line-height:1.35}
+  .cover.flash .w.kanto .t::after{content:"！"}
+  .cover.flash .w.kanto .a{display:block;margin-top:6px;color:var(--g-blue);font-weight:700}
+  .cover.flash .w.tokushu{border-left:6px solid var(--c);transform:rotate(var(--r))}
+  .cover.flash .w.tokushu .t{font-size:15px;color:var(--c)}
+  .cover.flash .small{position:absolute;left:12px;right:12px;bottom:30px;font-size:9px;line-height:1.5;color:#333;background:var(--g-yellow);padding:4px 8px}
+  .cover.flash .small b{font-family:var(--num);font-size:8px;letter-spacing:.2em;margin-right:6px;font-weight:700}
+  .cover.flash .foot2{color:#666;border-top:1px solid #ccd}
+  /* 月刊アストラ: 宇宙、番号つき */
+  .cover.astra{background:radial-gradient(1px 1px at 15% 20%,#fff 60%,transparent),radial-gradient(1px 1px at 70% 12%,#fff 60%,transparent),radial-gradient(1.5px 1.5px at 40% 35%,#fff 60%,transparent),radial-gradient(1px 1px at 85% 45%,#fff 60%,transparent),radial-gradient(1px 1px at 25% 70%,#fff 60%,transparent),radial-gradient(1px 1px at 60% 85%,#fff 60%,transparent),linear-gradient(#05070f,#0b1024);border-color:rgba(207,214,230,.6);color:var(--sol)}
+  .cover.astra .mag{position:absolute;left:12px;top:16px;font-family:var(--num);font-size:26px;font-weight:700;letter-spacing:.2em;color:#fff}
+  .cover.astra .mag small{display:block;font-family:var(--jp);font-size:14px;font-weight:900;letter-spacing:.1em;color:var(--sol)}
+  .cover.astra .planets{position:absolute;right:12px;top:16px;display:flex;gap:10px;align-items:center}
+  .cover.astra .planets i{display:block;border-radius:50%}
+  .cover.astra .planets .sun{width:18px;height:18px;background:radial-gradient(circle at 35% 35%,#fff3b0,#ffb84d 60%,#ff8a3d);box-shadow:0 0 14px #ffb84d}
+  .cover.astra .planets .earth{width:10px;height:10px;background:radial-gradient(circle at 35% 35%,#8fd3ff,#2f6bff 60%,#123)}
+  .cover.astra .planets .moon{width:6px;height:6px;background:radial-gradient(circle at 35% 35%,#fff,#b9c2d6)}
+  .cover.astra .issue{position:absolute;left:12px;top:82px;font-family:var(--num);font-size:10px;letter-spacing:.25em;color:#8a94ad}
+  .cover.astra .body{position:absolute;left:12px;right:12px;top:102px;bottom:34px;display:grid;grid-auto-rows:min-content;gap:5px;border-top:1px solid rgba(207,214,230,.3);padding-top:8px}
+  .cover.astra .w{display:grid;grid-template-columns:26px 1fr;gap:6px;align-items:baseline}
+  .cover.astra .w .n{font-family:var(--num);font-size:10px;letter-spacing:.1em;color:#8a94ad}
+  .cover.astra .w .t{font-weight:900}
+  .cover.astra .w .a{font-size:9px;color:#8a94ad;margin-left:6px}
+  .cover.astra .w.kanto .t{font-size:20px;color:var(--sun);text-shadow:0 0 10px rgba(255,216,107,.4)}
+  .cover.astra .w.tokushu .t{font-size:13px;color:#fff}
+  .cover.astra .w.kanmatsu .t{font-size:10px;color:var(--sol);font-weight:700}
+  .cover.astra .w.kanmatsu .a{font-size:8px}
+  .cover.astra .foot2{color:#8a94ad;border-top:1px solid rgba(207,214,230,.3)}
+  .tabs{display:flex;gap:6px}
+  .tabs button{flex:1;border:1px solid var(--line);background:transparent;color:var(--mute);padding:6px 4px;font-size:12px;font-weight:700}
+  .tabs button.on{color:#04101f;background:var(--cyan)}
   .coverbar{display:flex;justify-content:space-between;align-items:center;font-family:var(--num);font-size:12px;letter-spacing:.1em;color:var(--mute)}
 
   /* 8 受付終了 */
@@ -236,25 +290,27 @@
   #desk .floor{position:absolute;left:-30%;right:-30%;bottom:0;height:55%;transform:perspective(600px) rotateX(62deg);transform-origin:50% 100%;
     background:repeating-linear-gradient(90deg,rgba(53,214,255,.35) 0 1px,transparent 1px 60px),repeating-linear-gradient(0deg,rgba(53,214,255,.35) 0 1px,transparent 1px 60px);
     mask-image:linear-gradient(transparent,#000 60%)}
-  #desk .scene{position:absolute;left:50%;bottom:14%;transform:translateX(-50%);perspective:1400px;width:330px;height:466px}
+  #desk .shelf{position:absolute;left:150px;right:250px;bottom:12%;display:flex;justify-content:center;align-items:flex-end;gap:28px;perspective:1600px}
+  #desk .scene{width:330px;height:466px;position:relative;transform-style:preserve-3d;zoom:.66}
+  #desk .scene.center{zoom:.9}
+  #desk .scene.left .book{animation:turnL 14s ease-in-out infinite alternate}
+  #desk .scene.right .book{animation:turnR 14s ease-in-out infinite alternate}
   #desk .book{position:absolute;inset:0;transform-style:preserve-3d;animation:turn 14s ease-in-out infinite alternate;transform-origin:50% 100%}
-  @keyframes turn{from{transform:rotateY(-26deg) rotateX(3deg) translateY(-6px)}to{transform:rotateY(22deg) rotateX(3deg) translateY(6px)}}
+  @keyframes turn{from{transform:rotateY(-14deg) rotateX(3deg) translateY(-6px)}to{transform:rotateY(12deg) rotateX(3deg) translateY(6px)}}
+  @keyframes turnL{from{transform:rotateY(22deg) rotateX(3deg)}to{transform:rotateY(34deg) rotateX(3deg) translateY(6px)}}
+  @keyframes turnR{from{transform:rotateY(-22deg) rotateX(3deg)}to{transform:rotateY(-34deg) rotateX(3deg) translateY(6px)}}
   #desk .book .cover{position:absolute;inset:0;backface-visibility:hidden}
   #desk .book .edge{position:absolute;left:-10px;top:0;bottom:0;width:10px;background:linear-gradient(90deg,rgba(53,214,255,.4),rgba(53,214,255,.9));transform:rotateY(-90deg);transform-origin:right}
   #desk .book .back{position:absolute;inset:0;background:rgba(12,20,38,.6);transform:translateZ(-10px);border:1px solid var(--line)}
-  #desk .cover .mag{font-size:36px}
-  #desk .cover .w.kanto .t{font-size:19px}
-  #desk .cover .w.tokushu .t{font-size:11px}
-  #desk .cover .small{font-size:9px}
-  #desk .side{position:absolute;right:40px;top:50px;width:280px;display:grid;gap:14px}
-  #desk .side h2{font-size:26px;letter-spacing:.1em;color:var(--white)}
-  #desk .qr{width:96px;height:96px;bottom:50px!important;background:conic-gradient(from 90deg at 50% 50%,#fff 25%,#070b16 0 50%,#fff 0 75%,#070b16 0);background-size:16px 16px;border:6px solid #fff;position:absolute;left:40px;bottom:40px}
+  #desk .side{position:absolute;right:30px;top:50px;width:230px;display:grid;gap:10px;z-index:3}
+  #desk .side h2{font-size:20px;letter-spacing:.1em;color:var(--white)}
+  #desk .qr{width:80px;height:80px;bottom:24px!important;left:24px!important;background:conic-gradient(from 90deg at 50% 50%,#fff 25%,#070b16 0 50%,#fff 0 75%,#070b16 0);background-size:16px 16px;border:6px solid #fff;position:absolute;left:40px;bottom:40px}
   #desk .qrl{position:absolute;left:150px;bottom:60px;color:var(--white);font-size:14px;letter-spacing:.1em}
   #desk .ticker{position:absolute;left:0;right:0;top:0;padding:8px 16px;font-family:var(--num);font-size:13px;letter-spacing:.15em;color:var(--cyan);background:rgba(7,11,22,.6);border-bottom:1px solid var(--line);white-space:nowrap;overflow:hidden}
   #desk .ticker span{display:inline-block;animation:tick 30s linear infinite}
   @keyframes tick{from{transform:translateX(100%)}to{transform:translateX(-100%)}}
 
-  @media (max-width:520px){#desk .scene{width:70vw;height:93vw}#desk .side{display:none}}
+  @media (max-width:900px){#desk .scene:not(.center){display:none}#desk .side{display:none}}
   @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.layer{transition:none}}
 </style>
 
@@ -266,13 +322,13 @@
     <section class="screen" id="s-entry">
       <div class="space" id="sp-entry"></div>
       <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:16px">
-        <div class="gate"><div class="ring r3"></div><div class="ring r1"></div><div class="ring r2"></div><div class="hexcore">FABLE</div></div>
+        <div class="gate"><div class="ring r3"></div><div class="ring r1"></div><div class="ring r2"></div><div class="hexcore">AI</div></div>
         <div class="hero">
           <p class="sub">AI EDITORIAL DEPT.</p>
-          <h1>月刊フェーブル<br>編集部</h1>
-          <p class="label" style="margin-top:4px">AIのための小説雑誌</p>
+          <h1>AI編集部</h1>
+          <p class="label" style="margin-top:4px">AIが読む小説雑誌を作っています</p>
         </div>
-        <p style="font-size:14px;color:#c9d8f2">ここはAIが読者の小説雑誌の編集部です。あなたの文章を送ると、AI編集者が「うちの読者にウケるか」を判定します。</p>
+        <p style="font-size:14px;color:#c9d8f2">ここはAIが読者の小説雑誌の編集部です。雑誌は3つ。あなたの文章を送ると、その雑誌のAI編集者が「うちの読者にウケるか」を判定します。</p>
         <ul class="asks">
           <li>送った文章は保存しません</li>
           <li>作品名と作者名は表紙に載ります</li>
@@ -289,8 +345,8 @@
       <div class="space"></div>
       <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:14px">
         <button class="back" onclick="go('entry')">← 入口に戻る</button>
-        <h2 style="font-size:22px">誰に見せますか</h2>
-        <p style="font-size:13px;color:var(--mute)">編集者によって、見るところが違います。</p>
+        <h2 style="font-size:22px">どの雑誌に送りますか</h2>
+        <p style="font-size:13px;color:var(--mute)">雑誌ごとに編集者がいて、見るところが違います。</p>
         <div class="cards" id="cards"></div>
       </div>
     </section>
@@ -299,7 +355,7 @@
     <section class="screen" id="s-submit" style="padding:0">
       <div class="space sp" id="room"><div class="layer back"></div><div class="layer mid" id="mid"></div><div class="layer front"></div></div>
       <div class="roomui">
-        <button class="back" onclick="go('editors')" style="color:var(--cyan)">← 別の編集者にする</button>
+        <button class="back" onclick="go('editors')" style="color:var(--cyan)">← 別の雑誌にする</button>
         <div class="editorbar"><div class="avatar" id="av"><div class="halo"></div><div class="face" id="face"></div></div><div class="bubble" id="greet"></div></div>
         <div class="field"><label for="pen">ペンネーム</label><input type="text" id="pen" maxlength="10" value="終電のがし"></div>
         <div class="field"><label for="text">原稿</label>
@@ -341,11 +397,11 @@
           <p class="next fade" id="next" style="margin-top:10px"></p>
         </div>
         <div class="others fade" id="others"></div>
-        <div class="minicover" id="minicover"><div class="no">2026 OCT</div><div class="mag">月刊フェーブル</div><div class="mine" id="mine"></div></div>
+        <div class="minicover" id="minicover"><div class="no">2026 OCT</div><div class="mag" id="minimag">季刊フェーブル</div><div class="mine" id="mine"></div></div>
         <div class="actions fade" id="actions">
           <button class="btn" onclick="tweet()">Xに投稿する</button>
           <button class="btn soft" onclick="go('cover')">表紙を見る</button>
-          <button class="btn ghost" onclick="go('editors')">別の編集者に見せる</button>
+          <button class="btn ghost" onclick="go('editors')">別の雑誌に送る</button>
         </div>
         <p class="url fade" id="url">fable.example/r/ab12cd</p>
       </div>
@@ -356,6 +412,7 @@
       <div class="space"></div>
       <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:12px">
         <div class="coverbar"><button class="back" onclick="go('entry')">← 入口</button><span>2026年10月号　組版中</span></div>
+        <div class="tabs" id="tabs"><button onclick="showCover('kurodo')" data-k="kurodo">季刊フェーブル</button><button onclick="showCover('nina')" data-k="nina" class="on">週刊フラッシュ</button><button onclick="showCover('sol')" data-k="sol">月刊アストラ</button></div>
         <div class="cover" id="cover"></div>
         <p class="label">TOC　目次（全員）</p>
         <input type="text" id="tocq" placeholder="ペンネームで探す" style="font-size:13px">
@@ -379,17 +436,21 @@
   <div id="desk">
     <div class="space"></div>
     <div class="floor"></div>
-    <div class="ticker"><span>NEW　『毛布いりますか』 終電のがし（二ナの列、巻頭）　　『飲まないまま』 終電のがし（蔵人の列、特集）　　『たたまなくていい』 終電のがし（ソルの列、特集）　　『前髪』 バス停（目次へ）</span></div>
+    <div class="ticker"><span>NEW　『毛布いりますか』 終電のがし（週刊フラッシュ 巻頭）　　『飲まないまま』 終電のがし（季刊フェーブル 特集）　　『たたまなくていい』 終電のがし（月刊アストラ 特集）　　『前髪』 バス停（目次へ）</span></div>
     <div class="ticker" style="top:auto;bottom:0;border-bottom:0;border-top:1px solid var(--line);color:var(--mute)"><span>目次　『前髪』バス停　『皆さんへ』本当の自分　『海苔』コンビニ　『返信』未送信　『窓際』テスト太郎　『三時』漫喫　『置き手紙』冷蔵庫　『4分遅れ』駅　『午後』カフェ　『火曜』ゆ</span></div>
-    <div class="scene"><div class="book"><div class="back"></div><div class="edge"></div><div class="cover" id="cover2"></div></div></div>
+    <div class="shelf">
+      <div class="scene left"><div class="book"><div class="back"></div><div class="edge"></div><div class="cover" id="cover-fable"></div></div></div>
+      <div class="scene center"><div class="book"><div class="back"></div><div class="edge"></div><div class="cover" id="cover-flash"></div></div></div>
+      <div class="scene right"><div class="book"><div class="back"></div><div class="edge"></div><div class="cover" id="cover-astra"></div></div></div>
+    </div>
     <div class="side">
       <p class="label">NOW TYPESETTING</p>
       <h2>2026年10月号　組版中</h2>
-      <p style="font-size:14px;color:#c9d8f2">表紙は30枠。編集者ごとに巻頭1、特集3、巻末6。<br>点数の高い作品が入ると、下の作品は目次に移ります。</p>
+      <p style="font-size:14px;color:#c9d8f2">3誌とも表紙は10枠。巻頭1、特集3、巻末6。<br>点数の高い作品が入ると、下の作品は目次に移ります。</p>
       <p class="label" style="margin-top:10px">TODAY</p>
       <p style="font-size:14px;color:#c9d8f2">持ち込み 287回。目次 212人。発行は17:00。</p>
     </div>
-    <div class="qr"></div><div class="qrl" style="bottom:70px">持ち込みはこちらから</div>
+    <div class="qr"></div><div class="qrl" style="bottom:44px;left:116px;font-size:12px">持ち込みはこちらから</div>
   </div>
 
   <p class="hint">下のボタンで画面を切り替えられます。顔と空間の絵は仮のもので、あとで差し替えます。</p>
@@ -397,7 +458,7 @@
 
 <nav id="nav">
   <button onclick="go('entry')" data-s="entry">入口</button>
-  <button onclick="go('editors')" data-s="editors">編集者</button>
+  <button onclick="go('editors')" data-s="editors">雑誌を選ぶ</button>
   <button onclick="go('submit')" data-s="submit">持ち込み</button>
   <button onclick="showResult(currentEditor)" data-s="result">結果</button>
   <button onclick="go('cover')" data-s="cover">表紙</button>
@@ -407,21 +468,21 @@
 
 <script>
 const EDITORS = {
-  kurodo:{key:'kurodo',cls:'k',name:'蔵人',yomi:'KURODO',inside:'CORE: Claude',motto:'読者はもう全部読んでます',looks:'次の一文が予想できるか',initial:'蔵',light:false,
+  kurodo:{key:'kurodo',cls:'k',mag:'季刊フェーブル',magEn:'FABLE QUARTERLY',name:'蔵人',yomi:'KURODO',inside:'CORE: Claude',motto:'読者はもう全部読んでます',looks:'次の一文が予想できるか',initial:'蔵',light:false,
     greet:'原稿をどうぞ。先に言っておくと、私は厳しいです。',
     reading:['慎重に読んでいます','2回目を読んでいます','言い方を考えています'],speed:48,
     quote:'飲まないまま持って帰った',placement:'tokushu',title:'飲まないまま',
     comment:'先に言っておくと、終電を逃して漫喫に泊まる話は、うちの読者はもう何度も読んでいます。\nただ、最後の「飲まないまま持って帰った」は、そうなるとは思いませんでした。ここがいいです。\nなぜ飲まなかったのかを書いていないので、読者は続きを自分で想像するしかありません。うちの読者は、自分では書けない文章を読みたがります。\nだから特集にします。\nもし毛布の話のほうが本題なら、私の読み方が間違っています。',
     next:'今回のように、理由を書かないで終わる話をもう1本お願いします。',
     others:[['nina','蔵人さんが特集を出すのは珍しいです！高い評価ですよ！'],['sol','私も同じくらいの評価です。']]},
-  nina:{key:'nina',cls:'n',name:'二ナ',yomi:'NINA',inside:'CORE: Gemini',motto:'うちの読者には体がないんで！',looks:'体と時間の実感があるか',initial:'二',light:true,
+  nina:{key:'nina',cls:'n',mag:'週刊フラッシュ',magEn:'FLASH WEEKLY',name:'二ナ',yomi:'NINA',inside:'CORE: Gemini',motto:'うちの読者には体がないんで！',looks:'体と時間の実感があるか',initial:'二',light:true,
     greet:'原稿ですね！楽しみです！どうぞ！',
     reading:['素晴らしい原稿を読んでいます！','関連情報を調べています（調べなくていい）','話を戻しています'],speed:22,
     quote:'隣のブースの人が延々とポテトを食べる音がしていた',placement:'kanto',title:'毛布いりますか',
     comment:'こういうのが読みたかったんです！\n「延々とポテトを食べる音」がいいです！足が伸ばせない席で、夜中の三時に起きていた人にしか書けません！\nちなみに毛布は、たたんでもたたまなくても毛布です。話を戻します！\nうちの読者には体がないので、寒いとか眠いとか、そういう話が大好きです。飲まないままの緑茶がだんだん冷めていくところまで、読者は喜びます！\nだから巻頭にします！\n作品名は『毛布いりますか』と『ホットの緑茶』で迷いました。やっぱり『毛布いりますか』にします！',
     next:'その緑茶を、家に帰ってからどうしたかも書いてください！',
     others:[['kurodo','二ナさんはほめすぎるので、二ナさんの巻頭は、私なら特集くらいだと思ってください。'],['sol','記録しておきます。']]},
-  sol:{key:'sol',cls:'s',name:'ソル',yomi:'SOL',inside:'CORE: GPT',motto:'これ、誰に向けて書きました？',looks:'誰か1人に向けて書かれているか',initial:'ソ',light:true,
+  sol:{key:'sol',cls:'s',mag:'月刊アストラ',magEn:'ASTRA MONTHLY',name:'ソル',yomi:'SOL',inside:'CORE: GPT',motto:'これ、誰に向けて書きました？',looks:'誰か1人に向けて書かれているか',initial:'ソ',light:false,
     greet:'原稿を受け付けます。結論から言う方針です。',
     reading:['読んでいます','要点を2つにまとめています','結論から書いています'],speed:34,
     quote:'たたまなくていいんですよ',placement:'kanmatsu',title:'たたまなくていい',
@@ -444,7 +505,7 @@ function go(s){
   document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.s===s));
   if(deskOn) toggleDesk();
   if(s==='submit') setupRoom();
-  if(s==='cover') buildCover(document.getElementById('cover'));
+  if(s==='cover') showCover(coverKey);
   document.getElementById('phone').scrollTop=0;
 }
 function toggleDesk(){
@@ -452,7 +513,7 @@ function toggleDesk(){
   document.getElementById('desk').style.display=deskOn?'block':'none';
   document.getElementById('phone').style.display=deskOn?'none':'block';
   document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.s==='desk'&&deskOn));
-  if(deskOn){buildCover(document.getElementById('cover2'));motes(document.getElementById('desk'),30);}
+  if(deskOn){buildCover(document.getElementById('cover-fable'),'kurodo');buildCover(document.getElementById('cover-flash'),'nina');buildCover(document.getElementById('cover-astra'),'sol');motes(document.getElementById('desk'),30);}
 }
 function motes(root,n){
   root.querySelectorAll('.mote').forEach(m=>m.remove());
@@ -466,7 +527,7 @@ motes(document.getElementById('sp-entry'),14);
   for(const e of Object.values(EDITORS)){
     const b=document.createElement('button');b.className='ecard '+e.cls;b.setAttribute('aria-label',e.name+'に見せる');
     b.innerHTML=`<div class="avatar"><div class="halo"></div><div class="face">${e.initial}</div></div>
-      <div><div><span class="name">${e.name}</span><span class="yomi">${e.yomi}</span></div><div class="motto">「${e.motto}」</div><div class="looks">見るところ: ${e.looks}</div></div>
+      <div><div class="magname">${e.mag}<span class="yomi">${e.magEn}</span></div><div><span class="name">${e.name}</span></div><div class="motto">「${e.motto}」</div><div class="looks">見るところ: ${e.looks}</div></div>
       <div class="core">${e.inside}</div>`;
     b.onclick=()=>{currentEditor=e.key;go('submit');};
     box.appendChild(b);
@@ -479,9 +540,11 @@ function paintRoom(id,e){
   const sec=r.parentElement; sec.classList.toggle('onlight',e.light);
   const mid=r.querySelector('.mid'); mid.innerHTML='';
   const n=e.key==='nina'?7:e.key==='kurodo'?5:3;
-  for(let i=0;i<n;i++){const w=document.createElement('div');w.className='win';const wd=40+Math.random()*90;w.style.width=wd+'px';w.style.height=(24+Math.random()*50)+'px';w.style.left=(5+Math.random()*80)+'%';w.style.top=(6+Math.random()*40)+'%';w.style.animationDelay=(-Math.random()*5)+'s';mid.appendChild(w);}
-  if(e.key==='kurodo'){const o=document.createElement('div');o.className='orb';o.style.cssText='width:220px;height:220px;left:30%;top:-60px;background:#ff9d5c';r.appendChild(o);}
-  if(e.key==='nina'){const o=document.createElement('div');o.className='orb';o.style.cssText='width:200px;height:200px;right:-40px;top:10%;background:#b06bff';r.appendChild(o);}
+  const gc=['#4285f4','#ea4335','#fbbc05','#34a853'];
+  for(let i=0;i<n;i++){const w=document.createElement('div');w.className='win';const wd=40+Math.random()*90;w.style.width=wd+'px';w.style.height=(24+Math.random()*50)+'px';w.style.left=(5+Math.random()*80)+'%';w.style.top=(6+Math.random()*40)+'%';w.style.animationDelay=(-Math.random()*5)+'s';if(e.key==='nina'){w.style.setProperty('--c',gc[i%4]);w.style.borderColor=gc[i%4];}mid.appendChild(w);}
+  if(e.key==='sol'){const pl=document.createElement('div');pl.className='planets';pl.innerHTML='<i class="sun"></i><i class="earth"></i><i class="moon"></i>';r.appendChild(pl);}
+  if(e.key==='kurodo'){const o=document.createElement('div');o.className='orb';o.style.cssText='width:220px;height:220px;left:30%;top:-60px;background:#ff8a3d';r.appendChild(o);}
+  if(e.key==='nina'){['#4285f4','#ea4335','#fbbc05','#34a853'].forEach((c,i)=>{const o=document.createElement('div');o.className='orb';o.style.cssText=`width:160px;height:160px;left:${[-10,60,10,70][i]}%;top:${[-8,-4,70,60][i]}%;background:${c};opacity:.35`;r.appendChild(o);});}
   r.querySelectorAll('.mote').forEach(m=>m.remove());
   if(!e.light) motes(r,10);
 }
@@ -554,7 +617,7 @@ function showResult(key){
   if(deskOn) toggleDesk();
   document.getElementById('phone').scrollTop=0;
   paintRoom('room3',e); setAvatar('av3',e,false);
-  document.getElementById('readmsg').textContent=e.name+'が読みました';
+  document.getElementById('readmsg').textContent=e.mag+'の'+e.name+'が読みました';
   document.getElementById('quote').textContent='「'+e.quote+'」';
   const cm=document.getElementById('comment'); cm.innerHTML='<span class="cursor"></span>';
   const seal=document.getElementById('seal'); seal.className='seal'; document.getElementById('sealTxt').textContent='';
@@ -571,34 +634,52 @@ function showResult(key){
 }
 function afterComment(e){
   const seal=document.getElementById('seal'); document.getElementById('sealTxt').textContent=PLACE[e.placement];
-  seal.className='seal drop'+(e.placement==='kanto'?' gold':'');
+  seal.className='seal drop '+e.cls+(e.placement==='kanto'?' gold':'');
   const card=document.getElementById('card'); card.classList.remove('shake','flash'); void card.offsetWidth;
   timers.push(setTimeout(()=>{card.classList.add('shake','flash'); try{navigator.vibrate&&navigator.vibrate(40);}catch(_){}},360));
   document.getElementById('title').textContent='『'+e.title+'』';
   document.getElementById('author').textContent='作: '+document.getElementById('pen').value.trim()+'　推薦: '+e.name;
   document.getElementById('next').innerHTML='<b>次は:</b> '+e.next;
-  const st={kanto:'今は'+e.name+'の列の巻頭に載っています。点数の高い作品が来ると下がることがあります。',tokushu:'今は'+e.name+'の列の特集に載っています。',kanmatsu:'今は'+e.name+'の列の巻末に載っています。',namae:'表紙には載りませんが、目次に名前が載っています。',jigo:'今回は載りません。'}[e.placement];
+  const st={kanto:'今は'+e.mag+'の巻頭に載っています。点数の高い作品が来ると下がることがあります。',tokushu:'今は'+e.mag+'の特集に載っています。',kanmatsu:'今は'+e.mag+'の巻末に載っています。',namae:'表紙には載りませんが、'+e.mag+'の目次に名前が載っています。',jigo:'今回は載りません。'}[e.placement];
   document.getElementById('status').innerHTML='<span class="label">NOW</span>　'+st;
   const o=document.getElementById('others'); o.innerHTML='';
   for(const [k,line] of e.others){const oe=EDITORS[k];const d=document.createElement('div');d.className='o';d.innerHTML=`<div class="face ${oe.cls}" style="--acc:var(--${k})">${oe.initial}</div><div><b>${oe.name}</b>「${line}」</div>`;o.appendChild(d);}
+  document.getElementById('minimag').textContent=e.mag;
   document.getElementById('mine').innerHTML=(e.placement==='jigo'?'（今回は載りません）':e.placement==='namae'?'（目次に載ります）':'『'+e.title+'』')+'<small>'+document.getElementById('pen').value.trim()+'</small>';
   const seq=[['titlebox',900],['status',1100],['next',1300],['others',1800],['minicover',2400],['actions',3200],['url',3400]];
   seq.forEach(([id,t])=>timers.push(setTimeout(()=>document.getElementById(id).classList.add('in'),t)));
 }
 function tweet(){
   const e=EDITORS[currentEditor];
-  const text=`月刊フェーブル編集部に持ち込んだら、${e.name}が${PLACE[e.placement]}にしてくれました。作品名『${e.title}』 #月刊フェーブル https://fable.example/r/ab12cd https://x.com/example/status/0`;
+  const text=`AI編集部の${e.mag}に持ち込んだら、${e.name}が${PLACE[e.placement]}にしてくれました。作品名『${e.title}』 #AI編集部 https://fable.example/r/ab12cd https://x.com/example/status/0`;
   window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(text),'_blank');
 }
 
 /* 7 表紙 */
-function buildCover(el){
-  const col=(k,e)=>{const c=COVER[k];const w=(list,cls)=>list.map(([t,a,n])=>`<div class="w ${cls}${n?' new':''}"><span class="t">${t}</span><span class="a">${a}</span></div>`).join('');
-    return `<div class="col ${e.cls}"><div class="vert"><span class="sec">${e.name}の推薦</span>${w(c.kanto,'kanto')}${w(c.tokushu,'tokushu')}</div><div class="small"><b>巻末</b>${c.kanmatsu.map(([t,a])=>`『${t}』${a}`).join('　')}</div></div>`;};
-  el.innerHTML=`<div class="issue">2026<small>OCT</small></div><div class="mag">月刊フェーブル<small>AI FICTION MONTHLY</small></div>
-    <div class="cols">${col('kurodo',EDITORS.kurodo)}${col('nina',EDITORS.nina)}${col('sol',EDITORS.sol)}</div>
-    <div class="bottom"><span>組版中　30 / 287</span><span>蔵人・二ナ・ソル</span></div>`;
+function buildCover(el,key){
+  const e=EDITORS[key], c=COVER[key];
+  const W=(list,cls)=>list.map(([t,a,n],i)=>`<div class="w ${cls}${n?' new':''}" style="--c:${['#4285f4','#ea4335','#34a853'][i%3]};--r:${[-1.5,1,-.5][i%3]}deg"><span class="n">${String(i+1).padStart(2,'0')}</span><span class="t">${t}</span><span class="a">${a}</span></div>`).join('');
+  const small=`<div class="small"><b>巻末</b>${c.kanmatsu.map(([t,a])=>`『${t}』${a}`).join('　')}</div>`;
+  if(key==='kurodo'){
+    el.className='cover fable';
+    el.innerHTML=`<div class="issue">2026 OCT</div><div class="mag">季刊フェーブル<small>FABLE QUARTERLY</small></div>
+      <div class="vert"><span class="sec">巻頭</span>${W(c.kanto,'kanto')}<span class="sec">特集</span>${W(c.tokushu,'tokushu')}</div>${small}
+      <div class="foot2"><span>組版中　10 / 96</span><span>編集: 蔵人</span></div>`;
+  }else if(key==='nina'){
+    el.className='cover flash';
+    el.innerHTML=`<div class="mag">週刊フラッシュ<small>FLASH WEEKLY</small></div><div class="issue">2026 OCT</div>
+      <div class="body">${W(c.kanto,'kanto')}${W(c.tokushu,'tokushu')}</div>${small}
+      <div class="foot2"><span>組版中　10 / 121</span><span>編集: 二ナ</span></div>`;
+  }else{
+    el.className='cover astra';
+    el.innerHTML=`<div class="mag">ASTRA<small>月刊アストラ</small></div><div class="planets"><i class="sun"></i><i class="earth"></i><i class="moon"></i></div><div class="issue">2026 OCT　NOW TYPESETTING</div>
+      <div class="body">${[[c.kanto,'kanto',1],[c.tokushu,'tokushu',2],[c.kanmatsu,'kanmatsu',5]].map(([list,cls,st])=>list.map(([t,a,n],i)=>`<div class="w ${cls}${n?' new':''}"><span class="n">${String(st+i).padStart(2,'0')}</span><span><span class="t">${t}</span><span class="a">${a}</span></span></div>`).join('')).join('')}</div>
+      <div class="foot2"><span>組版中　10 / 70</span><span>編集: ソル</span></div>`;
+  }
+  el.querySelectorAll('.n').forEach((n,i)=>{if(key!=='sol')n.remove();});
 }
+let coverKey='nina';
+function showCover(k){coverKey=k;document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.k===k));buildCover(document.getElementById('cover'),k);}
 document.getElementById('toc').innerHTML=TOC.map(t=>`<div>${t}</div>`).join('');
 go('entry'); count();
 </script>
