@@ -1,4 +1,4 @@
-# 技術の定義（第4版）
+# 技術の定義（第5版。段階0から6を作ったあとの実物に合わせた）
 
 「何を使って、どう作るか」を決めます。
 決めた理由も書いておきます。あとで変えるときに、理由ごと見直せるようにするためです。
@@ -25,10 +25,10 @@ MacBookの表紙 ─┘（10秒ごとに読みに来る）
 | 役割 | 使うもの | 理由 |
 |---|---|---|
 | 画面とサーバー | Next.js（App Router）とTypeScript | 画面とサーバーを1つのコードにまとめられる。置き場所の選択肢が多い |
-| 見た目 | Tailwind CSS | 細かい見た目をあとから直しやすい |
+| 見た目 | 素のCSS（app/globals.css） | モックのCSSをそのまま引き継ぐため。Tailwindは使わない |
 | 置き場所 | Vercel | Next.jsをそのまま置ける。当日だけの公開なら無料の範囲で足りる |
-| データベース | Neon（Postgres） | Vercelから使いやすく、無料の範囲で足りる。データは小さい |
-| データベースの操作 | Drizzle ORM | 表の形をTypeScriptで書ける。軽い |
+| データベース | Neon（Postgres）。手元ではPGlite | 本番はVercelのStorageから作れる。手元は同じPostgresの形で data/pglite に保存する |
+| データベースの操作 | SQLを直接書く（lib/db/index.ts） | 表が5つしかないので、道具を増やさない。表は最初のアクセスで自動で作る |
 | 蔵人 | Anthropic公式SDK（@anthropic-ai/sdk） | モデルはclaude-sonnet-5（当日）、claude-haiku-4-5（試験中） |
 | 二ナ | Google公式SDK（@google/genai） | モデルはGemini 3.7 Flash（正確なID名は実装時に確認） |
 | ソル | OpenAI公式SDK（openai） | モデルはgpt-5.6-luna |
@@ -55,8 +55,9 @@ app/
   submit/page.tsx          原稿を持ち込む（読んでいる間もここ）
   r/[id]/page.tsx          結果
   r/[id]/opengraph-image.tsx  結果の画像（X用）
-  cover/page.tsx           表紙（最新の号）
-  toc/page.tsx             目次（全員の一覧）
+  cover/page.tsx           表紙（3誌を切り替え、下に目次）
+  screen/page.tsx          ブースの大画面
+  toc/page.tsx             表紙の画面に飛ばすだけ
   admin/page.tsx           管理
   api/
     submit/route.ts        原稿を受け取って判定を返す
@@ -84,8 +85,8 @@ lib/
   afterword.ts             編集後記を作る
   cover.ts                 号の分け方、表紙に載せる順番
   db/
-    schema.ts              表の定義
-    index.ts               接続
+    schema.ts              表の定義（SQL）
+    index.ts               接続（NeonかPGliteを選ぶ）
 docs/                      企画メモなど
 public/
   editors/                 顔と部屋の絵
