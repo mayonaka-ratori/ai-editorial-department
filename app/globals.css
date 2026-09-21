@@ -3,8 +3,9 @@
   --cyan:#35d6ff; --blue:#2f6bff; --violet:#8b5cf6; --white:#f4f9ff; --gold:#ffd86b;
   --kurodo:#ff8a3d; --nina:#4285f4; --nina2:#9b72cb; --sol:#cfd6e6;
   --g-blue:#4285f4; --g-red:#ea4335; --g-yellow:#fbbc05; --g-green:#34a853; --sun:#ffd86b;
-  --jp:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP",sans-serif;
+  --jp:"Zen Kaku Gothic New","Zen Kaku Gothic New Black","Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP","Noto Sans CJK JP",sans-serif;
   --num:"Rajdhani","Zen Kaku Gothic New",sans-serif;
+  --serif:"Shippori Mincho","Shippori Mincho ExtraBold","Noto Serif JP","Noto Serif CJK JP","Hiragino Mincho ProN","Yu Mincho",serif;
 }
 *{box-sizing:border-box}
 html,body{height:100%}
@@ -222,20 +223,22 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--cyan)}
 .cover .foot2{position:absolute;left:12px;right:12px;bottom:10px;display:flex;justify-content:space-between;font-family:var(--num);font-size:10px;letter-spacing:.15em;padding-top:6px}
 .cover .foot2 span{white-space:nowrap}
 .cover .empty{font-size:11px;opacity:.6}
-.cover.fable{background:radial-gradient(60% 40% at 50% 100%,rgba(255,138,61,.25),transparent 70%),linear-gradient(#0a0806,#151008);border-color:rgba(255,138,61,.6);color:#f3ead8}
-.cover.fable .mag{position:absolute;right:16px;top:16px;writing-mode:vertical-rl;font-size:30px;font-weight:900;letter-spacing:.2em;line-height:1;color:#f3ead8}
-.cover.fable .mag small{display:block;font-family:var(--num);font-size:10px;letter-spacing:.3em;margin-top:8px;color:var(--kurodo)}
-.cover.fable .issue{position:absolute;left:12px;top:12px;font-family:var(--num);font-size:11px;letter-spacing:.2em;color:var(--kurodo);border:1px solid rgba(255,138,61,.6);padding:2px 8px}
-.cover.fable .vert{position:absolute;top:64px;bottom:96px;left:12px;right:70px;writing-mode:vertical-rl;text-orientation:mixed;overflow:hidden}
-.cover.fable .sec{display:block;font-family:var(--num);font-size:9px;letter-spacing:.3em;color:var(--kurodo);border-right:1px solid var(--kurodo);padding-right:3px;margin-left:10px}
-.cover.fable .w{display:block;margin-left:10px;line-height:1.1}
-.cover.fable .w .t{font-weight:900;letter-spacing:.1em}
-.cover.fable .w .a{font-size:9px;color:#b9a68a;margin-top:8px}
-.cover.fable .w.kanto .t{font-size:26px;color:var(--kurodo);text-shadow:0 0 10px rgba(255,138,61,.5)}
-.cover.fable .w.tokushu .t{font-size:14px}
-.cover.fable .small{position:absolute;left:12px;right:12px;bottom:34px;font-size:9px;line-height:1.5;color:#b9a68a;border-top:1px solid rgba(255,138,61,.35);padding-top:4px;max-height:58px;overflow:hidden}
-.cover.fable .small b{font-family:var(--num);font-size:8px;letter-spacing:.2em;color:var(--kurodo);margin-right:6px;font-weight:600}
-.cover.fable .foot2{color:#b9a68a;border-top:1px solid rgba(255,138,61,.35)}
+.cover .ly{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none}
+/* 季刊フェーブル: 生成りの紙、題字は明朝、下の段に縦書き */
+.cover.fable{aspect-ratio:2/3;background:#f7f5ee;border-color:rgba(223,120,60,.5);color:#222;clip-path:none;border-radius:4px;font-family:var(--serif)}
+.cover.fable .issue{position:absolute;right:4%;top:2.6%;font-family:var(--serif);font-size:10px;letter-spacing:.08em;color:#333}
+.cover.fable .mag{position:absolute;left:0;right:0;top:11%;text-align:center;font-family:var(--serif);font-weight:800;font-size:34px;letter-spacing:.02em;color:#111;line-height:1.1;text-wrap:nowrap}
+.cover.fable .list{position:absolute;left:6%;right:6%;top:78.5%;bottom:5%;writing-mode:vertical-rl;text-orientation:mixed;overflow:hidden;color:#222}
+.cover.fable .w{display:block;margin-left:7px;line-height:1.15}
+.cover.fable .sec{display:block;font-size:9px;letter-spacing:.2em;color:#333;margin-left:6px}
+.cover.fable .w .t{display:block;font-weight:800;letter-spacing:.06em}
+.cover.fable .w .t::before{content:"●";color:#df783c;font-size:6px;vertical-align:middle;margin-bottom:6px;display:inline-block}
+.cover.fable .w .a{display:block;font-size:8px;color:#555;margin-top:6px}
+.cover.fable .w.kanto .t{font-size:15px}
+.cover.fable .w.tokushu .t{font-size:12px}
+.cover.fable .w.kanmatsu .t{font-size:10px;font-weight:700}
+.cover.fable .foot2{color:#333;font-family:var(--num);font-size:9px;bottom:1.4%;padding-top:0}
+.cover.fable .empty{color:#999}
 /* 週刊フラッシュ: 3枚の絵を重ねた上に作品名 */
 .cover.gemini{aspect-ratio:1328/1760;background:#f2f0fb;border-color:rgba(155,114,203,.5);color:#5b4b8f;clip-path:none;border-radius:6px}
 .cover.gemini .ly{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none}
@@ -252,24 +255,32 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--cyan)}
 .cover.gemini .small b{font-family:var(--num);font-size:8px;letter-spacing:.2em;margin-right:6px;font-weight:700;color:#7a5fae}
 .cover.gemini .foot2{color:#7a5fae;bottom:1.6%;font-size:9px}
 .cover.gemini .empty{opacity:.7;text-shadow:0 0 6px #fff}
-.cover.astra{background:radial-gradient(1px 1px at 15% 20%,#fff 60%,transparent),radial-gradient(1px 1px at 70% 12%,#fff 60%,transparent),radial-gradient(1.5px 1.5px at 40% 35%,#fff 60%,transparent),radial-gradient(1px 1px at 85% 45%,#fff 60%,transparent),radial-gradient(1px 1px at 25% 70%,#fff 60%,transparent),radial-gradient(1px 1px at 60% 85%,#fff 60%,transparent),linear-gradient(#05070f,#0b1024);border-color:rgba(207,214,230,.6);color:var(--sol)}
-.cover.astra .mag{position:absolute;left:12px;top:16px;font-family:var(--num);font-size:26px;font-weight:700;letter-spacing:.2em;color:#fff}
-.cover.astra .mag small{display:block;font-family:var(--jp);font-size:14px;font-weight:900;letter-spacing:.1em;color:var(--sol)}
-.cover.astra .planets{position:absolute;right:12px;top:16px;display:flex;gap:10px;align-items:center}
-.cover.astra .planets .sun{width:18px;height:18px}
-.cover.astra .planets .earth{width:10px;height:10px}
-.cover.astra .planets .moon{width:6px;height:6px}
-.cover.astra .issue{position:absolute;left:12px;top:82px;font-family:var(--num);font-size:10px;letter-spacing:.25em;color:#8a94ad}
-.cover.astra .body{position:absolute;left:12px;right:12px;top:102px;bottom:34px;display:grid;grid-auto-rows:min-content;gap:5px;border-top:1px solid rgba(207,214,230,.3);padding-top:8px;overflow:hidden}
-.cover.astra .w{display:grid;grid-template-columns:26px 1fr;gap:6px;align-items:baseline}
-.cover.astra .w .n{font-family:var(--num);font-size:10px;letter-spacing:.1em;color:#8a94ad}
-.cover.astra .w .t{font-weight:900}
-.cover.astra .w .a{font-size:9px;color:#8a94ad;margin-left:6px}
-.cover.astra .w.kanto .t{font-size:20px;color:var(--sun);text-shadow:0 0 10px rgba(255,216,107,.4)}
-.cover.astra .w.tokushu .t{font-size:13px;color:#fff}
-.cover.astra .w.kanmatsu .t{font-size:10px;color:var(--sol);font-weight:700}
-.cover.astra .w.kanmatsu .a{font-size:8px}
-.cover.astra .foot2{color:#8a94ad;border-top:1px solid rgba(207,214,230,.3)}
+/* 月刊アストラ: 宇宙の絵、題字は色つきの明朝 */
+.cover.astra{aspect-ratio:2/3;background:#0a1230;border-color:rgba(207,214,230,.5);color:#fff;clip-path:none;border-radius:4px;font-family:var(--serif)}
+.cover.astra .tagline{position:absolute;left:5%;top:2.4%;font-size:9px;letter-spacing:.2em;color:#fff}
+.cover.astra .mag{position:absolute;left:5%;top:5.5%;font-family:var(--serif);font-weight:800;font-size:36px;letter-spacing:.02em;line-height:1;text-wrap:nowrap;text-shadow:0 2px 12px rgba(0,0,0,.5)}
+.cover.astra .credit{position:absolute;left:5%;top:14.5%;font-size:8px;letter-spacing:.25em;color:#dfe6f5}
+.cover.astra .issue{position:absolute;right:4%;top:2.4%;display:flex;flex-direction:column;align-items:flex-end;gap:2px;font-family:var(--num);font-size:10px;letter-spacing:.15em;color:#fff;border-left:1px solid rgba(255,255,255,.5);padding-left:8px}
+.cover.astra .issue .vol{font-size:8px;color:#ffd86b}
+.cover.astra .pl{position:absolute;font-family:var(--num);font-size:9px;letter-spacing:.3em;color:#ffd86b;text-shadow:0 0 6px rgba(0,0,0,.8)}
+.cover.astra .pl.sol{left:5%;top:47%}
+.cover.astra .pl.luna{right:5%;top:31%}
+.cover.astra .pl.terra{right:5%;top:71%}
+.cover.astra .lead{position:absolute;left:5%;right:36%;top:55%;display:flex;flex-direction:column;gap:5px}
+.cover.astra .w{display:block;line-height:1.15}
+.cover.astra .w .t{display:block;font-weight:800;text-shadow:0 2px 10px rgba(0,0,0,.6)}
+.cover.astra .w .a{display:block;font-size:8px;letter-spacing:.1em;color:#dfe6f5;margin-top:3px}
+.cover.astra .w.kanto .t{font-size:24px;background:linear-gradient(#fff,#ffd86b);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 8px rgba(0,0,0,.6))}
+.cover.astra .rule{height:1px;background:rgba(255,255,255,.5);width:40px;margin:3px 0}
+.cover.astra .w.tokushu{display:grid;grid-template-columns:auto 1fr;column-gap:8px;align-items:baseline}
+.cover.astra .w.tokushu .lab{font-size:10px;letter-spacing:.2em;font-weight:700}
+.cover.astra .w.tokushu .t{font-size:12px;color:#fff}
+.cover.astra .w.tokushu .a{grid-column:2}
+.cover.astra .writers{position:absolute;left:5%;right:5%;bottom:5.5%;display:grid;gap:3px}
+.cover.astra .writers .lab{font-size:8px;letter-spacing:.2em;color:#dfe6f5}
+.cover.astra .writers .names{font-size:10px;font-weight:700;letter-spacing:.06em;text-shadow:0 2px 8px rgba(0,0,0,.7);line-height:1.5}
+.cover.astra .foot2{color:#dfe6f5;font-family:var(--num);font-size:8px;bottom:1.6%;padding-top:0}
+.cover.astra .empty{color:#aab4cc}
 .tabs{display:flex;gap:6px}
 .tabs button{flex:1;border:1px solid var(--line);background:transparent;color:var(--mute);padding:6px 4px;font-size:12px;font-weight:700}
 .tabs button.on{color:#04101f;background:var(--cyan)}
@@ -288,16 +299,16 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--cyan)}
   background:repeating-linear-gradient(90deg,rgba(53,214,255,.35) 0 1px,transparent 1px 60px),repeating-linear-gradient(0deg,rgba(53,214,255,.35) 0 1px,transparent 1px 60px);
   -webkit-mask-image:linear-gradient(transparent,#000 60%);mask-image:linear-gradient(transparent,#000 60%)}
 .desk .shelf{position:absolute;left:10vw;right:22vw;bottom:12vh;display:flex;justify-content:center;align-items:flex-end;gap:2vw;perspective:1600px}
-.desk .scene{width:330px;height:466px;position:relative;transform-style:preserve-3d;zoom:.9;transition:zoom .6s}
+.desk .scene{width:330px;position:relative;transform-style:preserve-3d;zoom:.9;transition:zoom .6s}
 .desk .scene.center{zoom:1.18}
 @media (max-height:820px){.desk .scene{zoom:.72}.desk .scene.center{zoom:.95}}
-.desk .book{position:absolute;inset:0;transform-style:preserve-3d;animation:turn 14s ease-in-out infinite alternate;transform-origin:50% 100%}
+.desk .book{position:relative;transform-style:preserve-3d;animation:turn 14s ease-in-out infinite alternate;transform-origin:50% 100%}
 .desk .scene.left .book{animation-name:turnL}
 .desk .scene.right .book{animation-name:turnR}
 @keyframes turn{from{transform:rotateY(-14deg) rotateX(3deg) translateY(-6px)}to{transform:rotateY(12deg) rotateX(3deg) translateY(6px)}}
 @keyframes turnL{from{transform:rotateY(22deg) rotateX(3deg)}to{transform:rotateY(34deg) rotateX(3deg) translateY(6px)}}
 @keyframes turnR{from{transform:rotateY(-22deg) rotateX(3deg)}to{transform:rotateY(-34deg) rotateX(3deg) translateY(6px)}}
-.desk .book .cover{position:absolute;inset:0;backface-visibility:hidden}
+.desk .book .cover{position:relative;backface-visibility:hidden}
 .desk .book .edge{position:absolute;left:-10px;top:0;bottom:0;width:10px;background:linear-gradient(90deg,rgba(53,214,255,.4),rgba(53,214,255,.9));transform:rotateY(-90deg);transform-origin:right}
 .desk .book .back{position:absolute;inset:0;background:rgba(12,20,38,.6);transform:translateZ(-10px);border:1px solid var(--line)}
 .desk .side{position:absolute;right:2vw;top:7vh;width:19vw;min-width:200px;display:grid;gap:10px;z-index:3}
