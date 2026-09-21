@@ -43,28 +43,32 @@ export default function CoverView({ m, issueTitle, published }: { m: MagazineCov
     );
   }
   if (m.editor === "nina") {
-    const cols = ["#4285f4", "#ea4335", "#34a853"];
+    // 3枚の絵（地、ロゴ、マスコット）を重ねて、その上に作品名を置く。
     return (
-      <div className="cover flash">
-        <div className="mag">
-          {m.magazine}
-          <small>{m.magazineEn}</small>
-        </div>
+      <div className="cover gemini">
+        <img className="ly" src="/covers/nina/bg.webp" alt="" />
+        <img className="ly" src="/covers/nina/mascot.webp" alt="" />
+        <img className="ly" src="/covers/nina/logo.webp" alt={m.magazine} />
         <div className="issue">{issueTitle}</div>
-        <div className="body">
+        <div className="colL">
+          <span className="sec">巻頭</span>
           {m.kanto.map((w) => (
             <div key={w.id} className={`w kanto${w.is_new ? " new" : ""}`}>
               <span className="t">{w.title}</span>
               <span className="a">{w.pen_name}</span>
             </div>
           ))}
-          {!m.kanto.length && <div className="w kanto"><span className="t">巻頭は空席</span></div>}
-          {m.tokushu.map((w, i) => (
-            <div key={w.id} className={`w tokushu${w.is_new ? " new" : ""}`} style={{ ["--c" as string]: cols[i % 3], ["--r" as string]: `${[-1.5, 1, -0.5][i % 3]}deg` }}>
+          {!m.kanto.length && <div className="w kanto"><span className="t empty">空席</span></div>}
+        </div>
+        <div className="colR">
+          <span className="sec">特集</span>
+          {m.tokushu.map((w) => (
+            <div key={w.id} className={`w tokushu${w.is_new ? " new" : ""}`}>
               <span className="t">{w.title}</span>
               <span className="a">{w.pen_name}</span>
             </div>
           ))}
+          {!m.tokushu.length && <div className="w tokushu"><span className="t empty">まだ空いています</span></div>}
         </div>
         {small}
         <div className="foot2">

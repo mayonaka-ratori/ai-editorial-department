@@ -236,24 +236,22 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--cyan)}
 .cover.fable .small{position:absolute;left:12px;right:12px;bottom:34px;font-size:9px;line-height:1.5;color:#b9a68a;border-top:1px solid rgba(255,138,61,.35);padding-top:4px;max-height:58px;overflow:hidden}
 .cover.fable .small b{font-family:var(--num);font-size:8px;letter-spacing:.2em;color:var(--kurodo);margin-right:6px;font-weight:600}
 .cover.fable .foot2{color:#b9a68a;border-top:1px solid rgba(255,138,61,.35)}
-.cover.flash{background:linear-gradient(160deg,#ffffff,#eef4ff);border-color:var(--g-blue);color:#1a1a1a}
-.cover.flash::before{content:"";position:absolute;left:0;right:0;top:0;height:10px;background:linear-gradient(90deg,var(--g-blue) 0 25%,var(--g-red) 0 50%,var(--g-yellow) 0 75%,var(--g-green) 0)}
-.cover.flash .mag{position:absolute;left:12px;top:18px;font-size:30px;font-weight:900;letter-spacing:.02em;line-height:1;background:linear-gradient(90deg,var(--g-blue),var(--nina2));-webkit-background-clip:text;background-clip:text;color:transparent}
-.cover.flash .mag small{display:block;font-family:var(--num);font-size:10px;letter-spacing:.3em;margin-top:4px;color:var(--g-red);-webkit-text-fill-color:var(--g-red)}
-.cover.flash .issue{position:absolute;right:12px;top:18px;font-family:var(--num);font-size:11px;letter-spacing:.15em;color:#fff;background:var(--g-red);padding:2px 8px;transform:rotate(4deg)}
-.cover.flash .body{position:absolute;left:12px;right:12px;top:78px;bottom:96px;display:flex;flex-direction:column;gap:8px;overflow:hidden}
-.cover.flash .w{position:relative;padding:4px 8px;line-height:1.15}
-.cover.flash .w .t{font-weight:900;display:block}
-.cover.flash .w .a{font-size:9px;color:#555}
-.cover.flash .w.kanto{transform:rotate(-3deg);margin-top:6px}
-.cover.flash .w.kanto .t{font-size:28px;color:#fff;background:var(--g-blue);display:inline;padding:0 6px;box-decoration-break:clone;-webkit-box-decoration-break:clone;line-height:1.35}
-.cover.flash .w.kanto .t::after{content:"！"}
-.cover.flash .w.kanto .a{display:block;margin-top:6px;color:var(--g-blue);font-weight:700}
-.cover.flash .w.tokushu{border-left:6px solid var(--c);transform:rotate(var(--r))}
-.cover.flash .w.tokushu .t{font-size:15px;color:var(--c)}
-.cover.flash .small{position:absolute;left:12px;right:12px;bottom:30px;font-size:9px;line-height:1.5;color:#333;background:var(--g-yellow);padding:4px 8px;max-height:60px;overflow:hidden}
-.cover.flash .small b{font-family:var(--num);font-size:8px;letter-spacing:.2em;margin-right:6px;font-weight:700}
-.cover.flash .foot2{color:#666;border-top:1px solid #ccd}
+/* 週刊フラッシュ: 3枚の絵を重ねた上に作品名 */
+.cover.gemini{aspect-ratio:1328/1760;background:#f2f0fb;border-color:rgba(155,114,203,.5);color:#5b4b8f;clip-path:none;border-radius:6px}
+.cover.gemini .ly{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none}
+.cover.gemini .issue{position:absolute;right:5%;top:3.2%;font-family:var(--num);font-size:10px;letter-spacing:.2em;color:#7a5fae;background:rgba(255,255,255,.75);padding:2px 8px;border-radius:999px}
+.cover.gemini .colL{position:absolute;left:4%;top:25%;bottom:14%;width:24%;writing-mode:vertical-rl;text-orientation:mixed;overflow:hidden}
+.cover.gemini .colR{position:absolute;right:5%;top:24%;bottom:14%;width:22%;writing-mode:vertical-rl;text-orientation:mixed;overflow:hidden}
+.cover.gemini .sec{display:block;font-family:var(--num);font-size:9px;letter-spacing:.3em;color:#7a5fae;border-right:1px solid #b7a6e0;padding-right:3px;margin-left:6px}
+.cover.gemini .w{display:block;margin-left:6px;line-height:1.1}
+.cover.gemini .w .t{font-weight:900;letter-spacing:.08em;color:#4d3d85;text-shadow:0 0 6px #fff,0 0 12px #fff,0 0 2px #fff}
+.cover.gemini .w .a{font-size:9px;color:#7a5fae;margin-top:8px;text-shadow:0 0 6px #fff}
+.cover.gemini .w.kanto .t{font-size:24px;background:linear-gradient(#5dd4c0,#5aa8ff 45%,#b06bff 75%,#ff8ac2);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 3px #fff) drop-shadow(0 0 6px #fff)}
+.cover.gemini .w.tokushu .t{font-size:13px}
+.cover.gemini .small{position:absolute;left:4%;right:4%;bottom:6%;font-size:9px;line-height:1.5;color:#4d3d85;background:rgba(255,255,255,.72);padding:4px 8px;border-radius:8px;max-height:44px;overflow:hidden}
+.cover.gemini .small b{font-family:var(--num);font-size:8px;letter-spacing:.2em;margin-right:6px;font-weight:700;color:#7a5fae}
+.cover.gemini .foot2{color:#7a5fae;bottom:1.6%;font-size:9px}
+.cover.gemini .empty{opacity:.7;text-shadow:0 0 6px #fff}
 .cover.astra{background:radial-gradient(1px 1px at 15% 20%,#fff 60%,transparent),radial-gradient(1px 1px at 70% 12%,#fff 60%,transparent),radial-gradient(1.5px 1.5px at 40% 35%,#fff 60%,transparent),radial-gradient(1px 1px at 85% 45%,#fff 60%,transparent),radial-gradient(1px 1px at 25% 70%,#fff 60%,transparent),radial-gradient(1px 1px at 60% 85%,#fff 60%,transparent),linear-gradient(#05070f,#0b1024);border-color:rgba(207,214,230,.6);color:var(--sol)}
 .cover.astra .mag{position:absolute;left:12px;top:16px;font-family:var(--num);font-size:26px;font-weight:700;letter-spacing:.2em;color:#fff}
 .cover.astra .mag small{display:block;font-family:var(--jp);font-size:14px;font-weight:900;letter-spacing:.1em;color:var(--sol)}
