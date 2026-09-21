@@ -1,7 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 import { JudgementSchema, JUDGEMENT_JSON_SCHEMA, type Provider } from "./schema";
 
-// 二ナ（週刊フラッシュ）。Google公式SDK。
+// 二ナ（GEMINI）。Google公式SDK。
 export function googleProvider(): Provider {
   const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
   const model = process.env.GEMINI_MODEL?.trim() || "gemini-3.7-flash";

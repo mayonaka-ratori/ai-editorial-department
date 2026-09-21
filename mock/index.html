@@ -238,7 +238,7 @@
   .cover.fable .small{position:absolute;left:12px;right:12px;bottom:34px;font-size:9px;line-height:1.5;color:#b9a68a;border-top:1px solid rgba(255,138,61,.35);padding-top:4px}
   .cover.fable .small b{font-family:var(--num);font-size:8px;letter-spacing:.2em;color:var(--kurodo);margin-right:6px;font-weight:600}
   .cover.fable .foot2{color:#b9a68a;border-top:1px solid rgba(255,138,61,.35)}
-  /* 週刊フラッシュ: 白、横書き、4色の見出し */
+  /* GEMINI: 白、横書き、4色の見出し */
   .cover.flash{background:linear-gradient(160deg,#ffffff,#eef4ff);border-color:var(--g-blue);color:#1a1a1a}
   .cover.flash::before{content:"";position:absolute;left:0;right:0;top:0;height:10px;background:linear-gradient(90deg,var(--g-blue) 0 25%,var(--g-red) 0 50%,var(--g-yellow) 0 75%,var(--g-green) 0)}
   .cover.flash .mag{position:absolute;left:12px;top:18px;font-size:30px;font-weight:900;letter-spacing:.02em;line-height:1;background:linear-gradient(90deg,var(--g-blue),var(--nina2));-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -412,7 +412,7 @@
       <div class="space"></div>
       <div style="position:relative;z-index:2;display:flex;flex-direction:column;gap:12px">
         <div class="coverbar"><button class="back" onclick="go('entry')">← 入口</button><span>2026年10月号　組版中</span></div>
-        <div class="tabs" id="tabs"><button onclick="showCover('kurodo')" data-k="kurodo">季刊フェーブル</button><button onclick="showCover('nina')" data-k="nina" class="on">週刊フラッシュ</button><button onclick="showCover('sol')" data-k="sol">月刊アストラ</button></div>
+        <div class="tabs" id="tabs"><button onclick="showCover('kurodo')" data-k="kurodo">季刊フェーブル</button><button onclick="showCover('nina')" data-k="nina" class="on">GEMINI</button><button onclick="showCover('sol')" data-k="sol">月刊アストラ</button></div>
         <div class="cover" id="cover"></div>
         <p class="label">TOC　目次（全員）</p>
         <input type="text" id="tocq" placeholder="ペンネームで探す" style="font-size:13px">
@@ -436,7 +436,7 @@
   <div id="desk">
     <div class="space"></div>
     <div class="floor"></div>
-    <div class="ticker"><span>NEW　『毛布いりますか』 終電のがし（週刊フラッシュ 巻頭）　　『飲まないまま』 終電のがし（季刊フェーブル 特集）　　『たたまなくていい』 終電のがし（月刊アストラ 特集）　　『前髪』 バス停（目次へ）</span></div>
+    <div class="ticker"><span>NEW　『毛布いりますか』 終電のがし（GEMINI 巻頭）　　『飲まないまま』 終電のがし（季刊フェーブル 特集）　　『たたまなくていい』 終電のがし（月刊アストラ 特集）　　『前髪』 バス停（目次へ）</span></div>
     <div class="ticker" style="top:auto;bottom:0;border-bottom:0;border-top:1px solid var(--line);color:var(--mute)"><span>目次　『前髪』バス停　『皆さんへ』本当の自分　『海苔』コンビニ　『返信』未送信　『窓際』テスト太郎　『三時』漫喫　『置き手紙』冷蔵庫　『4分遅れ』駅　『午後』カフェ　『火曜』ゆ</span></div>
     <div class="shelf">
       <div class="scene left"><div class="book"><div class="back"></div><div class="edge"></div><div class="cover" id="cover-fable"></div></div></div>
@@ -475,7 +475,7 @@ const EDITORS = {
     comment:'先に言っておくと、終電を逃して漫喫に泊まる話は、うちの読者はもう何度も読んでいます。\nただ、最後の「飲まないまま持って帰った」は、そうなるとは思いませんでした。ここがいいです。\nなぜ飲まなかったのかを書いていないので、読者は続きを自分で想像するしかありません。うちの読者は、自分では書けない文章を読みたがります。\nだから特集にします。\nもし毛布の話のほうが本題なら、私の読み方が間違っています。',
     next:'今回のように、理由を書かないで終わる話をもう1本お願いします。',
     others:[['nina','蔵人さんが特集を出すのは珍しいです！高い評価ですよ！'],['sol','私も同じくらいの評価です。']]},
-  nina:{key:'nina',cls:'n',mag:'週刊フラッシュ',magEn:'FLASH WEEKLY',name:'二ナ',yomi:'NINA',inside:'CORE: Gemini',motto:'うちの読者には体がないんで！',looks:'体と時間の実感があるか',initial:'二',light:true,
+  nina:{key:'nina',cls:'n',mag:'GEMINI',magEn:'GEMINI WEEKLY',name:'二ナ',yomi:'NINA',inside:'CORE: Gemini',motto:'うちの読者には体がないんで！',looks:'体と時間の実感があるか',initial:'二',light:true,
     greet:'原稿ですね！楽しみです！どうぞ！',
     reading:['素晴らしい原稿を読んでいます！','関連情報を調べています（調べなくていい）','話を戻しています'],speed:22,
     quote:'隣のブースの人が延々とポテトを食べる音がしていた',placement:'kanto',title:'毛布いりますか',
@@ -667,7 +667,7 @@ function buildCover(el,key){
       <div class="foot2"><span>組版中　10 / 96</span><span>編集: 蔵人</span></div>`;
   }else if(key==='nina'){
     el.className='cover flash';
-    el.innerHTML=`<div class="mag">週刊フラッシュ<small>FLASH WEEKLY</small></div><div class="issue">2026 OCT</div>
+    el.innerHTML=`<div class="mag">GEMINI<small>GEMINI WEEKLY</small></div><div class="issue">2026 OCT</div>
       <div class="body">${W(c.kanto,'kanto')}${W(c.tokushu,'tokushu')}</div>${small}
       <div class="foot2"><span>組版中　10 / 121</span><span>編集: 二ナ</span></div>`;
   }else{
