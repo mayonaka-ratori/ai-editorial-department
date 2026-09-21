@@ -1,8 +1,8 @@
 import type { CoverWork, MagazineCover } from "@/lib/cover";
 
 // 雑誌の表紙。3誌で見た目が違う。mine に入っている作品には「あなた」の印が付く。
-export default function CoverView({ m, issueTitle, published, mine = [] }: { m: MagazineCover; issueTitle: string; published: boolean; mine?: string[] }) {
-  const state = published ? "発行" : "組版中";
+// 表紙に置く文字は、題字、号、巻頭・特集・巻末の作品名と作者名だけ。飾りの英語や数は置かない（絵の雰囲気を壊さないため）。
+export default function CoverView({ m, issueTitle, mine = [] }: { m: MagazineCover; issueTitle: string; published?: boolean; mine?: string[] }) {
   const isMine = (w: CoverWork) => mine.includes(w.id);
   // 長い作品名は文字を小さくして、途中で折れないようにする（9字以上でl2、13字以上でl3）
   const len = (w: CoverWork) => [...w.title].length;
@@ -52,10 +52,6 @@ export default function CoverView({ m, issueTitle, published, mine = [] }: { m: 
           {!m.tokushu.length && <div className="w tokushu"><span className="sec">〈特集〉</span><span className="t empty">まだ空いています</span></div>}
         </div>
         {strip}
-        <div className="foot2">
-          <span>{state}　{m.kanto.length + m.tokushu.length + m.kanmatsu.length} / {m.counts.submissions}</span>
-          <span>AI EDITORIAL DEPT.</span>
-        </div>
       </div>
     );
   }
@@ -90,10 +86,6 @@ export default function CoverView({ m, issueTitle, published, mine = [] }: { m: 
           {!m.tokushu.length && <div className="w tokushu"><span className="t empty">まだ空いています</span></div>}
         </div>
         {strip}
-        <div className="foot2">
-          <span>{state}　COVER {m.kanto.length + m.tokushu.length + m.kanmatsu.length} / {m.counts.submissions}</span>
-          <span>編集: 二ナ</span>
-        </div>
       </div>
     );
   }
@@ -101,7 +93,6 @@ export default function CoverView({ m, issueTitle, published, mine = [] }: { m: 
   return (
     <div className="cover astra">
       <img className="ly" src="/covers/sol/bg.webp" alt="" />
-      <div className="tagline">AIが編集する、読者のための小説雑誌</div>
       <div className="mag">
         {[...m.magazine].map((ch, i) => (
           <span key={i} style={{ color: ["#ffffff", "#ffffff", "#ffd86b", "#7fe7ff", "#c9a6ff", "#9fe6b8", "#ffd86b"][i % 7] }}>
@@ -109,14 +100,9 @@ export default function CoverView({ m, issueTitle, published, mine = [] }: { m: 
           </span>
         ))}
       </div>
-      <div className="credit">編集AI　ASTRA / SOL / TERRA / LUNA</div>
       <div className="issue">
         <span>{issueTitle}</span>
-        <span className="vol">{published ? "PUBLISHED" : "NOW TYPESETTING"}</span>
       </div>
-      <div className="pl sol">SOL</div>
-      <div className="pl luna">LUNA</div>
-      <div className="pl terra">TERRA</div>
       <div className="lead">
         {m.kanto.map((w) => (
           <div key={w.id} className={cls(w, "kanto")}>
@@ -140,10 +126,6 @@ export default function CoverView({ m, issueTitle, published, mine = [] }: { m: 
         {!m.tokushu.length && <div className="w tokushu"><span className="lab" style={{ color: labelColors[0] }}>特集</span><span className="t empty">まだ空いています</span></div>}
       </div>
       {strip}
-      <div className="foot2">
-        <span>{state}　{m.kanto.length + m.tokushu.length + m.kanmatsu.length} / {m.counts.submissions}</span>
-        <span>STORIES ORBIT FURTHER</span>
-      </div>
     </div>
   );
 }

@@ -222,8 +222,6 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--cyan)}
   clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,18px 100%,0 calc(100% - 18px))}
 .cover .new .t{animation:flashT 1.6s ease}
 @keyframes flashT{30%{text-shadow:0 0 16px #fff,0 0 30px currentColor}}
-.cover .foot2{position:absolute;left:12px;right:12px;bottom:10px;display:flex;justify-content:space-between;font-family:var(--num);font-size:10px;letter-spacing:.15em;padding-top:6px}
-.cover .foot2 span{white-space:nowrap}
 .cover .empty{font-size:11px;opacity:.6}
 .cover .ly{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none}
 .cover .small{position:absolute;left:4%;right:4%;font-size:9px;line-height:1.5;padding:4px 8px;max-height:46px;overflow:hidden;font-weight:700}
@@ -243,12 +241,11 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--cyan)}
 .cover.fable .w .t{display:block;font-weight:800;letter-spacing:.06em}
 .cover.fable .w .t::before{content:"●";color:#df783c;font-size:6px;vertical-align:middle;margin-bottom:3px;display:inline-block}
 .cover.fable .w .a{display:block;font-size:8px;color:#555;margin-top:6px}
-.cover.fable .w.kanto .t{font-size:11px}
-.cover.fable .w.tokushu .t{font-size:10px}
+.cover.fable .w.kanto .t{font-size:10px}
+.cover.fable .w.tokushu .t{font-size:9px}
 .cover.fable .w.kanmatsu .t{font-size:10px;font-weight:700}
 .cover.fable .small{top:21%;left:6%;right:6%;color:#222;background:transparent;border-bottom:1px solid #df783c;font-family:var(--jp);padding:2px 4px 3px}
 .cover.fable .small b{color:#df783c}
-.cover.fable .foot2{color:#333;font-family:var(--num);font-size:9px;bottom:1.4%;padding-top:0}
 .cover.fable .empty{color:#999}
 /* 週刊フラッシュ: 3枚の絵を重ねた上に作品名 */
 .cover.gemini{aspect-ratio:1328/1760;background:#f2f0fb;border-color:rgba(155,114,203,.5);color:#5b4b8f;clip-path:none;border-radius:6px}
@@ -267,19 +264,11 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--cyan)}
 .cover.gemini .w.tokushu.l3 .t{font-size:11px}
 .cover.gemini .small{bottom:6%;color:#4d3d85;background:rgba(255,255,255,.72);border-radius:8px}
 .cover.gemini .small b{color:#7a5fae}
-.cover.gemini .foot2{color:#7a5fae;bottom:1.6%;font-size:9px}
 .cover.gemini .empty{opacity:.7;text-shadow:0 0 6px #fff}
 /* 月刊アストラ: 宇宙の絵、題字は色つきの明朝 */
 .cover.astra{aspect-ratio:2/3;background:#0a1230;border-color:rgba(207,214,230,.5);color:#fff;clip-path:none;border-radius:4px;font-family:var(--serif)}
-.cover.astra .tagline{position:absolute;left:5%;top:2.4%;font-size:9px;letter-spacing:.2em;color:#fff}
-.cover.astra .mag{position:absolute;left:5%;top:5.5%;font-family:var(--serif);font-weight:800;font-size:36px;letter-spacing:.02em;line-height:1;text-wrap:nowrap;text-shadow:0 2px 12px rgba(0,0,0,.5)}
-.cover.astra .credit{position:absolute;left:5%;top:14.5%;font-size:8px;letter-spacing:.25em;color:#dfe6f5}
+.cover.astra .mag{position:absolute;left:5%;top:3.5%;font-family:var(--serif);font-weight:800;font-size:36px;letter-spacing:.02em;line-height:1;text-wrap:nowrap;text-shadow:0 2px 12px rgba(0,0,0,.5)}
 .cover.astra .issue{position:absolute;right:4%;top:2.4%;display:flex;flex-direction:column;align-items:flex-end;gap:2px;font-family:var(--num);font-size:10px;letter-spacing:.15em;color:#fff;border-left:1px solid rgba(255,255,255,.5);padding-left:8px}
-.cover.astra .issue .vol{font-size:8px;color:#ffd86b}
-.cover.astra .pl{position:absolute;font-family:var(--num);font-size:9px;letter-spacing:.3em;color:#ffd86b;text-shadow:0 0 6px rgba(0,0,0,.8)}
-.cover.astra .pl.sol{left:5%;top:47%}
-.cover.astra .pl.luna{right:5%;top:31%}
-.cover.astra .pl.terra{right:5%;top:71%}
 .cover.astra .lead{position:absolute;left:5%;right:36%;top:55%;display:flex;flex-direction:column;gap:5px}
 .cover.astra .w{display:block;line-height:1.15}
 .cover.astra .w .t{display:block;font-weight:800;text-shadow:0 2px 10px rgba(0,0,0,.6)}
@@ -296,7 +285,6 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--cyan)}
 .cover.astra .w.tokushu .a{grid-column:2}
 .cover.astra .small{bottom:5.5%;color:#fff;background:rgba(10,18,48,.6);border-left:2px solid #ffd86b;font-family:var(--jp)}
 .cover.astra .small b{color:#ffd86b}
-.cover.astra .foot2{color:#dfe6f5;font-family:var(--num);font-size:8px;bottom:1.6%;padding-top:0}
 .cover.astra .empty{color:#aab4cc}
 .tabs{display:flex;gap:6px}
 .tabs button{flex:1;border:1px solid var(--line);background:transparent;color:var(--mute);padding:6px 4px;font-size:12px;font-weight:700}
