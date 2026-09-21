@@ -10,14 +10,7 @@ export const PLACEMENT_LABEL: Record<Placement, string> = {
   namae: "名前だけ",
   jigo: "次号待ち",
 };
-// 判定の言葉の説明。初めての人が「巻末ってなに」とならないように、判定の印のすぐ下に出す。
-export const PLACEMENT_EXPLAIN: Record<Placement, string> = {
-  kanto: "載ります。表紙の一番目立つところです。",
-  tokushu: "載ります。表紙の特集のところです。",
-  kanmatsu: "載ります。表紙の下のほうです。",
-  namae: "表紙には載りませんが、目次に名前が載ります。",
-  jigo: "今回は載りません。次の作品を待っています。",
-};
+// 判定の印のすぐ下に出す説明は lib/lines.ts の placementNote にある（いまの掲載で言い方が変わるため）。
 export const PLACEMENT_BASE: Record<Placement, number> = {
   kanto: 400,
   tokushu: 300,

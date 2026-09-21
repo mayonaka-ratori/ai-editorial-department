@@ -269,8 +269,11 @@ export function othersLines(
   });
 }
 
+// いまの掲載。表紙の枠に入っているか、目次か、どちらにも出ていないか。
+export type PlaceStatus = { kind: "cover"; slot: Placement } | { kind: "toc" } | { kind: "none" } | { kind: "sample" };
+
 // 判定ごとの「掲載」の言い方
-export function statusLine(magazine: string, status: { kind: "cover"; slot: Placement } | { kind: "toc" } | { kind: "none" } | { kind: "sample" }): string {
+export function statusLine(magazine: string, status: PlaceStatus): string {
   if (status.kind === "sample") return "見本の原稿なので、表紙にも目次にも載りません。";
   if (status.kind === "cover") {
     const label = { kanto: "巻頭", tokushu: "特集", kanmatsu: "巻末", namae: "", jigo: "" }[status.slot];
@@ -288,4 +291,33 @@ export function bestLine(comment: string, max = 40): string {
     .filter(Boolean);
   const short = sentences.filter((s) => [...s].length <= max);
   return short.find((s) => s.includes("うちの読者")) ?? short.find((s) => !s.startsWith("先に言っておくと")) ?? "";
+}
+
+// 判定の印のすぐ下に出す説明。判定だけで書くと「載ります」と出したあとに
+// 「載っていません」と続くことがあるので、いまの掲載に合わせて言い方を変える。
+export function placementNote(placement: Placement, status: PlaceStatus): string {
+  if (status.kind === "sample") return "見本の原稿なので、表紙にも目次にも載りません。";
+  if (placement === "jigo") return "今回は載りません。次の作品を待っています。";
+  if (status.kind === "cover") {
+    const where: Record<string, string> = { kanto: "表紙の一番目立つところ", tokushu: "表紙の特集のところ", kanmatsu: "表紙の下のほう" };
+    return `載ります。${where[status.slot] ?? "表紙"}です。`;
+  }
+  if (status.kind === "toc") {
+    if (placement === "namae") return "表紙には載りませんが、目次に名前が載ります。";
+    return "表紙に推薦されましたが、今は目次に名前が載っています。表紙は10枠で、1人につき点数の高い1作しか載らないためです。";
+  }
+  return "表紙にも目次にも出せない内容があったので、今回は載りません。";
+}
+
+// Xの投稿文の1行目。判定ごとに言い方を変える。
+export function tweetLead(magazine: string, editorName: string, placement: Placement): string {
+  const head = `AI編集部の${magazine}に持ち込んだら、`;
+  const tail: Record<Placement, string> = {
+    kanto: `${editorName}が巻頭に選んでくれました。`,
+    tokushu: `${editorName}が特集に選んでくれました。`,
+    kanmatsu: `${editorName}が巻末に載せてくれました。`,
+    namae: `${editorName}が目次に名前を載せてくれました。`,
+    jigo: `${editorName}は次号待ちにしました。次の作品を待つそうです。`,
+  };
+  return head + tail[placement];
 }

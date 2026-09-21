@@ -33,7 +33,7 @@ interface Prev {
   revision: number;
 }
 
-export default function SubmitFlow({ editor, appUrl, tweetUrl, rewriteId = "" }: { editor: EditorKey; appUrl: string; tweetUrl: string; rewriteId?: string }) {
+export default function SubmitFlow({ editor, appUrl, rewriteId = "" }: { editor: EditorKey; appUrl: string; rewriteId?: string }) {
   const e = EDITORS[editor];
   const [prev, setPrev] = useState<Prev | null>(null);
   const [sentText, setSentText] = useState("");
@@ -46,6 +46,8 @@ export default function SubmitFlow({ editor, appUrl, tweetUrl, rewriteId = "" }:
   const [statusIdx, setStatusIdx] = useState(0);
   const [result, setResult] = useState<ResultData | null>(null);
   const [flying, setFlying] = useState<{ t: string; x: number; y: number; dx: number; dy: number; d: number }[]>([]);
+  // 読まれている文章。見本のときは見本の文章で、原稿の欄には入れない。
+  const [reading, setReading] = useState("");
   const [upl, setUpl] = useState(0);
   const [litCount, setLitCount] = useState(0);
   const taRef = useRef<HTMLTextAreaElement>(null);
@@ -83,19 +85,14 @@ export default function SubmitFlow({ editor, appUrl, tweetUrl, rewriteId = "" }:
   const n = [...text.trim()].length;
   const same = !!sentText && text.trim() === sentText;
   const problem = n < 20 ? "20字以上でお願いします" : n > 1000 ? "1000字までです" : !pen.trim() ? "ペンネームを入れてください" : same ? "同じ文章のままでは送れません" : "";
-  const tokens = useMemo(() => tokenize(text.trim()).slice(0, 120), [text]);
+  const tokens = useMemo(() => tokenize(reading.trim()).slice(0, 120), [reading]);
 
   async function send(sampleId?: string) {
     setErr("");
     const body = sampleId ? { editor, sample: sampleId } : { editor, penName: pen.trim(), text: text.trim() };
     const sendText = sampleId ? SAMPLES.find((s) => s.id === sampleId)!.text : text.trim();
-    if (sampleId) setText(sendText);
-    if (!sampleId) {
-      try {
-        localStorage.setItem(sentKey(editor), sendText);
-      } catch {}
-      setSentText(sendText);
-    }
+    // 見本は本文の欄に入れない。入れると端末の下書きに残り、そのまま自分の作品として送れてしまう。
+    setReading(sendText);
     // 送る演出
     setPhase("upload");
     const ta = taRef.current?.getBoundingClientRect();
@@ -137,6 +134,14 @@ export default function SubmitFlow({ editor, appUrl, tweetUrl, rewriteId = "" }:
           setPhase("input");
           return;
         }
+        // 「同じ文章のままでは送れません」は、判定が返ってきたときだけにする。
+        // 送る前に覚えると、編集者側のエラーで戻ったときに同じ文章を送り直せなくなる。
+        if (!sampleId) {
+          try {
+            localStorage.setItem(sentKey(editor), sendText);
+          } catch {}
+          setSentText(sendText);
+        }
         setResult(j as ResultData);
         setPhase("result");
         window.scrollTo({ top: 0 });
@@ -164,7 +169,7 @@ export default function SubmitFlow({ editor, appUrl, tweetUrl, rewriteId = "" }:
       <div className={`screen${light ? " onlight" : ""}`}>
         <Space editor={editor} />
         <div className="screen-inner">
-          <ResultView data={result} animate appUrl={appUrl} tweetUrl={tweetUrl} />
+          <ResultView data={result} animate appUrl={appUrl} />
         </div>
       </div>
     );

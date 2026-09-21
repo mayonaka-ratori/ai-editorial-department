@@ -14,6 +14,8 @@ export interface JudgeInput {
   text: string;
   deviceId: string;
   isSample: boolean;
+  // 禁止語が入っていた。判定は返すが、表紙にも目次にも出さない。
+  ngWord?: boolean;
   settings: Record<string, string>;
 }
 
@@ -114,7 +116,7 @@ export async function judge(input: JudgeInput): Promise<SubmissionRow> {
 
   const score = PLACEMENT_BASE[j.placement] + (j.placement === "jigo" ? 0 : j.score);
   const id = shortId();
-  const hidden = !j.safe_for_cover;
+  const hidden = !j.safe_for_cover || !!input.ngWord;
   await q(
     `insert into submissions (id, editor, pen_name, placement, score, title, title_alt, quote, comment, next_request, reason_tags, work_type, safe_for_cover, hidden, is_sample, device_id, revision, prev_id, prev_score, issue)
      values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20)`,

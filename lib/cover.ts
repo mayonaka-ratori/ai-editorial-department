@@ -1,6 +1,7 @@
 import { q } from "./db";
 import { EDITOR_KEYS, EDITORS, type EditorKey, type Placement } from "./editors";
 import { currentIssue, getSettings } from "./settings";
+import type { PlaceStatus } from "./lines";
 
 export interface CoverWork {
   id: string;
@@ -122,6 +123,15 @@ export async function computeCover(settings?: Record<string, string>): Promise<C
     };
   });
   return { issue, published_at: published, magazines, positions };
+}
+
+// いまの掲載。結果画面と投稿文で、判定と掲載を取り違えないように1か所にまとめる。
+export function statusFor(id: string, isSample: boolean, positions: CoverData["positions"]): PlaceStatus {
+  if (isSample) return { kind: "sample" };
+  const pos = positions[id];
+  if (!pos) return { kind: "none" };
+  if (pos.slot === "toc") return { kind: "toc" };
+  return { kind: "cover", slot: pos.slot };
 }
 
 // この端末が送った作品の番号。表紙と目次で「あなた」の印を付けるのに使う。

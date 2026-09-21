@@ -5,6 +5,9 @@ export type Strictness = "amai" | "futsu" | "kibishii";
 export const DEFAULTS: Record<string, string> = {
   accepting: "1",
   daily_cap: "3000",
+  // 同じIPから1時間に送れる回数。0なら見ない。
+  // 会場のWi-Fiや携帯回線は大勢が同じIPを使うので、既定では見ない。
+  ip_hour_cap: "0",
   event_tweet_url: "",
   editor_kurodo_open: "1",
   editor_nina_open: "1",

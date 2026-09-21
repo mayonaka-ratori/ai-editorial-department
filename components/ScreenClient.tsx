@@ -25,7 +25,9 @@ export default function ScreenClient({ initial, qr, appUrl }: { initial: Payload
   const arranged = [ORDER[(center + 2) % 3], ORDER[center], ORDER[(center + 1) % 3]];
   const mid = data.magazines.find((m) => m.editor === ORDER[center])!;
   const news = data.magazines.flatMap((m) => [...m.kanto, ...m.tokushu, ...m.kanmatsu].filter((w) => w.is_new).map((w) => `『${w.title}』${w.pen_name}（${m.magazine} ${{ kanto: "巻頭", tokushu: "特集", kanmatsu: "巻末" }[w.slot as "kanto" | "tokushu" | "kanmatsu"]}）`));
-  const tocLine = mid.toc.slice(0, 40).map((t) => `『${t.title}』${t.pen_name}`).join("　");
+  // 目次は表紙に載っている人も含めて全員（スマホの目次と同じ並び）
+  const tocAll = [...mid.kanto, ...mid.tokushu, ...mid.kanmatsu, ...mid.toc];
+  const tocLine = tocAll.slice(0, 40).map((t) => `『${t.title}』${t.pen_name}`).join("　");
   const aw = data.afterwords[ORDER[center]];
   return (
     <div className="desk">

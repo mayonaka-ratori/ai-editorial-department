@@ -5,8 +5,9 @@ import { precheck, countDay } from "@/lib/precheck";
 import { judge, BusyError, reactions, parseTags } from "@/lib/judge";
 import { readDevice, clientIp, DEVICE_COOKIE } from "@/lib/device";
 import { SAMPLES } from "@/lib/samples";
-import { computeCover } from "@/lib/cover";
-import { statusLine } from "@/lib/lines";
+import { computeCover, statusFor } from "@/lib/cover";
+import { statusLine, placementNote } from "@/lib/lines";
+import { rememberHash } from "@/lib/throttle";
 import { EDITORS } from "@/lib/editors";
 import { q } from "@/lib/db";
 
@@ -38,17 +39,14 @@ export async function POST(req: Request) {
   if (!pre.ok) return withCookie(NextResponse.json({ ok: false, code: pre.code, message: pre.message }, { status: 200 }));
 
   try {
-    const row = await judge({ editor, penName, text, deviceId: device.id, isSample: !!sample, settings });
+    const row = await judge({ editor, penName, text, deviceId: device.id, isSample: !!sample, ngWord: pre.ngWord, settings });
+    // 同じ本文の2回目よけは、判定が終わってから覚える。
+    // 先に覚えると、混雑や編集者側のエラーで返したあとのやり直しが全部「2回目」になってしまう。
+    if (pre.dupKey) await rememberHash(pre.dupKey, 24 * 3600);
     await countDay();
     const cover = await computeCover(settings);
-    const pos = cover.positions[row.id];
-    const status = row.is_sample
-      ? statusLine(EDITORS[editor].magazine, { kind: "sample" })
-      : pos
-        ? pos.slot === "toc"
-          ? statusLine(EDITORS[editor].magazine, { kind: "toc" })
-          : statusLine(EDITORS[editor].magazine, { kind: "cover", slot: pos.slot })
-        : statusLine(EDITORS[editor].magazine, { kind: "none" });
+    const place = statusFor(row.id, row.is_sample, cover.positions);
+    const status = statusLine(EDITORS[editor].magazine, place);
     return withCookie(
       NextResponse.json({
         ok: true,
@@ -71,6 +69,8 @@ export async function POST(req: Request) {
         penName: row.pen_name,
         reactions: reactions(row),
         status,
+        statusKind: place.kind,
+        placementNote: placementNote(row.placement, place),
       }),
     );
   } catch (err) {

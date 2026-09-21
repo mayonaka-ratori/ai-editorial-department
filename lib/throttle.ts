@@ -38,3 +38,9 @@ export function todayKey(): string {
   const jst = new Date(Date.now() + 9 * 3600 * 1000);
   return jst.toISOString().slice(0, 10);
 }
+
+// 同じ本文をもう送ったかどうかを見るだけ（数えない、覚えない）。
+export async function hashSeen(hash: string): Promise<boolean> {
+  const row = await one<{ hash: string }>("select hash from text_hashes where hash = $1 and expires_at > now()", [hash]);
+  return !!row;
+}

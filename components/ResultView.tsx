@@ -2,8 +2,8 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Avatar from "./Avatar";
-import { EDITORS, PLACEMENT_EXPLAIN, PLACEMENT_LABEL, type EditorKey, type Placement } from "@/lib/editors";
-import { bestLine } from "@/lib/lines";
+import { EDITORS, PLACEMENT_LABEL, type EditorKey, type Placement } from "@/lib/editors";
+import { bestLine, tweetLead } from "@/lib/lines";
 
 export interface ResultData {
   id: string;
@@ -25,16 +25,22 @@ export interface ResultData {
   penName: string;
   reactions: { key: EditorKey; name: string; line: string }[];
   status: string;
+  statusKind: "cover" | "toc" | "none" | "sample";
+  placementNote: string;
 }
 
 const CLS: Record<EditorKey, string> = { kurodo: "k", nina: "n", sol: "s" };
 const SPEED: Record<EditorKey, number> = { kurodo: 42, nina: 20, sol: 30 };
 
-export default function ResultView({ data, animate, appUrl, tweetUrl }: { data: ResultData; animate: boolean; appUrl: string; tweetUrl: string }) {
+export default function ResultView({ data, animate, appUrl }: { data: ResultData; animate: boolean; appUrl: string }) {
   const e = EDITORS[data.editor];
   const [typed, setTyped] = useState(animate ? "" : data.comment);
   const [phase, setPhase] = useState(animate ? 0 : 9);
   const [status, setStatus] = useState(data.status);
+  const [note, setNote] = useState(data.placementNote);
+  const [kind, setKind] = useState(data.statusKind);
+  // APP_URLを設定し忘れても、投稿文のURLがドメインなしにならないようにする。
+  const [base, setBase] = useState(appUrl);
   const [copied, setCopied] = useState(false);
   const [canShare, setCanShare] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -94,8 +100,19 @@ export default function ResultView({ data, animate, appUrl, tweetUrl }: { data: 
   // いまの掲載を最新にする（結果ページを開き直したとき）
   useEffect(() => {
     if (animate) return;
-    fetch(`/api/r/${data.id}/status`).then((r) => r.json()).then((j) => j?.status && setStatus(j.status)).catch(() => {});
+    fetch(`/api/r/${data.id}/status`)
+      .then((r) => r.json())
+      .then((j) => {
+        if (j?.status) setStatus(j.status);
+        if (j?.placementNote) setNote(j.placementNote);
+        if (j?.kind) setKind(j.kind);
+      })
+      .catch(() => {});
   }, [animate, data.id]);
+
+  useEffect(() => {
+    if (!appUrl && typeof window !== "undefined") setBase(window.location.origin);
+  }, [appUrl]);
 
   useEffect(() => {
     try {
@@ -103,17 +120,20 @@ export default function ResultView({ data, animate, appUrl, tweetUrl }: { data: 
     } catch {}
   }, []);
 
-  const resultUrl = `${appUrl}/r/${data.id}`;
+  const resultUrl = `${base}/r/${data.id}`;
   const line = bestLine(data.comment);
+  // 結果URLは投稿文のいちばん最後に置く。ここに別の投稿のURLを足すと、
+  // Xがそちらを引用ツイートとして表示して、結果の画像カードが出なくなる。
   const tweetText =
-    `AI編集部の${data.magazine}に持ち込んだら、${e.name}が${data.placementLabel}にしてくれました。` +
+    tweetLead(data.magazine, e.name, data.placement) +
     (line ? `\n${e.name}「${line}」` : "") +
-    `\n作品名『${data.title}』 #AI編集部 ${resultUrl}${tweetUrl ? " " + tweetUrl : ""}`;
+    `\n作品名『${data.title}』 #AI編集部 ${resultUrl}`;
   const intent = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
   const gold = data.placement === "kanto";
   const showSeal = phase >= 1;
   const cls = (p: number) => `fade${phase >= p ? " in" : ""}`;
-  const mineText = data.isSample ? "（見本なので載りません）" : data.placement === "jigo" ? "（今回は載りません）" : data.placement === "namae" ? "（目次に載ります）" : `『${data.title}』`;
+  // 小さい表紙の絵も、判定ではなくいまの掲載で出し分ける。
+  const mineText = kind === "sample" ? "（見本なので載りません）" : kind === "none" ? "（今回は載りません）" : kind === "toc" ? "（目次に載ります）" : `『${data.title}』`;
   const diff = data.prevScore == null ? null : data.score - data.prevScore;
 
   const copyLink = async () => {
@@ -164,7 +184,7 @@ export default function ResultView({ data, animate, appUrl, tweetUrl }: { data: 
         </div>
         <p className={`sealnote ${cls(2)}`}>
           <b>{data.placementLabel}</b>
-          {PLACEMENT_EXPLAIN[data.placement]}
+          {note}
         </p>
         <div className={`titlebox ${cls(2)}`}>
           <p className="label">TITLE</p>

@@ -5,9 +5,10 @@ import ResultView, { type ResultData } from "@/components/ResultView";
 import { one } from "@/lib/db";
 import { EDITORS, PLACEMENT_LABEL } from "@/lib/editors";
 import { reactions, parseTags, type SubmissionRow } from "@/lib/judge";
-import { computeCover } from "@/lib/cover";
-import { statusLine } from "@/lib/lines";
+import { computeCover, statusFor } from "@/lib/cover";
+import { statusLine, placementNote } from "@/lib/lines";
 import { getSettings } from "@/lib/settings";
+import { appUrl } from "@/lib/appurl";
 
 export const dynamic = "force-dynamic";
 
@@ -33,14 +34,8 @@ export default async function ResultPage({ params }: { params: Promise<{ id: str
   const settings = await getSettings();
   const e = EDITORS[row.editor];
   const cover = await computeCover(settings);
-  const pos = cover.positions[row.id];
-  const status = row.is_sample
-    ? statusLine(e.magazine, { kind: "sample" })
-    : !pos
-      ? statusLine(e.magazine, { kind: "none" })
-      : pos.slot === "toc"
-        ? statusLine(e.magazine, { kind: "toc" })
-        : statusLine(e.magazine, { kind: "cover", slot: pos.slot });
+  const place = statusFor(row.id, row.is_sample, cover.positions);
+  const status = statusLine(e.magazine, place);
   const data: ResultData = {
     id: row.id,
     editor: row.editor,
@@ -61,12 +56,14 @@ export default async function ResultPage({ params }: { params: Promise<{ id: str
     penName: row.pen_name,
     reactions: reactions(row),
     status,
+    statusKind: place.kind,
+    placementNote: placementNote(row.placement, place),
   };
   return (
     <div className={`screen${row.editor === "nina" ? " onlight" : ""}`}>
       <Space editor={row.editor} />
       <div className="screen-inner">
-        <ResultView data={data} animate={false} appUrl={process.env.APP_URL || ""} tweetUrl={settings.event_tweet_url || ""} />
+        <ResultView data={data} animate={false} appUrl={await appUrl()} />
       </div>
     </div>
   );

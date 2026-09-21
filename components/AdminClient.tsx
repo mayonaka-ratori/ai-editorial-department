@@ -70,6 +70,15 @@ export default function AdminClient() {
           <span className="note">今日 {data.used}回 / 上限</span>
           <input type="text" defaultValue={s.daily_cap} onBlur={(e) => set("daily_cap", e.target.value)} style={{ width: 90, minWidth: 0, flex: "none" }} />
         </div>
+        <div className="row">
+          <span className="note">同じ回線から1時間に</span>
+          <input type="text" defaultValue={s.ip_hour_cap} onBlur={(e) => set("ip_hour_cap", e.target.value.trim())} style={{ width: 90, minWidth: 0, flex: "none" }} />
+          <span className="note">回まで（0なら見ない）</span>
+        </div>
+        <p className="note">
+          会場のWi-Fiや携帯回線は大勢が同じ回線を使うので、ふだんは0のままにしてください。
+          1人が何度も送ってくるときだけ、200などを入れます。端末ごとの1時間に7回までは、この設定とは別にいつも効いています。
+        </p>
       </section>
 
       <section>
@@ -77,7 +86,10 @@ export default function AdminClient() {
         <div className="row">
           <input type="text" defaultValue={s.event_tweet_url} placeholder="https://x.com/..." onBlur={(e) => set("event_tweet_url", e.target.value.trim())} />
         </div>
-        <p className="note">投稿文の末尾に付きます。当日の朝に入れてください。</p>
+        <p className="note">
+          入口の「告知を見る」のリンク先になります。結果のXの投稿文には入れません。
+          投稿文にこのURLを入れると、Xがそれを引用ツイートとして表示して、結果の画像カードが出なくなるためです。
+        </p>
       </section>
 
       <section>

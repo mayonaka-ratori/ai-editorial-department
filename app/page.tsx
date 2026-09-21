@@ -110,6 +110,11 @@ export default async function Entry() {
           </div>
           <div className="foot">
             <Link href="/cover">今日の表紙を見る</Link>
+            {settings.event_tweet_url && (
+              <a href={settings.event_tweet_url} target="_blank" rel="noopener">
+                告知を見る
+              </a>
+            )}
             <span className="num">
               残り {remaining.toLocaleString()} / {cap.toLocaleString()}
             </span>

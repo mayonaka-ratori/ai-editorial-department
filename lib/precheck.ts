@@ -1,9 +1,10 @@
-import { hit, rememberHash, peek, todayKey } from "./throttle";
+import { hit, hashSeen, peek, todayKey } from "./throttle";
 import { sha256 } from "./ids";
 import { normalize } from "./famous";
 import type { EditorKey } from "./editors/types";
 
-// 禁止語。表紙に出せない言葉。必要に応じて増やす。
+// 禁止語。表紙にも目次にも出さない言葉。必要に応じて増やす。
+// 当たっても原稿は受け取る。判定は返して、表紙と目次には出さない。
 const NG_WORDS = ["死ね", "殺す", "殺せ", "レイプ", "セックス", "セフレ", "淫", "ちんこ", "まんこ", "うんこ", "殺害予告"];
 
 export interface PrecheckInput {
@@ -16,7 +17,9 @@ export interface PrecheckInput {
   settings: Record<string, string>;
 }
 
-export type PrecheckResult = { ok: true; textHash: string } | { ok: false; code: string; message: string };
+export type PrecheckResult =
+  | { ok: true; textHash: string; dupKey: string; ngWord: boolean }
+  | { ok: false; code: string; message: string };
 
 export function countChars(s: string): number {
   return [...s].length;
@@ -34,30 +37,38 @@ export async function precheck(i: PrecheckInput): Promise<PrecheckResult> {
   if (n < 20) return { ok: false, code: "short", message: "20字以上でお願いします。一文でもいいので、もう少し。" };
   if (n > 1000) return { ok: false, code: "long", message: "1000字までです。" };
 
-  const bad = NG_WORDS.find((w) => text.includes(w) || pen.includes(w));
-  if (bad) return { ok: false, code: "ng", message: "表紙に載せられない言葉が入っています。言い換えてください。" };
+  // 禁止語。ここでは落とさない。判定は返して、表紙と目次には出さない印だけ付ける。
+  const ngWord = NG_WORDS.some((w) => text.includes(w) || pen.includes(w));
 
   // 1日の上限（会場とネットを合わせて）
   const cap = Number(i.settings.daily_cap || 3000);
   const day = await peek(`day:${todayKey()}`);
   if (day >= cap) return { ok: false, code: "closed", message: "本日の持ち込み受付は終了しました。" };
 
+  const textHash = sha256(normalize(text));
   if (i.isSample) {
     const s = await hit(`sample:${i.deviceId}:${todayKey()}`, 1, 24 * 3600);
     if (!s.ok) return { ok: false, code: "sample", message: "見本で試せるのは1回だけです。自分の文章を送ってください。" };
-  } else {
-    // 同じ端末から1時間に7回まで（3誌に送って比べる人が上限に当たらないように）
-    const hourKey = `hour:${new Date().toISOString().slice(0, 13)}`;
-    const r = await hit(`ip:${i.ip}:${hourKey}`, 7, 3600);
-    const d = await hit(`dev:${i.deviceId}:${hourKey}`, 7, 3600);
-    if (!r.ok || !d.ok) return { ok: false, code: "rate", message: "同じ端末からは1時間に7回までです。少し時間をおいてください。" };
-    // 同じ本文の2回目
-    const textHash = sha256(normalize(text));
-    const fresh = await rememberHash(`${i.editor}:${textHash}`, 24 * 3600);
-    if (!fresh) return { ok: false, code: "dup", message: "同じ原稿を同じ雑誌に2回は送れません。別の雑誌に送るか、書き直してください。" };
-    return { ok: true, textHash };
+    return { ok: true, textHash, dupKey: "", ngWord };
   }
-  return { ok: true, textHash: sha256(normalize(text)) };
+
+  const hourKey = `hour:${new Date().toISOString().slice(0, 13)}`;
+  // 会場のWi-Fiや携帯回線は大勢が同じIPを使う。ここは荒らし避けなので、うんと高くしておく。
+  const ipCap = Number(i.settings.ip_hour_cap || 0);
+  if (ipCap > 0) {
+    const r = await hit(`ip:${i.ip}:${hourKey}`, ipCap, 3600);
+    if (!r.ok) return { ok: false, code: "rate", message: "この回線から送れる回数が、1時間の上限に達しました。少し時間をおいてください。" };
+  }
+  // 同じ端末から1時間に7回まで（3誌に送って比べる人が上限に当たらないように）
+  const d = await hit(`dev:${i.deviceId}:${hourKey}`, 7, 3600);
+  if (!d.ok) return { ok: false, code: "rate", message: "同じ端末からは1時間に7回までです。少し時間をおいてください。" };
+
+  // 同じ本文の2回目。ここでは見るだけ。覚えるのは判定が終わったあと。
+  const dupKey = `${i.editor}:${textHash}`;
+  if (await hashSeen(dupKey)) {
+    return { ok: false, code: "dup", message: "同じ原稿を同じ雑誌に2回は送れません。別の雑誌に送るか、書き直してください。" };
+  }
+  return { ok: true, textHash, dupKey, ngWord };
 }
 
 export async function countDay(): Promise<void> {
