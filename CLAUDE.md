@@ -39,3 +39,4 @@
 - docs/samples.md が結果の例。編集者の言葉の見本として使う。
 - mock/index.html が画面のモック。docs/image-prompts.md が絵を作るための指示文。
 - docs/plan.md が実装の順番。作るときはこの順に進め、段階ごとに動く状態で止める。
+- docs/persona-review.md がペルソナでの見直し、docs/review.md が全体確認で見つかった直しどころと直し方の計画。直すときはここから拾う。
