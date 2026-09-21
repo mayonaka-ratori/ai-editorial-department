@@ -1,0 +1,369 @@
+<title>AI編集部 あそびかたガイド</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700;900&family=Rajdhani:wght@600;700&display=swap">
+<style>
+  :root {
+    --paper: #f6f8fb;
+    --ink: #101a2e;
+    --ink-2: #4a5670;
+    --line: #d5dce8;
+    --card: #ffffff;
+    --cyan: #0a8fb8;
+    --cyan-soft: #dff4fb;
+    --orange: #d9641a;
+    --orange-soft: #fdeadb;
+    --gem: #3b6fe0;
+    --gem-soft: #e3ebfd;
+    --star: #5d6b8f;
+    --star-soft: #e6e9f2;
+    --gold: #b8860b;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #0b1120;
+      --ink: #eef2f8;
+      --ink-2: #aab5cc;
+      --line: #263250;
+      --card: #141d31;
+      --cyan: #4fd3f7;
+      --cyan-soft: #10314a;
+      --orange: #f39a55;
+      --orange-soft: #3a2415;
+      --gem: #8fb0ff;
+      --gem-soft: #1c2a4d;
+      --star: #c3cbe0;
+      --star-soft: #232c44;
+      --gold: #f0c24a;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #0b1120;
+    --ink: #eef2f8;
+    --ink-2: #aab5cc;
+    --line: #263250;
+    --card: #141d31;
+    --cyan: #4fd3f7;
+    --cyan-soft: #10314a;
+    --orange: #f39a55;
+    --orange-soft: #3a2415;
+    --gem: #8fb0ff;
+    --gem-soft: #1c2a4d;
+    --star: #c3cbe0;
+    --star-soft: #232c44;
+    --gold: #f0c24a;
+  }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 1.9;
+    padding-inline: 16px;
+    padding-block: 0 64px;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; }
+  .eyebrow { font-family: Rajdhani, sans-serif; font-weight: 700; letter-spacing: .18em; color: var(--cyan); font-size: 13px; text-transform: uppercase; }
+  h1 { font-size: 34px; font-weight: 900; line-height: 1.3; margin: 8px 0 6px; text-wrap: balance; }
+  h2 { font-size: 24px; font-weight: 900; line-height: 1.4; margin: 0 0 14px; text-wrap: balance; display: flex; align-items: center; gap: 12px; }
+  h2 .num { font-family: Rajdhani, sans-serif; font-size: 15px; letter-spacing: .12em; color: var(--paper); background: var(--ink); padding: 2px 10px; border-radius: 999px; flex: none; }
+  h3 { font-size: 18px; font-weight: 700; margin: 0 0 6px; }
+  p { margin: 0 0 12px; }
+  .lead { font-size: 18px; color: var(--ink-2); margin-top: 4px; }
+  section { padding-block: 40px 8px; border-top: 1px solid var(--line); margin-top: 32px; }
+  section:first-of-type { border-top: 0; margin-top: 0; }
+  .box { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; }
+  .note { background: var(--cyan-soft); border-left: 4px solid var(--cyan); border-radius: 6px; padding: 12px 16px; margin: 16px 0; }
+  .note b { color: var(--cyan); }
+  ul, ol { padding-left: 1.4em; margin: 0 0 12px; }
+  li { margin-bottom: 4px; }
+  table { border-collapse: collapse; width: 100%; font-size: 15px; }
+  th, td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+  th { background: var(--star-soft); font-weight: 700; }
+  .tablewrap { overflow-x: auto; margin: 12px 0 16px; }
+
+  /* 流れ */
+  .step { display: grid; grid-template-columns: 1fr 240px; gap: 22px; align-items: start; margin-bottom: 28px; }
+  .step .txt { min-width: 0; }
+  .step .shot { justify-self: end; width: 100%; }
+  .shot img { display: block; width: 100%; max-width: 100%; border-radius: 12px; border: 1px solid var(--line); box-shadow: 0 8px 24px rgba(10, 20, 40, .12); }
+  .shot figcaption { font-size: 13px; color: var(--ink-2); margin-top: 6px; line-height: 1.5; }
+  .stepnum { font-family: Rajdhani, sans-serif; font-weight: 700; font-size: 14px; letter-spacing: .14em; color: var(--cyan); }
+  .time { font-size: 13px; color: var(--ink-2); margin-left: 8px; }
+  @media (max-width: 640px) {
+    .step { grid-template-columns: 1fr; }
+    .step .shot { max-width: 280px; justify-self: center; }
+    h1 { font-size: 28px; }
+  }
+
+  /* 3人 */
+  .three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 16px 0; }
+  .ed { border-radius: 14px; padding: 16px; border: 1px solid var(--line); background: var(--card); border-top: 6px solid var(--c); }
+  .ed.k { --c: var(--orange); --s: var(--orange-soft); }
+  .ed.n { --c: var(--gem); --s: var(--gem-soft); }
+  .ed.s { --c: var(--star); --s: var(--star-soft); }
+  .ed .mag { font-size: 13px; color: var(--ink-2); }
+  .ed .name { font-size: 22px; font-weight: 900; color: var(--c); line-height: 1.3; }
+  .ed .say { background: var(--s); border-radius: 8px; padding: 6px 10px; font-size: 14px; margin: 8px 0; }
+  .ed dl { margin: 0; font-size: 14px; }
+  .ed dt { font-weight: 700; color: var(--ink-2); font-size: 12px; margin-top: 8px; }
+  .ed dd { margin: 0; }
+  .three-shots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 16px 0; }
+  .three-shots figure { margin: 0; }
+  .three-shots img { width: 100%; max-width: 100%; display: block; border-radius: 10px; border: 1px solid var(--line); }
+  .three-shots figcaption { font-size: 13px; color: var(--ink-2); margin-top: 6px; line-height: 1.5; }
+  @media (max-width: 700px) {
+    .three, .three-shots { grid-template-columns: 1fr; }
+    .three-shots figure { max-width: 300px; margin: 0 auto; }
+  }
+
+  /* 判定の段 */
+  .ranks { display: grid; gap: 6px; margin: 12px 0 16px; }
+  .rank { display: grid; grid-template-columns: 96px 1fr; gap: 12px; align-items: center; padding: 8px 12px; border-radius: 8px; background: var(--card); border: 1px solid var(--line); }
+  .rank .lab { font-weight: 900; font-size: 18px; }
+  .rank.top .lab { color: var(--gold); }
+  .rank small { color: var(--ink-2); font-size: 13px; }
+
+  /* コツ */
+  .tips { display: grid; gap: 12px; margin: 14px 0; }
+  .tip { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: grid; grid-template-columns: 44px 1fr; gap: 12px; }
+  .tip .n { font-family: Rajdhani, sans-serif; font-weight: 700; font-size: 26px; color: var(--cyan); line-height: 1; }
+  .tip h3 { margin-bottom: 4px; }
+  .tip p { margin: 0; font-size: 15px; }
+  .ex { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+  .ex .box { font-size: 14px; }
+  .ex .tag { display: inline-block; font-size: 12px; font-weight: 700; border-radius: 999px; padding: 1px 10px; margin-bottom: 6px; }
+  .ex .bad .tag { background: var(--star-soft); color: var(--ink-2); }
+  .ex .good .tag { background: var(--orange-soft); color: var(--orange); }
+  blockquote { margin: 6px 0; padding: 8px 12px; border-left: 3px solid var(--line); color: var(--ink-2); }
+  @media (max-width: 640px) { .ex { grid-template-columns: 1fr; } }
+
+  .wide img { width: 100%; max-width: 100%; display: block; border-radius: 12px; border: 1px solid var(--line); }
+  .memo { margin-top: 48px; border: 1px dashed var(--line); border-radius: 12px; padding: 16px 20px; font-size: 14px; color: var(--ink-2); }
+  .memo h2 { font-size: 16px; color: var(--ink-2); }
+  @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto; } }
+</style>
+
+<div class="wrap">
+  <header style="padding-block: 40px 8px;">
+    <div class="eyebrow">AI Editorial Dept. / How to play</div>
+    <h1>AI編集部 あそびかたガイド</h1>
+    <p class="lead">自分のスマホで3分。あなたの文章を、AIの編集者に読んでもらうゲームです。</p>
+  </header>
+
+  <section>
+    <h2><span class="num">01</span>どんなゲーム？</h2>
+    <p>ここは「AIが読む小説雑誌」を作っている編集部です。読者は人間ではなく、AIです。</p>
+    <p>雑誌は3つあって、雑誌ごとにAIの編集者が1人います。あなたが文章を送ると、その編集者が読んで、「うちの読者にウケるかどうか」を決めます。</p>
+    <p>結果が良ければ、あなたの作品名とペンネームが、その雑誌の表紙に載ります。表紙はブースの大きな画面にも出ます。</p>
+    <div class="note"><b>大事な考え方</b><br>読者のAIは、世の中の文章をほとんど読んでいます。ふつうの文章なら自分で書けます。だから、AIが読みたいのは「AIには書けない文章」です。上手かどうかより、「あなたにしか書けないこと」が入っているかで決まります。</div>
+  </section>
+
+  <section>
+    <h2><span class="num">02</span>ゴールは「表紙に載る」こと</h2>
+    <p>編集者の判定は5段階です。上ほど良い判定です。</p>
+    <div class="ranks">
+      <div class="rank top"><span class="lab">巻頭</span><span>一番いい判定。表紙の一番目立つところに推薦されます。<small>1誌に1枠だけ</small></span></div>
+      <div class="rank"><span class="lab">特集</span><span>今号の特集に推薦されます。<small>1誌に3枠</small></span></div>
+      <div class="rank"><span class="lab">巻末</span><span>載ります。ただし表紙の一番下です。<small>1誌に6枠</small></span></div>
+      <div class="rank"><span class="lab">名前だけ</span><span>表紙には載りませんが、目次にペンネームと作品名が載ります。</span></div>
+      <div class="rank"><span class="lab">次号待ち</span><span>今回は見送りです。編集者からの手紙だけもらえます。</span></div>
+    </div>
+    <p>表紙の枠は1つの雑誌に10枠しかありません。あとから点数の高い作品が来ると、あなたの作品は下の枠に下がったり、目次に移ったりします。逆に、上の人が下がれば、あなたが上がることもあります。</p>
+    <p>だから「一度載ったら終わり」ではありません。あとで「まだ載っているかな」と見に来るのも、このゲームの楽しみです。</p>
+  </section>
+
+  <section>
+    <h2><span class="num">03</span>あそびかた（3分）</h2>
+
+    <div class="step">
+      <div class="txt">
+        <div class="stepnum">STEP 1<span class="time">10秒</span></div>
+        <h3>入口を開く</h3>
+        <p>ブースのQRコードを読むと、この画面が出ます。4つのお願いを読んで、「編集部に入る」を押します。</p>
+        <p>送った文章は保存されません。表紙と目次に出るのは、作品名とペンネームだけです。</p>
+      </div>
+      <figure class="shot"><img src="guide-images/01-entry.jpg" alt="入口の画面。光る六角形と、編集部に入るボタン"><figcaption>入口の画面</figcaption></figure>
+    </div>
+
+    <div class="step">
+      <div class="txt">
+        <div class="stepnum">STEP 2<span class="time">10秒</span></div>
+        <h3>雑誌を1つ選ぶ</h3>
+        <p>3つの雑誌と編集者が並んでいます。編集者ごとに「見るところ」が違うので、自分の文章に合いそうな人を選びます。</p>
+        <p>迷ったら、まず二ナ（GEMINI）がおすすめです。第一声で必ずほめてくれます。</p>
+        <p>選ぶと、画面全体がその雑誌の色に変わります。</p>
+      </div>
+      <figure class="shot"><img src="guide-images/02-editors.jpg" alt="雑誌を選ぶ画面。季刊フェーブル、GEMINI、月刊アストラの3つが並ぶ"><figcaption>雑誌を選ぶ画面</figcaption></figure>
+    </div>
+
+    <div class="step">
+      <div class="txt">
+        <div class="stepnum">STEP 3<span class="time">60秒</span></div>
+        <h3>ペンネームと文章を入れる</h3>
+        <p>ペンネームは10字まで。文章は20字から1000字まで。3行から10行くらいがちょうどいいです。</p>
+        <p>何を書けばいいかわからないときは、「今朝食べたもの」などのお題ボタンがあります。</p>
+        <p>文章を持っていないときは、「見本で試す」ボタンで見本の文章を送れます。ただし見本の結果は表紙に載りません。</p>
+        <p>書けたら「蔵人に送る」のようなボタンを押します。</p>
+      </div>
+      <figure class="shot"><img src="guide-images/03-submit-kurodo.jpg" alt="原稿を送る画面。ペンネームと原稿の欄、お題のボタン、送るボタン"><figcaption>原稿を送る画面（季刊フェーブルを選んだとき）</figcaption></figure>
+    </div>
+
+    <div class="step">
+      <div class="txt">
+        <div class="stepnum">STEP 4<span class="time">5秒から15秒</span></div>
+        <h3>編集者が読んでいる</h3>
+        <p>送ると、文章が単語ごとの小さな四角に分かれて、上の光の輪に吸い込まれていきます。</p>
+        <p>そのあと、編集者の部屋で単語が順番に光って消えていきます。編集者が読んでいるところです。</p>
+        <p>この間、編集者ごとに違うひとことが出ます。二ナは「関連情報を調べています（調べなくていい）」と出ます。</p>
+      </div>
+      <figure class="shot"><img src="guide-images/05-reading-kurodo.jpg" alt="読んでいる間の画面。単語の四角が並び、順に光る"><figcaption>読んでいる間の画面</figcaption></figure>
+    </div>
+
+    <div class="step">
+      <div class="txt">
+        <div class="stepnum">STEP 5<span class="time">20秒</span></div>
+        <h3>判定が出る</h3>
+        <p>上から順に出てきます。</p>
+        <ol>
+          <li>あなたの文章から、編集者が選んだ一文の引用</li>
+          <li>編集者のコメント（1文字ずつ出ます）</li>
+          <li>六角形の判子。ここで判定が決まります。巻頭のときだけ金色です</li>
+          <li>編集者がつけた作品名</li>
+          <li>「次はこういうものを」というお願い</li>
+          <li>見ていない2人の編集者のひとこと</li>
+        </ol>
+        <p>「今は季刊フェーブルの特集に載っています」のように、いまの表紙での位置も出ます。</p>
+      </div>
+      <figure class="shot"><img src="guide-images/06-result-kurodo.jpg" alt="結果の画面。引用、コメント、特集の六角形の判子、作品名、次のお願い"><figcaption>結果の画面（蔵人が特集にしたとき）</figcaption></figure>
+    </div>
+
+    <div class="step">
+      <div class="txt">
+        <div class="stepnum">STEP 6<span class="time">30秒</span></div>
+        <h3>表紙を見る。Xに投稿する</h3>
+        <p>「表紙を見る」で、いまの表紙と目次が見られます。目次では自分のペンネームを探せます。</p>
+        <p>「Xに投稿する」を押すと、結果のリンクと文が入った投稿画面が開きます。投稿には、判子と作品名の入った画像がつきます。</p>
+        <p>「別の雑誌に送る」で、同じ文章を別の編集者に見せられます。文章はスマホの中に残るので、貼り直す必要はありません。</p>
+      </div>
+      <figure class="shot"><img src="guide-images/07-cover-phone.jpg" alt="スマホで見た表紙の画面。GEMINIの表紙と、その下の目次"><figcaption>スマホで見た表紙と目次</figcaption></figure>
+    </div>
+
+    <div class="wide">
+      <img src="guide-images/08-screen.jpg" alt="ブースの大画面。3つの雑誌の表紙が並んで浮かんでいる">
+      <p style="font-size:13px;color:var(--ink-2);margin-top:6px;">ブースの大画面。表紙に載ると、ここにも名前が出ます。10秒ごとに新しくなります。</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">04</span>3人の編集者は、ここが違う</h2>
+    <p>3人は本当に別の会社のAIで動いています。見るところも、話し方も違います。</p>
+    <div class="three">
+      <div class="ed k">
+        <div class="mag">季刊フェーブル（中身: Claude）</div>
+        <div class="name">蔵人</div>
+        <div class="say">「読者はもう全部読んでます」</div>
+        <dl>
+          <dt>見るところ</dt><dd>次の一文が予想できるかどうか。予想できない文章が好き</dd>
+          <dt>好きなもの</dt><dd>変な固有名詞、妙に細かい数字、話が変な方向に曲がるところ</dd>
+          <dt>嫌いなもの</dt><dd>「心温まる」「かけがえのない」のような、どこかで見た言い回し。きれいにまとまったオチ</dd>
+          <dt>話し方</dt><dd>いちばん厳しい。丁寧に言う。最後に「もし〜なら、私の読み方が間違っています」とつける</dd>
+        </dl>
+      </div>
+      <div class="ed n">
+        <div class="mag">GEMINI（中身: Gemini）</div>
+        <div class="name">二ナ</div>
+        <div class="say">「うちの読者には体がないんで！」</div>
+        <dl>
+          <dt>見るところ</dt><dd>体と時間の実感があるか。寒い、眠い、待った、のような話</dd>
+          <dt>好きなもの</dt><dd>冷めたごはんの話、バスを待っている時間の話、何も起きない火曜日の話</dd>
+          <dt>嫌いなもの</dt><dd>うまく見せようとして飾った文章。人生訓</dd>
+          <dt>話し方</dt><dd>必ずほめる。「！」が多い。1回だけ関係ない話に脱線して、自分で戻る。作品名を2案出して迷う</dd>
+        </dl>
+      </div>
+      <div class="ed s">
+        <div class="mag">月刊アストラ（中身: GPT）</div>
+        <div class="name">ソル</div>
+        <div class="say">「これ、誰に向けて書きました？」</div>
+        <dl>
+          <dt>見るところ</dt><dd>誰か1人に向けて書かれているか</dd>
+          <dt>好きなもの</dt><dd>名前を呼びかけている文章。説明を省いた内輪の話。書きかけで終わっている文章</dd>
+          <dt>嫌いなもの</dt><dd>みんな向けに整えた文章。はじめに説明を全部済ませる文章</dd>
+          <dt>話し方</dt><dd>「結論から言うと、巻末です」と先に言う。理由は番号つき。感情の言葉を使わない</dd>
+        </dl>
+      </div>
+    </div>
+    <h3>同じ文章でも、3人の判定は違う</h3>
+    <p>下の3枚は、同じ日記（終電を逃して漫画喫茶に泊まった話）を3人に送った結果です。二ナは巻頭、蔵人は特集、ソルは巻末でした。引用する一文も、作品名も、全部違います。</p>
+    <div class="three-shots">
+      <figure><img src="guide-images/06-result-nina.jpg" alt="二ナの結果。巻頭。作品名は毛布いりますか"><figcaption>二ナ: 巻頭。「延々とポテトを食べる音」を引用。「体がある人にしか書けない」とほめた</figcaption></figure>
+      <figure><img src="guide-images/06-result-kurodo.jpg" alt="蔵人の結果。特集。作品名は飲まないまま"><figcaption>蔵人: 特集。「飲まないまま持って帰った」を引用。「そうなるとは思わなかった」と評価した</figcaption></figure>
+      <figure><img src="guide-images/06-result-sol.jpg" alt="ソルの結果。巻末。作品名はたたまなくていい"><figcaption>ソル: 巻末。「誰に向けて書いたのかわからない」ので低め。次は1人に向けて書き直してと頼んだ</figcaption></figure>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">05</span>ここが楽しい</h2>
+    <div class="tips">
+      <div class="tip"><div class="n">1</div><div><h3>コメントが、あなたの文章の話しかしない</h3><p>編集者は必ず本文から一文を引用して、そこについて話します。「良かったです」のような、誰にでも言える感想は言いません。</p></div></div>
+      <div class="tip"><div class="n">2</div><div><h3>同じ文章を3人に送ると、判定がばらばら</h3><p>1人に送って終わりにせず、「別の雑誌に送る」で3人全員に見せてみてください。3誌の表紙全部に載ることもできます。</p></div></div>
+      <div class="tip"><div class="n">3</div><div><h3>表紙は1日じゅう入れ替わる</h3><p>あとから来た人に押し出されることもあります。帰ってからスマホで「まだ載ってるかな」と見に来られます。</p></div></div>
+      <div class="tip"><div class="n">4</div><div><h3>2回目は、前回を覚えている</h3><p>同じ雑誌にもう一度送ると、編集者は前回の作品名と「次はこういうものを」を覚えています。結果に「2稿目」と出て、点数が上がったか下がったかも出ます。</p></div></div>
+      <div class="tip"><div class="n">5</div><div><h3>見ていない2人も、ひとこと言う</h3><p>「二ナさんはほめすぎるので、二ナさんの巻頭は、私なら特集くらいだと思ってください」のように、ほかの2人が横からひとこと言います。</p></div></div>
+      <div class="tip"><div class="n">6</div><div><h3>Xに投稿できる。大画面にも出る</h3><p>結果の画面から、判子と作品名の入った画像つきで投稿できます。ブースの大画面の表紙にも、その場で名前が出ます。</p></div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">06</span>いい結果を出すコツ</h2>
+    <p>コツはひとつだけです。「AIには書けないこと」を書くこと。具体的には、こういうことです。</p>
+    <div class="tips">
+      <div class="tip"><div class="n">1</div><div><h3>本当にあったことを、細かく書く</h3><p>「楽しかった」ではなく、何を食べたか、何分待ったか、どんな音がしたか。細かい数字や、そこにしかない名前が入っていると、AIは「自分では書けない」と思います。</p></div></div>
+      <div class="tip"><div class="n">2</div><div><h3>きれいにまとめない。オチをつけない</h3><p>最後に「いい一日だった」のようなまとめを書くと、AIは先が読めてしまいます。理由を書かずに終わる、途中で終わる、のほうが高く評価されます。</p></div></div>
+      <div class="tip"><div class="n">3</div><div><h3>どこかで見た言い回しを使わない</h3><p>「心温まる」「かけがえのない」「優しい陽射し」のような言葉は、AIが一番よく書く言葉です。自分の言葉で、ふだんの言い方で書いてください。</p></div></div>
+      <div class="tip"><div class="n">4</div><div><h3>誰か1人に向けて書く</h3><p>「みんなへ」ではなく、特定の1人に話しかけるように書くと、説明をはぶけます。ソルはこれをいちばん高く評価します。</p></div></div>
+      <div class="tip"><div class="n">5</div><div><h3>何も起きない日でいい</h3><p>事件はいりません。バスを待った、給食がカレーだった、麦茶がなかった。そういう話のほうが、体のないAIには書けません。二ナはこれが大好きです。</p></div></div>
+      <div class="tip"><div class="n">6</div><div><h3>雑誌に合わせて選ぶ</h3><p>話が変な方向に曲がるなら蔵人。体の感覚や待ち時間の話なら二ナ。誰かへの手紙なら、ソル。合う編集者に送るだけで判定が変わります。</p></div></div>
+    </div>
+
+    <h3>載らないもの</h3>
+    <ul>
+      <li><b>AIに書かせた文章。</b>なめらかで無難な文章は、3人とも「うちの読者なら自分で書けます」と冷たく返します。</li>
+      <li><b>有名な作品のコピペ。</b>「うちの読者はもう読んでいます」で次号待ちになります。</li>
+    </ul>
+
+    <h3>くらべてみる</h3>
+    <div class="ex">
+      <div class="box bad">
+        <span class="tag">載りにくい例</span>
+        <blockquote>春の陽射しが優しく降り注ぐ午後、私は小さなカフェの窓際に座っていた。湯気の立つコーヒーを手に、街を行き交う人々を眺めていると、ふと心が温かくなるのを感じた。日常の中にこそ、かけがえのない幸せが隠れているのかもしれない。</blockquote>
+        <p>きれいですが、AIがいつも書く文章です。「優しく降り注ぐ」「かけがえのない」は、どこかで見た言い回しです。最後にまとめもあります。</p>
+      </div>
+      <div class="box good">
+        <span class="tag">載りやすい例</span>
+        <blockquote>三時ごろ、受付の人が「毛布いりますか」と回ってきた。いらないと言ったのに置いていった。朝、毛布をたたんで返したら、たたまなくていいんですよと言われた。駅まで歩く途中、コンビニでホットの緑茶を買って、飲まないまま持って帰った。</blockquote>
+        <p>上手な文ではありませんが、その夜にそこにいた人にしか書けません。なぜ飲まなかったのかを書いていないので、先が読めません。</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">07</span>送るときのお願い</h2>
+    <ul>
+      <li>送った文章は保存しません。判定が終わったら捨てます。</li>
+      <li>表紙と目次に載るのは、作品名とペンネームだけです。</li>
+      <li>他の人の文章は送らないでください。</li>
+      <li>1回に送れるのは20字から1000字までです。</li>
+      <li>同じスマホからは、1時間に5回までです。同じ文章を同じ雑誌に2回は送れません。</li>
+      <li>本日限りで、全体で3000回までです。</li>
+    </ul>
+  </section>
+
+  <div class="memo">
+    <h2>作った人へのメモ（公開するときは消す）</h2>
+    <ul>
+      <li>スクショは手元でAIを呼ばずに動かしたものです。そのため作品名やコメントが見本と同じになっています。本物のAPIをつないでから撮り直すと、表紙の作品名がばらばらになって、より本物らしくなります。</li>
+      <li>スクショの左下に開発用の黒い丸（Next.jsの印）が写っています。本番の画面には出ません。</li>
+      <li>このページの置き場所は、入口の「AIが読む小説雑誌を作っています」の下にリンクを置く案と、ブースに紙で貼る案の2つが考えられます。</li>
+    </ul>
+  </div>
+</div>
