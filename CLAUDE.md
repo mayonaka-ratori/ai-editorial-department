@@ -38,3 +38,4 @@
 - docs/wireframes.md が画面の配置、docs/tech.md が技術の定義、docs/design.md が見た目と演出。作るときはこの3つに従う。
 - docs/samples.md が結果の例。編集者の言葉の見本として使う。
 - mock/index.html が画面のモック。docs/image-prompts.md が絵を作るための指示文。
+- docs/plan.md が実装の順番。作るときはこの順に進め、段階ごとに動く状態で止める。

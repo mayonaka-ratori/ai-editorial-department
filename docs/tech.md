@@ -1,4 +1,4 @@
-# 技術の定義（第3版）
+# 技術の定義（第4版）
 
 「何を使って、どう作るか」を決めます。
 決めた理由も書いておきます。あとで変えるときに、理由ごと見直せるようにするためです。
@@ -62,6 +62,8 @@ app/
     submit/route.ts        原稿を受け取って判定を返す
     cover/route.ts         表紙に載せる一覧を返す
     admin/route.ts         管理の設定を読み書きする
+    stats/route.ts         今日の傾向を返す
+    r/[id]/status/route.ts いまの掲載を返す
 lib/
   editors/
     kurodo.ts              蔵人の指示文と癖の一覧
@@ -77,6 +79,9 @@ lib/
   judge.ts                 判定の流れ全体（事前チェック → AI → 検算 → 保存）
   precheck.ts              AIを呼ぶ前のチェック（長さ、禁止語、重複、回数制限）
   lines.ts                 定型文（読んでいる間の表示、見なかった2人のひとこと）
+  famous.ts                有名作品の冒頭の一覧と照合
+  samples.ts               見本の原稿3本
+  afterword.ts             編集後記を作る
   cover.ts                 号の分け方、表紙に載せる順番
   db/
     schema.ts              表の定義
@@ -101,6 +106,9 @@ public/
 | placement | 文字列 | kanto（巻頭）/ tokushu（特集）/ kanmatsu（巻末）/ namae（名前だけ）/ jigo（次号待ち） |
 | score | 整数 | 点数。判定の土台（400/300/200/100/0）に、AIが返す細かい点（0から100）を足したもの |
 | device_id | 文字列 | 端末の目印。最初に開いたときにクッキーで配る乱数 |
+| is_sample | 真偽 | 見本の原稿で試した結果なら真。表紙にも目次にも載せない |
+| revision | 整数 | 同じ端末から同じ雑誌への何回目か。1回目は1 |
+| prev_id | 文字列 | 改稿のとき、前回の結果の id |
 | title | 文字列 | 作品名 |
 | quote | 文字列 | 引用した一文 |
 | comment | 文字列 | 編集者のコメント |
@@ -116,7 +124,7 @@ public/
 
 | 列 | 中身 |
 |---|---|
-| key | accepting / daily_cap / event_tweet_url / editor_kurodo_open / editor_nina_open / editor_sol_open / published_at（発行した時刻。空なら組版中） |
+| key | accepting / daily_cap / event_tweet_url / editor_kurodo_open / editor_nina_open / editor_sol_open / published_at（発行した時刻。空なら組版中） / strictness_kurodo / strictness_nina / strictness_sol（甘め、ふつう、厳しめ） |
 | value | 文字列 |
 
 ### throttle（回数の記録）
@@ -126,6 +134,14 @@ public/
 | bucket | 何の回数か。例: day:2026-10-05、ip:（端末の目印）:hour:13、provider:google:min:1342 |
 | count | 回数 |
 | expires_at | いつ消してよいか |
+
+### afterwords（編集後記）
+
+| 列 | 中身 |
+|---|---|
+| editor | kurodo / nina / sol |
+| body | 編集後記の本文（200字ほど） |
+| created_at | 書いた時刻 |
 
 ### text_hashes（重複よけ）
 
@@ -140,6 +156,7 @@ public/
 
 1. 受付中か、上限に達していないかを settings と throttle で見る。
    だめなら「受付終了」を返す。
+   見本の原稿（is_sample）なら、同じ端末から1回だけ受け付ける。
 2. 事前チェック（precheck.ts）。AIを呼ぶ前に済ませる。
    - 本文が20字以上1000字以下か。
    - ペンネームが1字以上10字以下か。
@@ -147,8 +164,11 @@ public/
    - 同じ本文のハッシュが24時間以内にないか。
    - 同じ端末から1時間に5回を超えていないか（端末の目印はIPアドレスとブラウザの情報のハッシュ）。
    - その編集者が出勤中か。
+   - 有名作品の冒頭に当たっていないか（lib/famous.ts）。当たったらAIを呼ばず、決まった結果を返す。
    だめなら理由つきで返す。AIは呼ばない。
 3. 癖を選ぶ。その編集者の癖4つから、1つか2つをランダムに選ぶ。
+   改稿かどうかを見る。同じ device_id と editor の今日の結果があれば、その作品名、判定、次のお願いを「前回」として渡す。
+   厳しさの一文（settings）と、今日ここまでのその編集者の判定の割合（直近50件）を1行ずつ足す。
 4. AIを呼ぶ（providers/）。
    - 固定の指示文（system）: 共通の土台 + その編集者の性格と見るところ + 返す形の説明。
    - 毎回の入力（user）: ペンネーム、本文、今回の癖。
@@ -210,6 +230,9 @@ public/
 
 - 表紙の画面は10秒ごとに `GET /api/cover` を読みに来る。返すのは3誌それぞれの10枠と目次の一覧。本文もコメントも返さない。
 - 結果のページは `GET /api/r/{id}/status` でいまの掲載（どの雑誌のどの枠か、目次か、未掲載か）を取る。
+- `GET /api/stats` は今日の傾向（理由の札の集計、判定の割合、持ち込み数）を返す。入口と大画面が使う。
+- 発行（管理画面の「表紙を固める」）のとき、3人ぶんの編集後記を作って afterwords に入れる。
+  材料は今日の持ち込み数、表紙に載った作品名、多かった理由の札。AIを呼ぶのは1日に3回。
 - 新しく表紙に入った作品と、表紙から目次に下がった作品は、画面側で1回だけ光らせる。
 
 ## 9. Xへの投稿
