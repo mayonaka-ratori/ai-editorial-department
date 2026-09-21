@@ -121,18 +121,19 @@ export default function ResultView({ data, animate, appUrl, tweetUrl }: { data: 
           </div>
         </div>
         <div className={`titlebox ${cls(2)}`}>
-          <div>
-            <p className="label">TITLE</p>
-            <p className="t">『{data.title}』</p>
-            {data.titleAlt && <p className="a">もう1案: 『{data.titleAlt}』</p>}
-          </div>
-          <div className="a">
-            作: {data.penName}　推薦: {e.name}
-          </div>
+          <p className="label">TITLE</p>
+          <p className="t">『{data.title}』</p>
+          <p className="a">
+            作: <b>{data.penName}</b>　推薦: <b>{e.name}</b>
+          </p>
+          {data.titleAlt && <p className="a">もう1案: 『{data.titleAlt}』</p>}
         </div>
         <p className={`nowline ${cls(3)}`}>
-          <span className="label">NOW</span>　{status}
-          {diff != null && (diff > 0 ? `　前回より${diff}点上がりました。` : diff < 0 ? `　前回より${-diff}点下がりました。` : "　前回と同じ点数です。")}
+          <span className="label">NOW</span>
+          <span>
+            {status}
+            {diff != null && (diff > 0 ? `　前回より${diff}点上がりました。` : diff < 0 ? `　前回より${-diff}点下がりました。` : "　前回と同じ点数です。")}
+          </span>
         </p>
         <p className={`next ${cls(4)}`} style={{ marginTop: 10 }}>
           <b>次は:</b> {data.nextRequest}
