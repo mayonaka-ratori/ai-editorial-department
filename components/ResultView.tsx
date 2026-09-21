@@ -2,7 +2,8 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Avatar from "./Avatar";
-import { EDITORS, PLACEMENT_LABEL, type EditorKey, type Placement } from "@/lib/editors";
+import { EDITORS, PLACEMENT_EXPLAIN, PLACEMENT_LABEL, type EditorKey, type Placement } from "@/lib/editors";
+import { bestLine } from "@/lib/lines";
 
 export interface ResultData {
   id: string;
@@ -34,8 +35,11 @@ export default function ResultView({ data, animate, appUrl, tweetUrl }: { data: 
   const [typed, setTyped] = useState(animate ? "" : data.comment);
   const [phase, setPhase] = useState(animate ? 0 : 9);
   const [status, setStatus] = useState(data.status);
+  const [copied, setCopied] = useState(false);
+  const [canShare, setCanShare] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
   const timers = useRef<number[]>([]);
+  const typing = useRef<number[]>([]);
 
   useEffect(() => {
     if (!animate) return;
@@ -53,11 +57,23 @@ export default function ResultView({ data, animate, appUrl, tweetUrl }: { data: 
       let wait = SPEED[data.editor];
       if ("。！？".includes(c)) wait += data.editor === "kurodo" ? 380 : 160;
       if (c === "\n") wait += 180;
-      timers.current.push(window.setTimeout(step, wait));
+      typing.current.push(window.setTimeout(step, wait));
     };
-    timers.current.push(window.setTimeout(step, 500));
-    return () => timers.current.forEach(clearTimeout);
+    typing.current.push(window.setTimeout(step, 500));
+    return () => {
+      typing.current.forEach(clearTimeout);
+      timers.current.forEach(clearTimeout);
+    };
   }, [animate, data.comment, data.editor]);
+
+  // 画面をタップすると、1文字ずつの表示をやめて全部出す。
+  const skip = () => {
+    if (phase !== 0) return;
+    typing.current.forEach(clearTimeout);
+    typing.current = [];
+    setTyped(data.comment);
+    setPhase(1);
+  };
 
   useEffect(() => {
     if (phase !== 1) return;
@@ -81,8 +97,18 @@ export default function ResultView({ data, animate, appUrl, tweetUrl }: { data: 
     fetch(`/api/r/${data.id}/status`).then((r) => r.json()).then((j) => j?.status && setStatus(j.status)).catch(() => {});
   }, [animate, data.id]);
 
+  useEffect(() => {
+    try {
+      setCanShare(typeof navigator !== "undefined" && typeof navigator.share === "function");
+    } catch {}
+  }, []);
+
   const resultUrl = `${appUrl}/r/${data.id}`;
-  const tweetText = `AI編集部の${data.magazine}に持ち込んだら、${e.name}が${data.placementLabel}にしてくれました。作品名『${data.title}』 #AI編集部 ${resultUrl}${tweetUrl ? " " + tweetUrl : ""}`;
+  const line = bestLine(data.comment);
+  const tweetText =
+    `AI編集部の${data.magazine}に持ち込んだら、${e.name}が${data.placementLabel}にしてくれました。` +
+    (line ? `\n${e.name}「${line}」` : "") +
+    `\n作品名『${data.title}』 #AI編集部 ${resultUrl}${tweetUrl ? " " + tweetUrl : ""}`;
   const intent = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
   const gold = data.placement === "kanto";
   const showSeal = phase >= 1;
@@ -90,8 +116,23 @@ export default function ResultView({ data, animate, appUrl, tweetUrl }: { data: 
   const mineText = data.isSample ? "（見本なので載りません）" : data.placement === "jigo" ? "（今回は載りません）" : data.placement === "namae" ? "（目次に載ります）" : `『${data.title}』`;
   const diff = data.prevScore == null ? null : data.score - data.prevScore;
 
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(resultUrl);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      window.prompt("このリンクをコピーしてください", resultUrl);
+    }
+  };
+  const share = async () => {
+    try {
+      await navigator.share({ title: `『${data.title}』 ${data.magazine}`, text: tweetText.replace(resultUrl, "").trim(), url: resultUrl });
+    } catch {}
+  };
+
   return (
-    <div className="result">
+    <div className="result" onClick={skip}>
       <div className="editorbar">
         <Avatar editor={data.editor} pose="judge" />
         <div className="bubble">
@@ -100,7 +141,7 @@ export default function ResultView({ data, animate, appUrl, tweetUrl }: { data: 
           {data.isSample && <span className="badge">見本</span>}
         </div>
       </div>
-      <div className="glass corner" ref={cardRef}>
+      <div className={`glass corner${animate && phase === 0 ? " typing" : ""}`} ref={cardRef}>
         {data.quote ? (
           <>
             <p className="label">QUOTE</p>
@@ -111,6 +152,7 @@ export default function ResultView({ data, animate, appUrl, tweetUrl }: { data: 
           {typed}
           {animate && phase === 0 && <span className="cursor" />}
         </p>
+        {animate && phase === 0 && <p className="taphint">画面をタップすると、全部出ます</p>}
         <div className="sealwrap">
           <div className={`seal ${CLS[data.editor]}${gold ? " gold" : ""}${showSeal ? (animate ? " drop" : " show") : ""}`}>
             <div className="hex" />
@@ -120,6 +162,10 @@ export default function ResultView({ data, animate, appUrl, tweetUrl }: { data: 
             <div className="sub">PLACEMENT</div>
           </div>
         </div>
+        <p className={`sealnote ${cls(2)}`}>
+          <b>{data.placementLabel}</b>
+          {PLACEMENT_EXPLAIN[data.placement]}
+        </p>
         <div className={`titlebox ${cls(2)}`}>
           <p className="label">TITLE</p>
           <p className="t">『{data.title}』</p>
@@ -166,16 +212,39 @@ export default function ResultView({ data, animate, appUrl, tweetUrl }: { data: 
       </div>
       <div className={`actions ${cls(7)}`}>
         {!data.isSample && (
+          <Link className={`btn rewrite ${CLS[data.editor]}`} href={`/submit?editor=${data.editor}&rewrite=${data.id}`}>
+            <span>書き直して、もう一度{e.name}に送る</span>
+            <small>さっきの原稿が入った状態で戻ります（{data.revision + 1}稿目）</small>
+          </Link>
+        )}
+        {!data.isSample && (
           <a className="btn" href={intent} target="_blank" rel="noopener">
             Xに投稿する
           </a>
         )}
-        <Link className="btn soft" href="/cover">
-          表紙を見る
-        </Link>
-        <Link className="btn ghost" href="/editors">
-          別の雑誌に送る
-        </Link>
+        <div className="grid2">
+          <Link className="btn soft" href={`/cover?m=${data.editor}`}>
+            表紙を見る
+          </Link>
+          <Link className="btn ghost" href="/editors">
+            別の雑誌に送る
+          </Link>
+        </div>
+        {!data.isSample && (
+          <div className="sharerow">
+            <a href={`/r/${data.id}/opengraph-image`} target="_blank" rel="noopener">
+              画像を保存する
+            </a>
+            <button type="button" onClick={copyLink}>
+              {copied ? "コピーしました" : "リンクをコピー"}
+            </button>
+            {canShare && (
+              <button type="button" onClick={share}>
+                共有する
+              </button>
+            )}
+          </div>
+        )}
       </div>
       <p className={`url ${cls(8)}`}>{resultUrl}</p>
     </div>

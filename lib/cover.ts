@@ -123,3 +123,44 @@ export async function computeCover(settings?: Record<string, string>): Promise<C
   });
   return { issue, published_at: published, magazines, positions };
 }
+
+// この端末が送った作品の番号。表紙と目次で「あなた」の印を付けるのに使う。
+export async function mineIds(deviceId: string, issue: string): Promise<string[]> {
+  if (!deviceId) return [];
+  const rows = await q<{ id: string }>(`select id from submissions where device_id = $1 and issue = $2 and is_sample = false`, [deviceId, issue]);
+  return rows.map((r) => r.id);
+}
+
+export interface MyWork {
+  id: string;
+  editor: EditorKey;
+  magazine: string;
+  title: string;
+  pen_name: string;
+  placement: Placement;
+  score: number;
+  revision: number;
+  is_sample: boolean;
+  created_at: string;
+}
+
+// この端末が今日送った作品の一覧（新しい順）。
+export async function myWorks(deviceId: string, issue: string): Promise<MyWork[]> {
+  if (!deviceId) return [];
+  const rows = await q<{ [k: string]: unknown; id: string; editor: EditorKey; title: string; pen_name: string; placement: Placement; score: number; revision: number; is_sample: boolean; created_at: string | Date }>(
+    `select id, editor, title, pen_name, placement, score, revision, is_sample, created_at from submissions where device_id = $1 and issue = $2 order by created_at desc limit 50`,
+    [deviceId, issue],
+  );
+  return rows.map((r) => ({
+    id: r.id,
+    editor: r.editor,
+    magazine: EDITORS[r.editor].magazine,
+    title: r.title,
+    pen_name: r.pen_name,
+    placement: r.placement,
+    score: Number(r.score),
+    revision: Number(r.revision),
+    is_sample: !!r.is_sample,
+    created_at: new Date(r.created_at).toISOString(),
+  }));
+}

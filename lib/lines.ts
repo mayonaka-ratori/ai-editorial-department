@@ -274,8 +274,18 @@ export function statusLine(magazine: string, status: { kind: "cover"; slot: Plac
   if (status.kind === "sample") return "見本の原稿なので、表紙にも目次にも載りません。";
   if (status.kind === "cover") {
     const label = { kanto: "巻頭", tokushu: "特集", kanmatsu: "巻末", namae: "", jigo: "" }[status.slot];
-    return `今は${magazine}の${label}に載っています。点数の高い作品が来ると下がることがあります。`;
+    return `今は${magazine}の${label}に載っています。点数の高い作品が来ると下がることがありますが、目次には残ります。`;
   }
   if (status.kind === "toc") return `表紙には載っていませんが、${magazine}の目次に名前が載っています。`;
   return "今回は載りません。";
+}
+
+// 投稿文に入れる、編集者の一番の一文。「うちの読者」の話をしている文を優先し、長すぎる文は使わない。
+export function bestLine(comment: string, max = 40): string {
+  const sentences = comment
+    .split(/(?<=[。！？])|\n/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+  const short = sentences.filter((s) => [...s].length <= max);
+  return short.find((s) => s.includes("うちの読者")) ?? short.find((s) => !s.startsWith("先に言っておくと")) ?? "";
 }

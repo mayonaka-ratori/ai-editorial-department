@@ -1,12 +1,27 @@
-import type { MagazineCover } from "@/lib/cover";
+import type { CoverWork, MagazineCover } from "@/lib/cover";
 
-// 雑誌の表紙。3誌で見た目が違う。
-export default function CoverView({ m, issueTitle, published }: { m: MagazineCover; issueTitle: string; published: boolean }) {
+// 雑誌の表紙。3誌で見た目が違う。mine に入っている作品には「あなた」の印が付く。
+export default function CoverView({ m, issueTitle, published, mine = [] }: { m: MagazineCover; issueTitle: string; published: boolean; mine?: string[] }) {
   const state = published ? "発行" : "組版中";
-  const small = (
+  const isMine = (w: CoverWork) => mine.includes(w.id);
+  // 長い作品名は文字を小さくして、途中で折れないようにする（9字以上でl2、13字以上でl3）
+  const len = (w: CoverWork) => [...w.title].length;
+  const cls = (w: CoverWork, kind: string) => `w ${kind}${w.is_new ? " new" : ""}${isMine(w) ? " mine" : ""}${len(w) > 12 ? " l3" : len(w) > 8 ? " l2" : ""}`;
+  const you = (w: CoverWork) => (isMine(w) ? <span className="you">あなた</span> : null);
+  // 巻末の帯。3誌とも同じ形（『作品名』作者名を横に並べる）で、置く場所と色だけ違う。
+  const strip = (
     <div className="small">
       <b>巻末</b>
-      {m.kanmatsu.length ? m.kanmatsu.map((w) => `『${w.title}』${w.pen_name}`).join("　") : <span className="empty">まだ空いています</span>}
+      {m.kanmatsu.length ? (
+        m.kanmatsu.map((w) => (
+          <span key={w.id} className={`km${isMine(w) ? " mine" : ""}`}>
+            『{w.title}』{w.pen_name}
+            {you(w)}
+          </span>
+        ))
+      ) : (
+        <span className="empty">まだ空いています</span>
+      )}
     </div>
   );
   if (m.editor === "kurodo") {
@@ -18,27 +33,25 @@ export default function CoverView({ m, issueTitle, published }: { m: MagazineCov
         <div className="mag">{m.magazine}</div>
         <div className="list">
           {m.kanto.map((w) => (
-            <div key={w.id} className={`w kanto${w.is_new ? " new" : ""}`}>
+            <div key={w.id} className={cls(w, "kanto")}>
               <span className="sec">〈巻頭〉</span>
               <span className="t">{w.title}</span>
               <span className="a">{w.pen_name}</span>
+              {you(w)}
             </div>
           ))}
           {!m.kanto.length && <div className="w kanto"><span className="sec">〈巻頭〉</span><span className="t empty">空席</span></div>}
           {m.tokushu.map((w, i) => (
-            <div key={w.id} className={`w tokushu${w.is_new ? " new" : ""}`}>
+            <div key={w.id} className={cls(w, "tokushu")}>
               {i === 0 && <span className="sec">〈特集〉</span>}
               <span className="t">{w.title}</span>
               <span className="a">{w.pen_name}</span>
+              {you(w)}
             </div>
           ))}
-          {m.kanmatsu.map((w, i) => (
-            <div key={w.id} className={`w kanmatsu${w.is_new ? " new" : ""}`}>
-              {i === 0 && <span className="sec">〈巻末〉</span>}
-              <span className="t">{w.pen_name}</span>
-            </div>
-          ))}
+          {!m.tokushu.length && <div className="w tokushu"><span className="sec">〈特集〉</span><span className="t empty">まだ空いています</span></div>}
         </div>
+        {strip}
         <div className="foot2">
           <span>{state}　{m.kanto.length + m.tokushu.length + m.kanmatsu.length} / {m.counts.submissions}</span>
           <span>AI EDITORIAL DEPT.</span>
@@ -57,9 +70,10 @@ export default function CoverView({ m, issueTitle, published }: { m: MagazineCov
         <div className="colL">
           <span className="sec">巻頭</span>
           {m.kanto.map((w) => (
-            <div key={w.id} className={`w kanto${w.is_new ? " new" : ""}`}>
+            <div key={w.id} className={cls(w, "kanto")}>
               <span className="t">{w.title}</span>
               <span className="a">{w.pen_name}</span>
+              {you(w)}
             </div>
           ))}
           {!m.kanto.length && <div className="w kanto"><span className="t empty">空席</span></div>}
@@ -67,14 +81,15 @@ export default function CoverView({ m, issueTitle, published }: { m: MagazineCov
         <div className="colR">
           <span className="sec">特集</span>
           {m.tokushu.map((w) => (
-            <div key={w.id} className={`w tokushu${w.is_new ? " new" : ""}`}>
+            <div key={w.id} className={cls(w, "tokushu")}>
               <span className="t">{w.title}</span>
               <span className="a">{w.pen_name}</span>
+              {you(w)}
             </div>
           ))}
           {!m.tokushu.length && <div className="w tokushu"><span className="t empty">まだ空いています</span></div>}
         </div>
-        {small}
+        {strip}
         <div className="foot2">
           <span>{state}　COVER {m.kanto.length + m.tokushu.length + m.kanmatsu.length} / {m.counts.submissions}</span>
           <span>編集: 二ナ</span>
@@ -104,26 +119,27 @@ export default function CoverView({ m, issueTitle, published }: { m: MagazineCov
       <div className="pl terra">TERRA</div>
       <div className="lead">
         {m.kanto.map((w) => (
-          <div key={w.id} className={`w kanto${w.is_new ? " new" : ""}`}>
+          <div key={w.id} className={cls(w, "kanto")}>
             <span className="t">{w.title}</span>
             <span className="a">{w.pen_name}</span>
+            {you(w)}
           </div>
         ))}
         {!m.kanto.length && <div className="w kanto"><span className="t empty">巻頭は空席</span></div>}
         <div className="rule" />
         {m.tokushu.map((w, i) => (
-          <div key={w.id} className={`w tokushu${w.is_new ? " new" : ""}`}>
+          <div key={w.id} className={cls(w, "tokushu")}>
             <span className="lab" style={{ color: labelColors[i % 3] }}>特集</span>
-            <span className="t">{w.title}</span>
+            <span className="t">
+              {w.title}
+              {you(w)}
+            </span>
             <span className="a">{w.pen_name}</span>
           </div>
         ))}
         {!m.tokushu.length && <div className="w tokushu"><span className="lab" style={{ color: labelColors[0] }}>特集</span><span className="t empty">まだ空いています</span></div>}
       </div>
-      <div className="writers">
-        <div className="lab">巻末の執筆陣</div>
-        <div className="names">{m.kanmatsu.length ? m.kanmatsu.map((w) => `${w.pen_name}`).join(" ／ ") : <span className="empty">まだ空いています</span>}</div>
-      </div>
+      {strip}
       <div className="foot2">
         <span>{state}　{m.kanto.length + m.tokushu.length + m.kanmatsu.length} / {m.counts.submissions}</span>
         <span>STORIES ORBIT FURTHER</span>

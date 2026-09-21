@@ -3,6 +3,9 @@ import Space from "@/components/Space";
 import { getSettings } from "@/lib/settings";
 import { computeStats } from "@/lib/stats";
 import { peek, todayKey } from "@/lib/throttle";
+import { readDevice } from "@/lib/device";
+import { myWorks } from "@/lib/cover";
+import { currentIssue } from "@/lib/settings";
 
 export const dynamic = "force-dynamic";
 
@@ -14,6 +17,9 @@ export default async function Entry() {
   const accepting = settings.accepting === "1" && remaining > 0;
   const stats = await computeStats(settings);
   const top = stats.topReasons[0];
+  const device = await readDevice();
+  const mine = device.isNew ? [] : await myWorks(device.id, currentIssue(settings));
+  const mineCount = mine.filter((w) => !w.is_sample).length;
 
   if (!accepting) {
     return (
@@ -37,6 +43,11 @@ export default async function Entry() {
           <Link className="btn soft" href="/cover">
             今日の表紙を見る
           </Link>
+          {mineCount > 0 && (
+            <Link className="btn ghost" href="/mine">
+              自分の結果を見る（{mineCount}件）
+            </Link>
+          )}
         </div>
       </div>
     );
@@ -59,18 +70,35 @@ export default async function Entry() {
             AIが読む小説雑誌を作っています
           </p>
         </div>
-        <p style={{ fontSize: 14, color: "#c9d8f2" }}>
-          ここはAIが読者の小説雑誌の編集部です。雑誌は3つ。あなたの文章を送ると、その雑誌のAI編集者が「うちの読者にウケるか」を判定します。
-        </p>
-        <ul className="asks">
-          <li>送った文章は保存しません</li>
-          <li>作品名と作者名は表紙と目次に載ります</li>
-          <li>他の人の文章は送らないでください</li>
-          <li>本日限り、合計{cap.toLocaleString()}回まで</li>
-        </ul>
+        <p style={{ fontSize: 14, color: "#c9d8f2" }}>あなたの文章を送ると、AIの編集者が「うちの読者にウケるか」を判定して、表紙に載せます。</p>
+        <ol className="steps">
+          <li>
+            <span className="n">1</span>
+            <b>選ぶ</b>
+            <span>雑誌は3つ。編集者が1人ずつ</span>
+          </li>
+          <li>
+            <span className="n">2</span>
+            <b>送る</b>
+            <span>自分の文章を貼るか、3行書く</span>
+          </li>
+          <li>
+            <span className="n">3</span>
+            <b>載る</b>
+            <span>判定が出て、表紙に名前が載る</span>
+          </li>
+        </ol>
         <Link className="btn" href="/editors">
           編集部に入る
         </Link>
+        {mineCount > 0 && (
+          <Link className="btn ghost" href="/mine">
+            自分の結果を見る（{mineCount}件）
+          </Link>
+        )}
+        <p className="asks2">
+          送った文章は保存しません。作品名と作者名は表紙と目次に載ります。他の人の文章は送らないでください。本日限り、合計{cap.toLocaleString()}回までです。
+        </p>
         {top && (
           <p className="trend">
             今日いちばん多かった理由: <b>{top.tag}</b>（{top.count}件）

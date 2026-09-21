@@ -46,11 +46,11 @@ export async function precheck(i: PrecheckInput): Promise<PrecheckResult> {
     const s = await hit(`sample:${i.deviceId}:${todayKey()}`, 1, 24 * 3600);
     if (!s.ok) return { ok: false, code: "sample", message: "見本で試せるのは1回だけです。自分の文章を送ってください。" };
   } else {
-    // 同じ端末から1時間に5回まで
+    // 同じ端末から1時間に7回まで（3誌に送って比べる人が上限に当たらないように）
     const hourKey = `hour:${new Date().toISOString().slice(0, 13)}`;
-    const r = await hit(`ip:${i.ip}:${hourKey}`, 5, 3600);
-    const d = await hit(`dev:${i.deviceId}:${hourKey}`, 5, 3600);
-    if (!r.ok || !d.ok) return { ok: false, code: "rate", message: "同じ端末からは1時間に5回までです。少し時間をおいてください。" };
+    const r = await hit(`ip:${i.ip}:${hourKey}`, 7, 3600);
+    const d = await hit(`dev:${i.deviceId}:${hourKey}`, 7, 3600);
+    if (!r.ok || !d.ok) return { ok: false, code: "rate", message: "同じ端末からは1時間に7回までです。少し時間をおいてください。" };
     // 同じ本文の2回目
     const textHash = sha256(normalize(text));
     const fresh = await rememberHash(`${i.editor}:${textHash}`, 24 * 3600);

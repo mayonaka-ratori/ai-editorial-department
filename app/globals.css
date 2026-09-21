@@ -226,6 +226,13 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--cyan)}
 .cover .foot2 span{white-space:nowrap}
 .cover .empty{font-size:11px;opacity:.6}
 .cover .ly{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none}
+.cover .small{position:absolute;left:4%;right:4%;font-size:9px;line-height:1.5;padding:4px 8px;max-height:46px;overflow:hidden;font-weight:700}
+.cover .small b{font-family:var(--num);font-size:8px;letter-spacing:.2em;margin-right:6px;font-weight:700}
+.cover .small .km{display:inline-block;white-space:nowrap;margin-right:7px}
+.cover .small .km.mine{padding:0 4px;border-radius:4px;background:rgba(53,214,255,.25);box-shadow:0 0 10px rgba(53,214,255,.8);outline:1px solid var(--cyan)}
+.cover .w.mine{position:relative;padding:3px 3px;border-radius:5px;outline:2px solid var(--cyan);outline-offset:1px;background:rgba(53,214,255,.18);box-shadow:0 0 14px rgba(53,214,255,.7);animation:mineGlow 2.2s ease-in-out infinite}
+@keyframes mineGlow{50%{box-shadow:0 0 26px rgba(53,214,255,1)}}
+.cover .you{display:inline-block;font-family:var(--num);font-size:7px;letter-spacing:.12em;line-height:1.4;padding:0 5px;border-radius:999px;background:var(--cyan);color:#04101f;margin:2px 0 0 4px;vertical-align:middle;box-shadow:0 0 8px var(--cyan);font-weight:700;text-shadow:none;-webkit-text-fill-color:#04101f}
 /* 季刊フェーブル: 生成りの紙、題字は明朝、下の段に縦書き */
 .cover.fable{aspect-ratio:2/3;background:#f7f5ee;border-color:rgba(223,120,60,.5);color:#222;clip-path:none;border-radius:4px;font-family:var(--serif)}
 .cover.fable .issue{position:absolute;right:4%;top:2.6%;font-family:var(--serif);font-size:10px;letter-spacing:.08em;color:#333}
@@ -234,11 +241,13 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--cyan)}
 .cover.fable .w{display:block;margin-left:7px;line-height:1.15}
 .cover.fable .sec{display:block;font-size:9px;letter-spacing:.2em;color:#333;margin-left:6px}
 .cover.fable .w .t{display:block;font-weight:800;letter-spacing:.06em}
-.cover.fable .w .t::before{content:"●";color:#df783c;font-size:6px;vertical-align:middle;margin-bottom:6px;display:inline-block}
+.cover.fable .w .t::before{content:"●";color:#df783c;font-size:6px;vertical-align:middle;margin-bottom:3px;display:inline-block}
 .cover.fable .w .a{display:block;font-size:8px;color:#555;margin-top:6px}
-.cover.fable .w.kanto .t{font-size:15px}
-.cover.fable .w.tokushu .t{font-size:12px}
+.cover.fable .w.kanto .t{font-size:11px}
+.cover.fable .w.tokushu .t{font-size:10px}
 .cover.fable .w.kanmatsu .t{font-size:10px;font-weight:700}
+.cover.fable .small{top:21%;left:6%;right:6%;color:#222;background:transparent;border-bottom:1px solid #df783c;font-family:var(--jp);padding:2px 4px 3px}
+.cover.fable .small b{color:#df783c}
 .cover.fable .foot2{color:#333;font-family:var(--num);font-size:9px;bottom:1.4%;padding-top:0}
 .cover.fable .empty{color:#999}
 /* 週刊フラッシュ: 3枚の絵を重ねた上に作品名 */
@@ -253,8 +262,11 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--cyan)}
 .cover.gemini .w .a{font-size:9px;color:#7a5fae;margin-top:8px;text-shadow:0 0 6px #fff}
 .cover.gemini .w.kanto .t{font-size:24px;background:linear-gradient(#5dd4c0,#5aa8ff 45%,#b06bff 75%,#ff8ac2);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 3px #fff) drop-shadow(0 0 6px #fff)}
 .cover.gemini .w.tokushu .t{font-size:13px}
-.cover.gemini .small{position:absolute;left:4%;right:4%;bottom:6%;font-size:9px;line-height:1.5;color:#4d3d85;background:rgba(255,255,255,.72);padding:4px 8px;border-radius:8px;max-height:44px;overflow:hidden}
-.cover.gemini .small b{font-family:var(--num);font-size:8px;letter-spacing:.2em;margin-right:6px;font-weight:700;color:#7a5fae}
+.cover.gemini .w.kanto.l2 .t{font-size:19px}
+.cover.gemini .w.kanto.l3 .t{font-size:15px}
+.cover.gemini .w.tokushu.l3 .t{font-size:11px}
+.cover.gemini .small{bottom:6%;color:#4d3d85;background:rgba(255,255,255,.72);border-radius:8px}
+.cover.gemini .small b{color:#7a5fae}
 .cover.gemini .foot2{color:#7a5fae;bottom:1.6%;font-size:9px}
 .cover.gemini .empty{opacity:.7;text-shadow:0 0 6px #fff}
 /* 月刊アストラ: 宇宙の絵、題字は色つきの明朝 */
@@ -276,11 +288,14 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--cyan)}
 .cover.astra .rule{height:1px;background:rgba(255,255,255,.5);width:40px;margin:3px 0}
 .cover.astra .w.tokushu{display:grid;grid-template-columns:auto 1fr;column-gap:8px;align-items:baseline}
 .cover.astra .w.tokushu .lab{font-size:10px;letter-spacing:.2em;font-weight:700}
-.cover.astra .w.tokushu .t{font-size:12px;color:#fff}
+.cover.astra .w.tokushu .t{font-size:12px;color:#fff;white-space:nowrap}
+.cover.astra .w.kanto .t{white-space:nowrap}
+.cover.astra .w.kanto.l2 .t{font-size:17px}
+.cover.astra .w.kanto.l3 .t{font-size:13px}
+.cover.astra .w.tokushu.l3 .t{font-size:10px}
 .cover.astra .w.tokushu .a{grid-column:2}
-.cover.astra .writers{position:absolute;left:5%;right:5%;bottom:5.5%;display:grid;gap:3px}
-.cover.astra .writers .lab{font-size:8px;letter-spacing:.2em;color:#dfe6f5}
-.cover.astra .writers .names{font-size:10px;font-weight:700;letter-spacing:.06em;text-shadow:0 2px 8px rgba(0,0,0,.7);line-height:1.5}
+.cover.astra .small{bottom:5.5%;color:#fff;background:rgba(10,18,48,.6);border-left:2px solid #ffd86b;font-family:var(--jp)}
+.cover.astra .small b{color:#ffd86b}
 .cover.astra .foot2{color:#dfe6f5;font-family:var(--num);font-size:8px;bottom:1.6%;padding-top:0}
 .cover.astra .empty{color:#aab4cc}
 .tabs{display:flex;gap:6px}
@@ -338,3 +353,63 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--cyan)}
 .small-btn.danger{border-color:#ea4335;color:#ff8a8a}
 
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.layer{transition:none}}
+
+/* 入口の3つの段 */
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.steps li{display:grid;grid-template-columns:26px auto 1fr;align-items:center;gap:10px;font-size:13px;color:#c9d8f2}
+.steps li .n{width:26px;height:26px;display:grid;place-items:center;font-family:var(--num);font-weight:700;color:#04101f;background:var(--cyan);clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)}
+.steps li b{font-size:15px;color:var(--white);letter-spacing:.1em}
+.asks2{font-size:11px;line-height:1.7;color:var(--mute)}
+
+/* 自分の結果の一覧 */
+.mylist{display:grid;gap:8px}
+.myitem{display:grid;gap:2px;text-decoration:none;color:var(--text);border:1px solid var(--acc);border-left-width:4px;background:rgba(255,255,255,.05);padding:10px 12px}
+.myitem .top{display:flex;justify-content:space-between;font-family:var(--num);font-size:11px;letter-spacing:.15em;color:var(--acc)}
+.myitem .t{font-size:17px;font-weight:900}
+.myitem .sub{font-size:12px;color:var(--mute)}
+
+/* 雑誌を選ぶ（表紙を並べる） */
+.scaled{position:relative;overflow:hidden;flex:none}
+.picker{gap:14px}
+.carousel{display:flex;align-items:flex-end;justify-content:center;gap:12px;margin-inline:-20px;padding:6px 8px 12px;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.carousel button{background:none;border:0;padding:0;position:relative;flex:none;transition:opacity .3s,transform .3s;-webkit-tap-highlight-color:transparent}
+.carousel .side{opacity:.55}
+.carousel .side .cover{box-shadow:0 8px 20px rgba(0,0,0,.5)}
+.carousel .center{filter:drop-shadow(0 0 22px color-mix(in srgb,var(--acc,var(--cyan)) 55%,transparent))}
+.carousel .closed{filter:grayscale(1);opacity:.4}
+.carousel .closedtag{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:rgba(7,11,22,.85);color:var(--white);font-size:13px;font-weight:700;padding:6px 12px;border:1px solid var(--line)}
+.pagedots{display:flex;justify-content:center;gap:8px}
+.pagedots button{width:8px;height:8px;border-radius:50%;border:0;padding:0;background:var(--acc);opacity:.4;transition:all .3s}
+.pagedots button.on{width:22px;border-radius:4px;opacity:1;background:var(--cyan)}
+.ecard.pick{cursor:default}
+.ecard.pick:hover{transform:none;background:linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.02))}
+
+/* 結果: タップの案内、判定の説明、書き直しのボタン、共有 */
+.glass.typing .sealwrap,.glass.typing .fade{display:none}
+.taphint{font-family:var(--num);font-size:11px;letter-spacing:.2em;color:#1f8fb0;text-align:center;margin-top:10px;animation:hintin .6s 1.6s both,blink2 2s 2.2s infinite}
+@keyframes hintin{from{opacity:0}to{opacity:1}}
+@keyframes blink2{50%{opacity:.35}}
+.sealnote{font-size:13px;color:var(--ink);text-align:center;margin-top:-6px}
+.sealnote b{font-weight:900;margin-right:6px}
+.btn.rewrite{display:flex;flex-direction:column;align-items:center;gap:2px;padding:11px 14px;letter-spacing:.08em;background:linear-gradient(90deg,#ffb27a,var(--kurodo));box-shadow:0 0 22px rgba(255,138,61,.4)}
+.btn.rewrite.n{background:linear-gradient(90deg,#9fc3ff,var(--nina));box-shadow:0 0 22px rgba(66,133,244,.4);color:#fff}
+.btn.rewrite.s{background:linear-gradient(90deg,#ffffff,var(--sol));box-shadow:0 0 22px rgba(207,214,230,.4)}
+.btn.rewrite small{font-size:11px;font-weight:700;letter-spacing:0;opacity:.85}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.sharerow{display:flex;justify-content:center;gap:6px;flex-wrap:wrap}
+.sharerow a,.sharerow button{font-family:inherit;font-size:12px;color:var(--text);background:transparent;border:1px solid var(--line);padding:5px 12px;text-decoration:none}
+.onlight .sharerow a,.onlight .sharerow button{color:var(--ink);border-color:rgba(47,107,255,.5)}
+
+/* 送る画面: 書き直しのときの頼みごと、一部でも構わないという案内 */
+.ask{display:grid;gap:4px;padding:10px 12px;border-left:2px solid var(--acc,var(--cyan));background:color-mix(in srgb,var(--acc,var(--cyan)) 12%,transparent);font-size:13px;line-height:1.6}
+.ask .label{color:var(--acc,var(--cyan))}
+.onlight .ask{color:var(--ink)}
+.hint{font-size:12px;color:var(--mute)}
+.onlight .hint{color:#5b6f90}
+
+/* 表紙と目次: あなたの印 */
+.tabs button{position:relative}
+.tabs .dot{position:absolute;right:4px;top:4px;width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 6px var(--cyan)}
+.tabs button.on .dot{background:#04101f;box-shadow:none}
+.toclist .mine{border:1px solid var(--cyan);background:rgba(53,214,255,.12);padding:4px 8px;color:var(--white)}
+.toclist .you{float:right;font-family:var(--num);font-size:10px;letter-spacing:.2em;padding:1px 8px;border-radius:999px;background:var(--cyan);color:#04101f;font-weight:700}
