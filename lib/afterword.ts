@@ -1,5 +1,5 @@
 import { q } from "./db";
-import { EDITORS, EDITOR_KEYS, type EditorKey } from "./editors";
+import { EDITORS, EDITOR_KEYS, PLACEMENT_LABEL, type EditorKey, type Placement } from "./editors";
 import { COMMON_SYSTEM } from "./editors/common";
 import { providerFor } from "./providers";
 import { computeCover } from "./cover";
@@ -20,7 +20,7 @@ export async function writeAfterwords(only?: EditorKey): Promise<Record<string, 
     const material = [
       `今日の${e.magazine}の持ち込みは${st.total}回でした。`,
       `表紙に載った作品: 巻頭『${mag.kanto.map((w) => w.title).join("』『")}』、特集『${mag.tokushu.map((w) => w.title).join("』『")}』、巻末『${mag.kanmatsu.map((w) => w.title).join("』『")}』。`,
-      `判定の内訳: ${Object.entries(st.placements).map(([k, v]) => `${k} ${v}件`).join("、") || "なし"}。`,
+      `判定の内訳: ${Object.entries(st.placements).map(([k, v]) => `${PLACEMENT_LABEL[k as Placement] ?? k} ${v}件`).join("、") || "なし"}。`,
       `今日多かった理由: ${stats.topReasons.map((r) => `${r.tag}（${r.count}件）`).join("、") || "なし"}。`,
     ].join("\n");
     const { provider } = providerFor(ek);

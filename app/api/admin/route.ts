@@ -4,6 +4,7 @@ import { getSettings, setSetting, DEFAULTS } from "@/lib/settings";
 import { q } from "@/lib/db";
 import { writeAfterwords } from "@/lib/afterword";
 import { isEditorKey } from "@/lib/editors";
+import { reopenEditor } from "@/lib/closure";
 
 export const runtime = "nodejs";
 export const maxDuration = 120;
@@ -32,6 +33,9 @@ export async function POST(req: Request) {
       if (key === "daily_cap" && Number(value) < 1) value = DEFAULTS.daily_cap;
     }
     await setSetting(key, value);
+    // 「出勤」に戻したら、自動で休業にした理由とエラーの数を消す
+    const open = key.match(/^editor_(\w+)_open$/);
+    if (open && value === "1" && isEditorKey(open[1])) await reopenEditor(open[1]);
     return NextResponse.json({ ok: true, settings: await getSettings() });
   }
   if (action === "hide") {

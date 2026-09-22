@@ -55,7 +55,14 @@ export function mockProvider(editor: EditorKey): Provider {
       const seed = text.length;
       const placements = ["kanto", "tokushu", "kanmatsu", "namae", "jigo"] as const;
       const placement = text.includes(base.quote) ? base.placement : placements[seed % 5];
-      return { ...base, quote, placement, score: 30 + (seed * 7) % 70 };
+      // 「AIっぽく話してもらう」のときは、言い方だけそれらしく変える
+      // 判定を入れ替えたときは、コメントの「だから〜にします」も合わせる
+      const said: Record<string, string> = { kanto: "巻頭にします", tokushu: "特集にします", kanmatsu: "巻末にします", namae: "名前だけにします", jigo: "人間の部署に回します" };
+      const matched = base.comment.replace(/(巻頭|特集|巻末)にします/, said[placement]).replace(/結論から言うと、(巻頭|特集|巻末)です。/, `結論から言うと、${said[placement].replace("にします", "です").replace("に回します", "に回します")}。`);
+      const comment = input.user.includes("AIっぽく話してほしい")
+        ? `ご提示いただいた原稿を拝見しました。\n${matched}\n総合的に判断すると、以上のようになると言えるでしょう。ご参考になれば幸いです。`
+        : matched;
+      return { ...base, comment, quote, placement, score: 30 + (seed * 7) % 70 };
     },
     async free(input) {
       await new Promise((r) => setTimeout(r, 600));

@@ -10,12 +10,13 @@ import { statusLine, placementNote } from "@/lib/lines";
 import { rememberHash } from "@/lib/throttle";
 import { EDITORS } from "@/lib/editors";
 import { q } from "@/lib/db";
+import { recordFailure, recordSuccess } from "@/lib/closure";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
 
 export async function POST(req: Request) {
-  let body: { editor?: string; penName?: string; text?: string; sample?: string };
+  let body: { editor?: string; penName?: string; text?: string; sample?: string; aiStyle?: boolean };
   try {
     body = await req.json();
   } catch {
@@ -26,12 +27,13 @@ export async function POST(req: Request) {
   const sample = body.sample ? SAMPLES.find((s) => s.id === body.sample) : undefined;
   const penName = String(sample ? sample.penName : body.penName ?? "");
   const text = String(sample ? sample.text : body.text ?? "");
+  const aiStyle = body.aiStyle === true;
 
   const settings = await getSettings();
   const device = await readDevice();
   const ip = await clientIp();
 
-  const pre = await precheck({ editor, penName, text, deviceId: device.id, ip, isSample: !!sample, settings });
+  const pre = await precheck({ editor, penName, text, deviceId: device.id, ip, isSample: !!sample, aiStyle, settings });
   const withCookie = (res: NextResponse) => {
     if (device.isNew) res.cookies.set(DEVICE_COOKIE, device.id, { path: "/", maxAge: 60 * 60 * 24 * 90, sameSite: "lax", httpOnly: true });
     return res;
@@ -39,7 +41,8 @@ export async function POST(req: Request) {
   if (!pre.ok) return withCookie(NextResponse.json({ ok: false, code: pre.code, message: pre.message }, { status: 200 }));
 
   try {
-    const row = await judge({ editor, penName, text, deviceId: device.id, isSample: !!sample, ngWord: pre.ngWord, settings });
+    const row = await judge({ editor, penName, text, deviceId: device.id, isSample: !!sample, ngWord: pre.ngWord, aiStyle, settings });
+    await recordSuccess(editor).catch(() => {});
     // 同じ本文の2回目よけは、判定が終わってから覚える。
     // 先に覚えると、混雑や編集者側のエラーで返したあとのやり直しが全部「2回目」になってしまう。
     if (pre.dupKey) await rememberHash(pre.dupKey, 24 * 3600);
@@ -65,6 +68,7 @@ export async function POST(req: Request) {
         reasonTags: parseTags(row),
         workType: row.work_type,
         isSample: row.is_sample,
+        aiStyle: !!row.ai_style,
         revision: Number(row.revision),
         prevScore: row.prev_score == null ? null : Number(row.prev_score),
         penName: row.pen_name,
@@ -83,6 +87,13 @@ export async function POST(req: Request) {
       await q("insert into errors (editor, message) values ($1, $2)", [editor, message.slice(0, 500)]);
     } catch {}
     console.error("judge failed", editor, message);
+    // 上限額のエラーや、続けてのエラーなら、この編集者を自動で休業にする
+    const closed = await recordFailure(editor, err).catch(() => null);
+    if (closed) {
+      return withCookie(
+        NextResponse.json({ ok: false, code: "editor_closed", message: `${EDITORS[editor].name}は本日は休業になりました。別の雑誌に送ってください。` }),
+      );
+    }
     return withCookie(
       NextResponse.json({ ok: false, code: "error", message: `${EDITORS[editor].name}は今、手が離せないようです。少し待つか、別の雑誌に送ってください。` }),
     );

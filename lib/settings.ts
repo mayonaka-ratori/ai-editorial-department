@@ -12,6 +12,10 @@ export const DEFAULTS: Record<string, string> = {
   editor_kurodo_open: "1",
   editor_nina_open: "1",
   editor_sol_open: "1",
+  // 自動で休業にしたときの理由。空なら自動の休業ではない（lib/closure.ts）。
+  editor_kurodo_closed_reason: "",
+  editor_nina_closed_reason: "",
+  editor_sol_closed_reason: "",
   strictness_kurodo: "futsu",
   strictness_nina: "futsu",
   strictness_sol: "futsu",

@@ -1,6 +1,6 @@
 import { q, one } from "./db";
 import { EDITORS, pickQuirks, type EditorKey, type Judgement, type Placement, PLACEMENTS, PLACEMENT_BASE, PLACEMENT_LABEL, REASON_TAGS, WORK_TYPES } from "./editors";
-import { COMMON_SYSTEM, STRICTNESS_LINE, ratioLine, previousLine } from "./editors/common";
+import { AI_STYLE_LINE, COMMON_SYSTEM, STRICTNESS_LINE, ratioLine, previousLine } from "./editors/common";
 import { providerFor } from "./providers";
 import { findFamous } from "./famous";
 import { shortId } from "./ids";
@@ -16,6 +16,8 @@ export interface JudgeInput {
   isSample: boolean;
   // 禁止語が入っていた。判定は返すが、表紙にも目次にも出さない。
   ngWord?: boolean;
+  // 来場者が「AIっぽく話してもらう」を選んだ。判定は変えず、コメントの言い方だけ変える。
+  aiStyle?: boolean;
   settings: Record<string, string>;
 }
 
@@ -39,6 +41,7 @@ export interface SubmissionRow {
   revision: number;
   prev_id: string;
   prev_score: number | null;
+  ai_style: boolean;
   issue: string;
   created_at: string | Date;
   [k: string]: unknown;
@@ -103,6 +106,7 @@ export async function judge(input: JudgeInput): Promise<SubmissionRow> {
       prev
         ? previousLine({ title: prev.title, placement_label: PLACEMENT_LABEL[prev.placement], next_request: prev.next_request, revision })
         : "",
+      input.aiStyle ? AI_STYLE_LINE : "",
       "作品の種類ごとの見るところ:\n" + Object.entries(e.typeHints).map(([k, v]) => `- ${k}: ${v}`).join("\n"),
     ].filter(Boolean);
     const { provider } = providerFor(input.editor);
@@ -118,12 +122,12 @@ export async function judge(input: JudgeInput): Promise<SubmissionRow> {
   const id = shortId();
   const hidden = !j.safe_for_cover || !!input.ngWord;
   await q(
-    `insert into submissions (id, editor, pen_name, placement, score, title, title_alt, quote, comment, next_request, reason_tags, work_type, safe_for_cover, hidden, is_sample, device_id, revision, prev_id, prev_score, issue)
-     values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20)`,
+    `insert into submissions (id, editor, pen_name, placement, score, title, title_alt, quote, comment, next_request, reason_tags, work_type, safe_for_cover, hidden, is_sample, device_id, revision, prev_id, prev_score, issue, ai_style)
+     values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21)`,
     [
       id, input.editor, penName, j.placement, score, j.title, j.title_alt, j.quote, j.comment, j.next_request,
       JSON.stringify(j.reason_tags), j.work_type, j.safe_for_cover, hidden, input.isSample, input.deviceId, revision,
-      prev?.id ?? "", prev ? Number(prev.score) : null, issue,
+      prev?.id ?? "", prev ? Number(prev.score) : null, issue, !!input.aiStyle,
     ],
   );
   const row = await one<SubmissionRow>("select * from submissions where id = $1", [id]);

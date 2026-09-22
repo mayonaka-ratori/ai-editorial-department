@@ -23,6 +23,8 @@ create table if not exists submissions (
   issue text not null,
   created_at timestamptz not null default now()
 );
+-- あとから足した列。前からある表にも足す。
+alter table submissions add column if not exists ai_style boolean not null default false;
 create index if not exists submissions_issue_idx on submissions (issue, created_at);
 create index if not exists submissions_device_idx on submissions (device_id, editor, issue);
 

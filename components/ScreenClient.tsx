@@ -1,7 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
-import Space from "./Space";
+import { createPortal } from "react-dom";
 import CoverView from "./CoverView";
+import Stage3D from "./Stage3D";
 import type { CoverData } from "@/lib/cover";
 import type { EditorKey } from "@/lib/editors/types";
 
@@ -10,9 +11,11 @@ const ORDER: EditorKey[] = ["kurodo", "nina", "sol"];
 const NAME: Record<EditorKey, string> = { kurodo: "蔵人", nina: "二ナ", sol: "ソル" };
 
 // ブースの大画面。3誌が並び、真ん中が大きい。10秒ごとに更新、30秒ごとに真ん中を入れ替える。
+// 3Dの空間は Stage3D（three.js）。表紙の中身はここで作って、Stage3D の枠に createPortal で入れる。
 export default function ScreenClient({ initial, qr, appUrl }: { initial: Payload; qr: string; appUrl: string }) {
   const [data, setData] = useState<Payload>(initial);
   const [center, setCenter] = useState(1);
+  const [slots, setSlots] = useState<Record<EditorKey, HTMLDivElement> | null>(null);
   useEffect(() => {
     const iv = setInterval(() => fetch("/api/cover").then((r) => r.json()).then(setData).catch(() => {}), 10000);
     const rot = setInterval(() => setCenter((c) => (c + 1) % 3), 30000);
@@ -31,25 +34,15 @@ export default function ScreenClient({ initial, qr, appUrl }: { initial: Payload
   const aw = data.afterwords[ORDER[center]];
   return (
     <div className="desk">
-      <Space motes={30} />
-      <div className="floor" />
+      <Stage3D order={arranged} onSlots={setSlots} />
       <div className="ticker">
         <span>{news.length ? `NEW　${news.join("　　")}` : `AI編集部　${data.issueTitle}　持ち込み ${data.total}回`}</span>
       </div>
-      <div className="shelf">
-        {arranged.map((ek, i) => {
+      {slots &&
+        ORDER.map((ek) => {
           const m = data.magazines.find((x) => x.editor === ek)!;
-          return (
-            <div key={ek} className={`scene ${i === 1 ? "center" : i === 0 ? "left" : "right"}`}>
-              <div className="book">
-                <div className="back" />
-                <div className="edge" />
-                <CoverView m={m} issueTitle={data.issueTitle} published={published} />
-              </div>
-            </div>
-          );
+          return createPortal(<CoverView m={m} issueTitle={data.issueTitle} published={published} />, slots[ek], ek);
         })}
-      </div>
       <div className="side">
         <p className="label">{published ? "PUBLISHED" : "NOW TYPESETTING"}</p>
         <h2>

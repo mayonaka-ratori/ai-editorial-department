@@ -8,7 +8,15 @@ export const PLACEMENT_LABEL: Record<Placement, string> = {
   tokushu: "特集",
   kanmatsu: "巻末",
   namae: "名前だけ",
-  jigo: "次号待ち",
+  jigo: "人間の部署へ",
+};
+// 「〇〇が□□しました」の□□の部分。人間の部署へは「にしました」とつなげられないので、別に持つ。
+export const PLACEMENT_DONE: Record<Placement, string> = {
+  kanto: "巻頭にしました",
+  tokushu: "特集にしました",
+  kanmatsu: "巻末にしました",
+  namae: "名前だけにしました",
+  jigo: "人間の部署に回しました",
 };
 // 判定の印のすぐ下に出す説明は lib/lines.ts の placementNote にある（いまの掲載で言い方が変わるため）。
 export const PLACEMENT_BASE: Record<Placement, number> = {

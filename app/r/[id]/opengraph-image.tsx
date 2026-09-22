@@ -62,16 +62,21 @@ export default async function OgImage({ params }: { params: Promise<{ id: string
                 clipPath: "polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)",
                 background: gold ? "linear-gradient(160deg,#fff4c2,#ffd86b 50%,#ff9d5c)" : row.editor === "nina" ? "linear-gradient(160deg,#4285f4,#ea4335 35%,#fbbc05 65%,#34a853)" : `linear-gradient(160deg,${t.edge},#2b2b2b)`,
                 color: gold || row.editor === "nina" ? "#04101f" : "#fff",
-                fontSize: label.length > 2 ? 40 : 60,
+                flexDirection: "column",
+                fontSize: label.length > 4 ? 32 : label.length > 2 ? 40 : 60,
                 fontWeight: 900,
                 letterSpacing: 4,
+                lineHeight: 1.2,
               }}
             >
-              {label}
+              {/* 「人間の部署へ」は長いので2行に分ける */}
+              {(label.length > 4 ? [label.slice(0, 3), label.slice(3)] : [label]).map((l) => (
+                <div key={l} style={{ display: "flex" }}>{l}</div>
+              ))}
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
               <div style={{ fontSize: 60, fontWeight: 900, lineHeight: 1.2 }}>{`『${row.title}』`}</div>
-              <div style={{ fontSize: 28, color: t.sub, fontWeight: 500 }}>{`作: ${row.pen_name}　推薦: ${e.name}`}</div>
+              <div style={{ fontSize: 28, color: t.sub, fontWeight: 500 }}>{`作: ${row.pen_name}　${row.placement === "jigo" ? "読んだ人" : "推薦"}: ${e.name}`}</div>
               {row.quote ? <div style={{ fontSize: 24, color: t.sub, fontWeight: 500, marginTop: 8 }}>{`「${row.quote.slice(0, 40)}」`}</div> : null}
             </div>
           </div>

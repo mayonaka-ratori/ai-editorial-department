@@ -20,6 +20,7 @@ export interface ResultData {
   reasonTags: string[];
   workType: string;
   isSample: boolean;
+  aiStyle: boolean;
   revision: number;
   prevScore: number | null;
   penName: string;
@@ -159,6 +160,7 @@ export default function ResultView({ data, animate, appUrl }: { data: ResultData
           {data.magazine}の{e.name}が読みました
           {data.revision > 1 && <span className="badge">{data.revision}稿目</span>}
           {data.isSample && <span className="badge">見本</span>}
+          {data.aiStyle && <span className="badge">AIっぽく</span>}
         </div>
       </div>
       <div className={`glass corner${animate && phase === 0 ? " typing" : ""}`} ref={cardRef}>
@@ -178,7 +180,18 @@ export default function ResultView({ data, animate, appUrl }: { data: ResultData
             <div className="hex" />
             <div className="hex in" />
             <div className="orbit" />
-            <div className={`txt${data.placementLabel.length > 2 ? " long" : ""}`}>{data.placementLabel}</div>
+            <div className={`txt${data.placementLabel.length > 4 ? " xl" : data.placementLabel.length > 2 ? " long" : ""}`}>
+              {/* 「人間の部署へ」は長いので2行に分ける */}
+              {data.placementLabel.length > 4 ? (
+                <>
+                  {data.placementLabel.slice(0, 3)}
+                  <br />
+                  {data.placementLabel.slice(3)}
+                </>
+              ) : (
+                data.placementLabel
+              )}
+            </div>
             <div className="sub">PLACEMENT</div>
           </div>
         </div>
@@ -190,7 +203,7 @@ export default function ResultView({ data, animate, appUrl }: { data: ResultData
           <p className="label">TITLE</p>
           <p className="t">『{data.title}』</p>
           <p className="a">
-            作: <b>{data.penName}</b>　推薦: <b>{e.name}</b>
+            作: <b>{data.penName}</b>　{data.placement === "jigo" ? "読んだ人" : "推薦"}: <b>{e.name}</b>
           </p>
           {data.titleAlt && <p className="a">もう1案: 『{data.titleAlt}』</p>}
         </div>
