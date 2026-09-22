@@ -21,6 +21,8 @@ export async function GET(_req: Request, ctx: { params: Promise<{ id: string }> 
     magazine: EDITORS[row.editor].magazine,
     title: row.title,
     placementLabel: PLACEMENT_LABEL[row.placement],
+    // 「前回の『〇〇』は巻頭でした」の「巻頭でした」の部分
+    placementPast: row.placement === "jigo" ? "人間の部署に回りました" : `${PLACEMENT_LABEL[row.placement]}でした`,
     nextRequest: row.next_request,
     penName: row.pen_name,
     revision: Number(row.revision),

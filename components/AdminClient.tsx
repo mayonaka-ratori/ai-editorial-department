@@ -140,6 +140,11 @@ export default function AdminClient() {
                   <td>
                     <button className={`small-btn${s[`editor_${k}_open`] === "1" ? " on" : ""}`} onClick={() => set(`editor_${k}_open`, "1")}>出勤</button>{" "}
                     <button className={`small-btn${s[`editor_${k}_open`] !== "1" ? " on" : ""}`} onClick={() => set(`editor_${k}_open`, "0")}>休業</button>
+                    {s[`editor_${k}_closed_reason`] && (
+                      <p className="err" style={{ margin: "4px 0 0", fontSize: 12 }}>
+                        {s[`editor_${k}_closed_reason`]}各社の管理画面で上限額と残高を確かめてから、「出勤」に戻してください。
+                      </p>
+                    )}
                   </td>
                   <td>
                     厳しさ{" "}

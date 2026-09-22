@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import Space from "@/components/Space";
 import ResultView, { type ResultData } from "@/components/ResultView";
 import { one } from "@/lib/db";
-import { EDITORS, PLACEMENT_LABEL } from "@/lib/editors";
+import { EDITORS, PLACEMENT_DONE, PLACEMENT_LABEL } from "@/lib/editors";
 import { reactions, parseTags, type SubmissionRow } from "@/lib/judge";
 import { computeCover, statusFor } from "@/lib/cover";
 import { statusLine, placementNote } from "@/lib/lines";
@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const e = EDITORS[row.editor];
   return {
     title: `『${row.title}』 ${e.magazine} ${PLACEMENT_LABEL[row.placement]}`,
-    description: `${e.name}が${PLACEMENT_LABEL[row.placement]}にしました。作: ${row.pen_name}`,
+    description: `${e.name}が${PLACEMENT_DONE[row.placement]}。作: ${row.pen_name}`,
   };
 }
 
@@ -51,6 +51,7 @@ export default async function ResultPage({ params }: { params: Promise<{ id: str
     reasonTags: parseTags(row),
     workType: row.work_type,
     isSample: row.is_sample,
+    aiStyle: !!row.ai_style,
     revision: Number(row.revision),
     prevScore: row.prev_score == null ? null : Number(row.prev_score),
     penName: row.pen_name,

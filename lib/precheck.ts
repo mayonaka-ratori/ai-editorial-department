@@ -14,6 +14,7 @@ export interface PrecheckInput {
   deviceId: string;
   ip: string;
   isSample: boolean;
+  aiStyle?: boolean;
   settings: Record<string, string>;
 }
 
@@ -64,7 +65,8 @@ export async function precheck(i: PrecheckInput): Promise<PrecheckResult> {
   if (!d.ok) return { ok: false, code: "rate", message: "同じ端末からは1時間に7回までです。少し時間をおいてください。" };
 
   // 同じ本文の2回目。ここでは見るだけ。覚えるのは判定が終わったあと。
-  const dupKey = `${i.editor}:${textHash}`;
+  // AIっぽく話してもらうかどうかが違えば、同じ原稿でも送れる（言い方の違いを比べられるように）。
+  const dupKey = `${i.editor}:${i.aiStyle ? "ai:" : ""}${textHash}`;
   if (await hashSeen(dupKey)) {
     return { ok: false, code: "dup", message: "同じ原稿を同じ雑誌に2回は送れません。別の雑誌に送るか、書き直してください。" };
   }

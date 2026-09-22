@@ -141,6 +141,10 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--cyan)}
 .chip{border:1px solid var(--line);background:rgba(255,255,255,.12);color:inherit;padding:4px 10px;font-size:12px}
 .chip.on{background:var(--cyan);color:#04101f}.chip:disabled{opacity:.4}
 .odai{font-size:12px;color:var(--cyan);min-height:1.2em}
+.aistyle{display:flex;gap:10px;align-items:flex-start;margin:4px 0 12px;padding:10px 12px;border:1px solid var(--line);background:rgba(255,255,255,.06);font-size:14px;cursor:pointer}
+.aistyle input{width:20px;height:20px;margin:2px 0 0;flex:none;accent-color:var(--cyan)}
+.aistyle small{display:block;font-size:12px;opacity:.8;margin-top:2px}
+.onlight .aistyle{background:rgba(255,255,255,.8)}
 
 /* 送る演出 */
 .post{position:fixed;inset:0;z-index:20;pointer-events:none;overflow:hidden}
@@ -176,6 +180,7 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--cyan)}
 .seal .hex.in{inset:4px;background:linear-gradient(160deg,#0c1426,#132040)}
 .seal .txt{position:relative;font-size:30px;font-weight:900;letter-spacing:.2em;padding-left:.2em;color:var(--white);text-shadow:0 0 14px rgba(53,214,255,.8);white-space:nowrap}
 .seal .txt.long{font-size:20px;letter-spacing:.1em}
+.seal .txt.xl{font-size:19px;letter-spacing:.08em;line-height:1.25;text-align:center}
 .seal .sub{position:absolute;bottom:22px;font-family:var(--num);font-size:10px;letter-spacing:.3em;color:var(--cyan)}
 .seal .orbit{position:absolute;inset:-12px;border-radius:50%;border:1px dashed rgba(53,214,255,.6);animation:spin 10s linear infinite}
 .seal.show{opacity:1}
@@ -301,22 +306,13 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--cyan)}
 
 /* 大画面 */
 .desk{position:fixed;inset:0;overflow:hidden;background:var(--space)}
-.desk .floor{position:absolute;left:-30%;right:-30%;bottom:0;height:55%;transform:perspective(600px) rotateX(62deg);transform-origin:50% 100%;
-  background:repeating-linear-gradient(90deg,rgba(53,214,255,.35) 0 1px,transparent 1px 60px),repeating-linear-gradient(0deg,rgba(53,214,255,.35) 0 1px,transparent 1px 60px);
-  -webkit-mask-image:linear-gradient(transparent,#000 60%);mask-image:linear-gradient(transparent,#000 60%)}
-.desk .shelf{position:absolute;left:10vw;right:22vw;bottom:12vh;display:flex;justify-content:center;align-items:flex-end;gap:2vw;perspective:1600px}
-.desk .scene{width:330px;position:relative;transform-style:preserve-3d;zoom:.9;transition:zoom .6s}
-.desk .scene.center{zoom:1.18}
-@media (max-height:820px){.desk .scene{zoom:.72}.desk .scene.center{zoom:.95}}
-.desk .book{position:relative;transform-style:preserve-3d;animation:turn 14s ease-in-out infinite alternate;transform-origin:50% 100%}
-.desk .scene.left .book{animation-name:turnL}
-.desk .scene.right .book{animation-name:turnR}
-@keyframes turn{from{transform:rotateY(-14deg) rotateX(3deg) translateY(-6px)}to{transform:rotateY(12deg) rotateX(3deg) translateY(6px)}}
-@keyframes turnL{from{transform:rotateY(22deg) rotateX(3deg)}to{transform:rotateY(34deg) rotateX(3deg) translateY(6px)}}
-@keyframes turnR{from{transform:rotateY(-22deg) rotateX(3deg)}to{transform:rotateY(-34deg) rotateX(3deg) translateY(6px)}}
-.desk .book .cover{position:relative;backface-visibility:hidden}
-.desk .book .edge{position:absolute;left:-10px;top:0;bottom:0;width:10px;background:linear-gradient(90deg,rgba(53,214,255,.4),rgba(53,214,255,.9));transform:rotateY(-90deg);transform-origin:right}
-.desk .book .back{position:absolute;inset:0;background:rgba(12,20,38,.6);transform:translateZ(-10px);border:1px solid var(--line)}
+/* 3Dの空間（components/Stage3D.tsx）。下に WebGL の床と光、上に HTML の表紙 */
+.stage3d{position:absolute;inset:0;z-index:1}
+.stage3d .stage-gl,.stage3d .stage-css{position:absolute!important;inset:0}
+.stage3d .stage-css{pointer-events:none}
+.book3d{box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 0 1px rgba(53,214,255,.25);transition:box-shadow .6s}
+.book3d.center{box-shadow:0 40px 120px rgba(0,0,0,.7),0 0 40px rgba(53,214,255,.35),0 0 0 1px rgba(53,214,255,.5)}
+.book3d .cover{position:relative}
 .desk .side{position:absolute;right:2vw;top:7vh;width:19vw;min-width:200px;display:grid;gap:10px;z-index:3}
 .desk .side h2{font-size:22px;letter-spacing:.1em;color:var(--white)}
 .desk .side p{font-size:14px;color:#c9d8f2}
@@ -328,19 +324,9 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--cyan)}
 @keyframes tick{to{transform:translateX(-100%)}}
 .desk .state{position:absolute;right:2vw;bottom:6vh;font-family:var(--num);font-size:16px;letter-spacing:.3em;color:var(--cyan);border:1px solid var(--line);padding:6px 14px;z-index:3}
 .desk .state.done{color:var(--gold);border-color:var(--gold)}
-@media (max-width:900px){.desk .scene:not(.center){display:none}.desk .side{display:none}.desk .shelf{left:0;right:0}}
-/* ブースの大画面（1920×1080など）。離れた場所から名前が読めるように、
-   真ん中の1冊を大きくして上の余白を埋める。左右の2冊は少し小さくして、横にはみ出さないようにする */
+/* ブースの大画面（1920×1080など）。表紙が大きくなるぶん、QRの案内は縦に並べて本の下に入らないようにする */
 @media (min-width:1800px) and (min-height:950px){
-  .desk .shelf{bottom:8vh}
-  .desk .scene{zoom:.85}
-  .desk .scene.center{zoom:1.7}
-  /* 表紙が大きくなるぶん、QRの案内は縦に並べて本の下に入らないようにする */
   .desk .qr{flex-direction:column;align-items:flex-start;gap:8px;max-width:160px;letter-spacing:normal}
-}
-@media (min-width:2400px) and (min-height:1300px){
-  .desk .scene{zoom:.95}
-  .desk .scene.center{zoom:2.5}
 }
 
 /* 管理 */

@@ -21,6 +21,7 @@ function tokenize(text: string): string[] {
 
 const DRAFT_KEY = "fable_draft";
 const sentKey = (editor: string) => `fable_sent_${editor}`;
+const sentMark = (ai: boolean, text: string) => `${ai ? "ai" : "plain"}\n${text}`;
 // 見本は1端末1日1回。日本時間の日付で覚える。
 const sampleKey = () => `fable_sample_${new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10)}`;
 const SLOW_MS = 30000; // ここまで返事がなければ「時間がかかっています」
@@ -32,6 +33,7 @@ interface Prev {
   editor: EditorKey;
   title: string;
   placementLabel: string;
+  placementPast: string;
   nextRequest: string;
   penName: string;
   revision: number;
@@ -57,6 +59,8 @@ export default function SubmitFlow({ editor, appUrl, rewriteId = "" }: { editor:
   const [slow, setSlow] = useState(false);
   const [canRetry, setCanRetry] = useState(false);
   const [sampleUsed, setSampleUsed] = useState(false);
+  // 「AIっぽく話してもらう」。判定は変わらず、コメントの言い方だけが変わる。
+  const [aiStyle, setAiStyle] = useState(false);
   // いま待っている送信。「もう一度」で古いほうを止め、遅れて返ってきても使わない。
   const inflight = useRef<{ gen: number; ctrl: AbortController | null }>({ gen: 0, ctrl: null });
   const taRef = useRef<HTMLTextAreaElement>(null);
@@ -93,7 +97,8 @@ export default function SubmitFlow({ editor, appUrl, rewriteId = "" }: { editor:
   useEffect(() => () => timers.current.forEach(clearTimeout), []);
 
   const n = [...text.trim()].length;
-  const same = !!sentText && text.trim() === sentText;
+  // 前に送った原稿は「AIっぽくの印 + 改行 + 本文」の形で覚えている。印が違えば同じ本文でも送れる。
+  const same = !!sentText && sentText === sentMark(aiStyle, text.trim());
   const problem = n < 20 ? "20字以上でお願いします" : n > 1000 ? "1000字までです" : !pen.trim() ? "ペンネームを入れてください" : same ? "同じ文章のままでは送れません" : "";
   const tokens = useMemo(() => tokenize(reading.trim()).slice(0, 120), [reading]);
 
@@ -108,7 +113,7 @@ export default function SubmitFlow({ editor, appUrl, rewriteId = "" }: { editor:
     const gen = ++inflight.current.gen;
     const ctrl = new AbortController();
     inflight.current.ctrl = ctrl;
-    const body = sampleId ? { editor, sample: sampleId } : { editor, penName: pen.trim(), text: text.trim() };
+    const body = sampleId ? { editor, sample: sampleId, aiStyle } : { editor, penName: pen.trim(), text: text.trim(), aiStyle };
     const sendText = sampleId ? SAMPLES.find((s) => s.id === sampleId)!.text : text.trim();
     // 見本は本文の欄に入れない。入れると端末の下書きに残り、そのまま自分の作品として送れてしまう。
     setReading(sendText);
@@ -172,9 +177,9 @@ export default function SubmitFlow({ editor, appUrl, rewriteId = "" }: { editor:
         // 送る前に覚えると、編集者側のエラーで戻ったときに同じ文章を送り直せなくなる。
         if (!sampleId) {
           try {
-            localStorage.setItem(sentKey(editor), sendText);
+            localStorage.setItem(sentKey(editor), sentMark(aiStyle, sendText));
           } catch {}
-          setSentText(sendText);
+          setSentText(sentMark(aiStyle, sendText));
         } else {
           markSampleUsed();
         }
@@ -291,7 +296,7 @@ export default function SubmitFlow({ editor, appUrl, rewriteId = "" }: { editor:
           <div className="bubble">
             {prev ? (
               <>
-                <b>{prev.revision + 1}稿目ですね。</b>前回の『{prev.title}』は{prev.placementLabel}でした。
+                <b>{prev.revision + 1}稿目ですね。</b>前回の『{prev.title}』は{prev.placementPast}。
               </>
             ) : (
               <>
@@ -330,6 +335,13 @@ export default function SubmitFlow({ editor, appUrl, rewriteId = "" }: { editor:
           </div>
           <div className="odai">{odai ? `お題: ${odai}（3行でいいです）` : ""}</div>
         </div>
+        <label className="aistyle">
+          <input type="checkbox" checked={aiStyle} onChange={(ev) => setAiStyle(ev.target.checked)} />
+          <span>
+            <b>AIっぽく話してもらう</b>
+            <small>{e.name}が、わざとAIらしい言い方でコメントします。判定は変わりません。同じ原稿でも、ここを切り替えればもう一度送れます。</small>
+          </span>
+        </label>
         {err && <p className="err">{err}</p>}
         <button className="btn" type="button" disabled={!!problem} onClick={() => sendAndRemember()}>
           {e.name}に送る{prev ? `（${prev.revision + 1}稿目）` : ""}
