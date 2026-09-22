@@ -1,6 +1,6 @@
-# 画像生成の指示文（gpt-image-2.5用、第3版）
+# 画像生成の指示文（gpt-image-2.5用、第4版）
 
-docs/design.md（第3版）の「用意してもらう絵」を作るための指示文です。
+docs/design.md の8「用意してもらう絵」を作るための指示文です。
 方向は「ネットワークの中にあるAI編集部」で、雑誌ごとに色がまったく違います。
 
 ## 使い方の順番
@@ -96,10 +96,12 @@ docs/design.md（第3版）の「用意してもらう絵」を作るための�
 public/editors/kurodo/face-wait.png  face-read.png  face-judge.png
 public/editors/nina/face-wait.png    face-read.png  face-judge.png  face-joy.png
 public/editors/sol/face-wait.png     face-read.png  face-judge.png
-public/spaces/fable/full.png  back.png  mid.png  front.png
-public/spaces/flash/...
-public/spaces/astra/...
+public/spaces/kurodo/full.png  back.png  mid.png  front.png
+public/spaces/nina/...
+public/spaces/sol/...
 public/stage.png
 ```
 
 ファイル名はこの通りでなくても構いません。届いたらこちらで直します。
+
+3誌の表紙の絵は、この指示文とは別に作って届いている（public/covers/）。
