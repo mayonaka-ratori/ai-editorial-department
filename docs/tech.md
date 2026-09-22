@@ -1,4 +1,4 @@
-# 技術の定義（第5版。段階0から6を作ったあとの実物に合わせた）
+# 技術の定義（第6版。2026年9月21日の全体確認で実物に合わせた）
 
 「何を使って、どう作るか」を決めます。
 決めた理由も書いておきます。あとで変えるときに、理由ごと見直せるようにするためです。
@@ -58,12 +58,14 @@ app/
   cover/page.tsx           表紙（3誌を切り替え、下に目次）
   screen/page.tsx          ブースの大画面
   toc/page.tsx             表紙の画面に飛ばすだけ
+  mine/page.tsx            この端末で送った結果の一覧
   admin/page.tsx           管理
   api/
     submit/route.ts        原稿を受け取って判定を返す
     cover/route.ts         表紙に載せる一覧を返す
     admin/route.ts         管理の設定を読み書きする
     stats/route.ts         今日の傾向を返す
+    r/[id]/route.ts        結果の要点（書き直しの画面が前回を出すのに使う）
     r/[id]/status/route.ts いまの掲載を返す
 lib/
   editors/
@@ -89,7 +91,8 @@ lib/
     index.ts               接続（NeonかPGliteを選ぶ）
 docs/                      企画メモなど
 public/
-  editors/                 顔と部屋の絵
+  covers/                  3誌の表紙の絵（届いたもの）
+  editors/                 顔の絵（まだ。届くまでは名前の1文字）
   fonts/                   書体。fonts.css と g/ の下の細切れのwoff2（Zen Kaku Gothic New、Rajdhani、Shippori Mincho）。OG画像用のTTFも
 ```
 
@@ -110,7 +113,9 @@ public/
 | is_sample | 真偽 | 見本の原稿で試した結果なら真。表紙にも目次にも載せない |
 | revision | 整数 | 同じ端末から同じ雑誌への何回目か。1回目は1 |
 | prev_id | 文字列 | 改稿のとき、前回の結果の id |
+| prev_score | 整数 | 改稿のとき、前回の点数。上がったか下がったかを出すのに使う |
 | title | 文字列 | 作品名 |
+| title_alt | 文字列 | 作品名のもう1案（二ナだけ） |
 | quote | 文字列 | 引用した一文 |
 | comment | 文字列 | 編集者のコメント |
 | next_request | 文字列 | 次に持ってきてほしいもの |
@@ -125,7 +130,7 @@ public/
 
 | 列 | 中身 |
 |---|---|
-| key | accepting / daily_cap / event_tweet_url / editor_kurodo_open / editor_nina_open / editor_sol_open / published_at（発行した時刻。空なら組版中） / strictness_kurodo / strictness_nina / strictness_sol（甘め、ふつう、厳しめ） |
+| key | accepting / daily_cap / event_tweet_url / editor_kurodo_open / editor_nina_open / editor_sol_open / published_at（発行した時刻。空なら組版中） / strictness_kurodo / strictness_nina / strictness_sol（甘め、ふつう、厳しめ） / issue_label（号。空なら今日の月） |
 | value | 文字列 |
 
 ### throttle（回数の記録）
@@ -143,6 +148,14 @@ public/
 | editor | kurodo / nina / sol |
 | body | 編集後記の本文（200字ほど） |
 | created_at | 書いた時刻 |
+
+### errors（エラーの記録）
+
+| 列 | 中身 |
+|---|---|
+| editor | どの編集者で起きたか |
+| message | エラーの文（500字まで） |
+| created_at | 起きた時刻 |
 
 ### text_hashes（重複よけ）
 
@@ -267,6 +280,8 @@ public/
 | ADMIN_PASSWORD | 管理画面の合言葉 |
 | APP_URL | 公開先のURL（結果のURLと投稿文に使う）。空のときはリクエストのホスト名から作る |
 | MOCK_EDITORS | 「1」にすると、AIを呼ばずに例の結果を返す。キーがない間の開発用 |
+| ANTHROPIC_MODEL / GEMINI_MODEL / OPENAI_MODEL | モデル名。空なら既定（claude-sonnet-5、gemini-3.7-flash、gpt-5.6-luna） |
+| PGLITE_DIR | 手元のPGliteの保存先。空なら data/pglite |
 
 ## 12. APIキーがなくても動かす
 
@@ -295,4 +310,5 @@ public/
 ## 15. まだ決めていないこと
 
 1. 「次号待ち」の作品は表紙にも目次にも出ない。管理画面の「最近の結果」にだけ出る。それでよいか。
-2. 端末の目印をクッキーにするか、ブラウザの保存領域にするか。クッキーのほうがサーバーで扱いやすい。
+
+（端末の目印はクッキーに決めた。書き直しのための下書きだけブラウザの保存領域に置く）
