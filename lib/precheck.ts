@@ -41,7 +41,7 @@ export async function precheck(i: PrecheckInput): Promise<PrecheckResult> {
   const ngWord = NG_WORDS.some((w) => text.includes(w) || pen.includes(w));
 
   // 1日の上限（会場とネットを合わせて）
-  const cap = Number(i.settings.daily_cap || 3000);
+  const cap = Number(i.settings.daily_cap) > 0 ? Number(i.settings.daily_cap) : 3000;
   const day = await peek(`day:${todayKey()}`);
   if (day >= cap) return { ok: false, code: "closed", message: "本日の持ち込み受付は終了しました。" };
 
@@ -54,7 +54,7 @@ export async function precheck(i: PrecheckInput): Promise<PrecheckResult> {
 
   const hourKey = `hour:${new Date().toISOString().slice(0, 13)}`;
   // 会場のWi-Fiや携帯回線は大勢が同じIPを使う。ここは荒らし避けなので、うんと高くしておく。
-  const ipCap = Number(i.settings.ip_hour_cap || 0);
+  const ipCap = Number(i.settings.ip_hour_cap) > 0 ? Number(i.settings.ip_hour_cap) : 0;
   if (ipCap > 0) {
     const r = await hit(`ip:${i.ip}:${hourKey}`, ipCap, 3600);
     if (!r.ok) return { ok: false, code: "rate", message: "この回線から送れる回数が、1時間の上限に達しました。少し時間をおいてください。" };

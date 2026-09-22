@@ -43,7 +43,8 @@ export async function POST(req: Request) {
     // 同じ本文の2回目よけは、判定が終わってから覚える。
     // 先に覚えると、混雑や編集者側のエラーで返したあとのやり直しが全部「2回目」になってしまう。
     if (pre.dupKey) await rememberHash(pre.dupKey, 24 * 3600);
-    await countDay();
+    // 見本は1日の上限を消費しない。
+    if (!sample) await countDay();
     const cover = await computeCover(settings);
     const place = statusFor(row.id, row.is_sample, cover.positions);
     const status = statusLine(EDITORS[editor].magazine, place);

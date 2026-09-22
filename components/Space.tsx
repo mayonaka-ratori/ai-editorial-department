@@ -13,7 +13,8 @@ export default function Space({ editor, motes = 12, presence = false }: { editor
       w: 40 + ((i * 37) % 90),
       h: 24 + ((i * 53) % 50),
       left: 5 + ((i * 41) % 80),
-      top: 6 + ((i * 29) % 40),
+      // 上の30%より下には置かない。ペンネームの見出しや吹き出しに重なるため。
+      top: 4 + ((i * 29) % 26),
       delay: -((i * 1.3) % 5),
       c: GC[i % 4],
     }));
@@ -40,18 +41,14 @@ export default function Space({ editor, motes = 12, presence = false }: { editor
         l.style.transform = `translate(${x * k}px,${y * k}px)`;
       });
     };
-    const onOrient = (ev: DeviceOrientationEvent) => {
-      if (ev.gamma == null || ev.beta == null) return;
-      tilt(Math.max(-1, Math.min(1, ev.gamma / 30)), Math.max(-1, Math.min(1, (ev.beta - 45) / 30)));
-    };
+    // スマホの傾きは使わない。iOSは傾きの取得に許可のダイアログが要り、体験の邪魔になる。
+    // 視差は飾りなので、パソコンのマウスの位置だけで動かす。
     const onMove = (ev: PointerEvent) => {
       if (ev.pointerType === "touch") return;
       tilt((ev.clientX / window.innerWidth) * 2 - 1, (ev.clientY / window.innerHeight) * 2 - 1);
     };
-    window.addEventListener("deviceorientation", onOrient);
     window.addEventListener("pointermove", onMove);
     return () => {
-      window.removeEventListener("deviceorientation", onOrient);
       window.removeEventListener("pointermove", onMove);
     };
   }, []);

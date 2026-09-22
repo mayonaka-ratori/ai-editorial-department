@@ -17,12 +17,15 @@ export default function MagazinePicker({
   published,
   open,
   initial = "nina",
+  models = {},
 }: {
   magazines: MagazineCover[];
   issueTitle: string;
   published: boolean;
   open: Record<EditorKey, boolean>;
   initial?: EditorKey;
+  // 「CORE:」に添えるモデル名。管理画面で「モデル名まで」にしたときだけ入る。
+  models?: Partial<Record<EditorKey, string>>;
 }) {
   const router = useRouter();
   const [idx, setIdx] = useState(Math.max(0, EDITOR_KEYS.indexOf(initial)));
@@ -85,7 +88,8 @@ export default function MagazinePicker({
           <div>
             <div className="magname">
               {e.magazine}
-              <span className="yomi">{e.magazineEn}</span>
+              {/* 「GEMINI　GEMINI WEEKLY」と重なって見えないように、雑誌名と同じ語は省く */}
+              <span className="yomi">{e.magazineEn.startsWith(e.magazine) ? e.magazineEn.slice(e.magazine.length).trim() : e.magazineEn}</span>
             </div>
             <div>
               <span className="name">{e.name}</span>
@@ -95,7 +99,10 @@ export default function MagazinePicker({
             <div className="looks">見るところ: {e.looks}</div>
             {!isOpen && <div className="looks">本日は休業です</div>}
           </div>
-          <div className="core">CORE: {e.inside}</div>
+          <div className="core">
+            CORE: {e.inside}
+            {models[key] ? `（${models[key]}）` : ""}
+          </div>
         </div>
         <button className="btn" type="button" disabled={!isOpen} onClick={go}>
           {e.magazine}に送る

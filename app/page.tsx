@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 
 export default async function Entry() {
   const settings = await getSettings();
-  const cap = Number(settings.daily_cap || 3000);
+  const cap = Number(settings.daily_cap) > 0 ? Number(settings.daily_cap) : 3000;
   const used = await peek(`day:${todayKey()}`);
   const remaining = Math.max(0, cap - used);
   const accepting = settings.accepting === "1" && remaining > 0;

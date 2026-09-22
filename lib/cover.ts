@@ -76,7 +76,8 @@ export async function computeCover(settings?: Record<string, string>): Promise<C
     const seen = new Set<string>();
     const candidates: Row[] = [];
     const eligible = mine.filter((r) => r.placement === "kanto" || r.placement === "tokushu" || r.placement === "kanmatsu");
-    for (const r of [...eligible].sort((a, b) => b.score - a.score)) {
+    // 点数が高い順。同点なら早く送った順（あとから来た作品が上に入らないように）。
+    for (const r of [...eligible].sort((a, b) => b.score - a.score || new Date(a.created_at).getTime() - new Date(b.created_at).getTime())) {
       const k1 = `d:${r.device_id}`;
       const k2 = `p:${r.pen_name}`;
       if (seen.has(k1) || seen.has(k2)) continue;

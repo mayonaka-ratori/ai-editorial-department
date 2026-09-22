@@ -34,7 +34,7 @@ MacBookの表紙 ─┘（10秒ごとに読みに来る）
 | ソル | OpenAI公式SDK（openai） | モデルはgpt-5.6-luna |
 | 結果の画像 | Next.jsの画像生成（next/og） | 結果のURLをXに貼ったときに出る画像。日本語フォントはNoto Serif JPとNoto Sans JPを同梱する |
 | 大画面の表紙 | three.js | 格子の床の上に浮かぶ3誌の表紙。スマホでは使わない（docs/design.md 第3版の5を参照） |
-| スマホの動き | CSSアニメーションと端末の傾きセンサー | 投函、読まれていく文字、判子、部屋の奥行き。3Dライブラリは使わない |
+| スマホの動き | CSSアニメーション（端末の傾きセンサーは使わない。iOSで許可のダイアログが出るため） | 投函、読まれていく文字、判子、部屋の奥行き。3Dライブラリは使わない |
 | QRコード | qrcode（npm） | 表紙の隅に出す |
 
 Vercel、Neonは、あなたのアカウントで作ってもらう。
@@ -130,7 +130,7 @@ public/
 
 | 列 | 中身 |
 |---|---|
-| key | accepting / daily_cap / event_tweet_url / editor_kurodo_open / editor_nina_open / editor_sol_open / published_at（発行した時刻。空なら組版中） / strictness_kurodo / strictness_nina / strictness_sol（甘め、ふつう、厳しめ） / issue_label（号。空なら今日の月） |
+| key | accepting / daily_cap / event_tweet_url / editor_kurodo_open / editor_nina_open / editor_sol_open / published_at（発行した時刻。空なら組版中） / strictness_kurodo / strictness_nina / strictness_sol（甘め、ふつう、厳しめ） / issue_label（号。空なら今日の月） / ip_hour_cap（同じ回線から1時間に送れる回数。0なら見ない） / inside_display（雑誌を選ぶ画面の「CORE:」に出すもの。company なら会社名だけ、model ならモデル名まで） |
 | value | 文字列 |
 
 ### throttle（回数の記録）

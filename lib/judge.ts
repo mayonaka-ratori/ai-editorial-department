@@ -81,7 +81,7 @@ export async function judge(input: JudgeInput): Promise<SubmissionRow> {
       title_alt: "",
       quote: "",
       comment: e.famousReply(famous.title),
-      next_request: "あなたにしか書けなかった一文が入ったものをお待ちしています。",
+      next_request: e.famousNext,
       reason_tags: ["どこかで読んだ"],
       safe_for_cover: true,
     };

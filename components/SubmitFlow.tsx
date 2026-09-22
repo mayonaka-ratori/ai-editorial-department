@@ -21,6 +21,10 @@ function tokenize(text: string): string[] {
 
 const DRAFT_KEY = "fable_draft";
 const sentKey = (editor: string) => `fable_sent_${editor}`;
+// 見本は1端末1日1回。日本時間の日付で覚える。
+const sampleKey = () => `fable_sample_${new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10)}`;
+const SLOW_MS = 30000; // ここまで返事がなければ「時間がかかっています」
+const RETRY_MS = 60000; // ここまで返事がなければ「もう一度」ボタン
 
 // 書き直して送るときに出す、前回の要点。
 interface Prev {
@@ -50,6 +54,11 @@ export default function SubmitFlow({ editor, appUrl, rewriteId = "" }: { editor:
   const [reading, setReading] = useState("");
   const [upl, setUpl] = useState(0);
   const [litCount, setLitCount] = useState(0);
+  const [slow, setSlow] = useState(false);
+  const [canRetry, setCanRetry] = useState(false);
+  const [sampleUsed, setSampleUsed] = useState(false);
+  // いま待っている送信。「もう一度」で古いほうを止め、遅れて返ってきても使わない。
+  const inflight = useRef<{ gen: number; ctrl: AbortController | null }>({ gen: 0, ctrl: null });
   const taRef = useRef<HTMLTextAreaElement>(null);
   const timers = useRef<number[]>([]);
   const light = editor === "nina";
@@ -60,6 +69,7 @@ export default function SubmitFlow({ editor, appUrl, rewriteId = "" }: { editor:
       if (d?.pen) setPen(d.pen);
       if (d?.text) setText(d.text);
       setSentText(localStorage.getItem(sentKey(editor)) || "");
+      setSampleUsed(localStorage.getItem(sampleKey()) === "1");
     } catch {}
   }, [editor]);
   // 書き直しのとき、前回の作品名と判定と頼みごとを取ってくる（本文は保存していないので、手元の下書きを使う）
@@ -89,6 +99,15 @@ export default function SubmitFlow({ editor, appUrl, rewriteId = "" }: { editor:
 
   async function send(sampleId?: string) {
     setErr("");
+    setSlow(false);
+    setCanRetry(false);
+    // 前の送信が残っていれば止める（「もう一度」で呼ばれたとき）
+    inflight.current.ctrl?.abort();
+    timers.current.forEach(clearTimeout);
+    timers.current = [];
+    const gen = ++inflight.current.gen;
+    const ctrl = new AbortController();
+    inflight.current.ctrl = ctrl;
     const body = sampleId ? { editor, sample: sampleId } : { editor, penName: pen.trim(), text: text.trim() };
     const sendText = sampleId ? SAMPLES.find((s) => s.id === sampleId)!.text : text.trim();
     // 見本は本文の欄に入れない。入れると端末の下書きに残り、そのまま自分の作品として送れてしまう。
@@ -108,8 +127,14 @@ export default function SubmitFlow({ editor, appUrl, rewriteId = "" }: { editor:
     const iv = window.setInterval(() => setUpl((p) => Math.min(100, p + 7)), 90);
     timers.current.push(iv);
     const started = Date.now();
-    const req = fetch("/api/submit", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) }).then((r) => r.json());
+    const post = () =>
+      fetch("/api/submit", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body), signal: ctrl.signal }).then((r) => r.json());
+    const req = post();
     timers.current.push(window.setTimeout(() => setPhase("reading"), 2100));
+    // 返事が遅いとき。30秒で「時間がかかっています」、60秒で「もう一度」ボタン。
+    // 回線が切れたときに、読んでいる画面のまま止まらないようにする。
+    timers.current.push(window.setTimeout(() => setSlow(true), SLOW_MS));
+    timers.current.push(window.setTimeout(() => setCanRetry(true), RETRY_MS));
     let j: { ok: boolean; code?: string; message?: string; retryAfter?: number } & Partial<ResultData>;
     try {
       j = await req;
@@ -118,18 +143,27 @@ export default function SubmitFlow({ editor, appUrl, rewriteId = "" }: { editor:
         tries++;
         setQueue(`前に何人かいます。${j.retryAfter}秒ほどお待ちください。`);
         await new Promise((r) => setTimeout(r, (j.retryAfter ?? 6) * 1000));
-        j = await fetch("/api/submit", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) }).then((r) => r.json());
+        if (ctrl.signal.aborted) return;
+        j = await post();
       }
     } catch {
+      if (ctrl.signal.aborted) return;
       j = { ok: false, message: "つながりませんでした。もう一度お試しください。" };
     }
+    // 「もう一度」で新しい送信が始まっていたら、こちらの返事は使わない
+    if (gen !== inflight.current.gen) return;
     clearInterval(iv);
+    timers.current.forEach(clearTimeout);
+    timers.current = [];
+    setSlow(false);
+    setCanRetry(false);
     const minRead = 5000;
     const wait = Math.max(0, minRead - (Date.now() - started));
     timers.current.push(
       window.setTimeout(() => {
         setQueue("");
         if (!j.ok) {
+          if (j.code === "sample") markSampleUsed();
           setErr(j.message || "うまくいきませんでした。");
           setPhase("input");
           return;
@@ -141,6 +175,8 @@ export default function SubmitFlow({ editor, appUrl, rewriteId = "" }: { editor:
             localStorage.setItem(sentKey(editor), sendText);
           } catch {}
           setSentText(sendText);
+        } else {
+          markSampleUsed();
         }
         setResult(j as ResultData);
         setPhase("result");
@@ -149,6 +185,20 @@ export default function SubmitFlow({ editor, appUrl, rewriteId = "" }: { editor:
     );
   }
 
+  function markSampleUsed() {
+    try {
+      localStorage.setItem(sampleKey(), "1");
+    } catch {}
+    setSampleUsed(true);
+  }
+
+  // 「もう一度」。同じ本文（見本なら同じ見本）で送り直す。
+  const lastSend = useRef<string | undefined>(undefined);
+  const sendAndRemember = (sampleId?: string) => {
+    lastSend.current = sampleId;
+    return send(sampleId);
+  };
+
   // 読んでいる間: 表示の文を回し、単語を順に光らせる
   useEffect(() => {
     if (phase !== "reading") return;
@@ -156,7 +206,14 @@ export default function SubmitFlow({ editor, appUrl, rewriteId = "" }: { editor:
     const rot = window.setInterval(() => setStatusIdx((i) => (i + 1) % e.reading.length), 2600);
     const total = Math.max(1, tokens.length);
     const step = 7000 / total;
-    const lit = window.setInterval(() => setLitCount((c) => Math.min(total, c + 1)), step);
+    // 全部光ったら1秒置いて、最初から光らせ直す。結果が来るまで繰り返す。
+    const pause = Math.ceil(1000 / step);
+    let c = 0;
+    const lit = window.setInterval(() => {
+      c++;
+      if (c > total + pause) c = 0;
+      setLitCount(Math.min(total, c));
+    }, step);
     timers.current.push(rot, lit);
     return () => {
       clearInterval(rot);
@@ -204,6 +261,12 @@ export default function SubmitFlow({ editor, appUrl, rewriteId = "" }: { editor:
             <span className="dots" />
           </div>
           {queue && <p className="queue">{queue}</p>}
+          {slow && !queue && <p className="queue">時間がかかっています。もう少しお待ちください。</p>}
+          {canRetry && (
+            <button className="small-btn retry" type="button" onClick={() => sendAndRemember(lastSend.current)}>
+              返事が来ません。もう一度送る
+            </button>
+          )}
           <p className="presencelabel">READER IS HERE</p>
         </div>
       </div>
@@ -215,11 +278,11 @@ export default function SubmitFlow({ editor, appUrl, rewriteId = "" }: { editor:
       <Space editor={editor} />
       <div className="screen-inner">
         {prev ? (
-          <Link className="back-btn" href={`/r/${prev.id}`} style={{ color: "var(--cyan)" }}>
+          <Link className="back-btn" href={`/r/${prev.id}`}>
             ← 結果に戻る
           </Link>
         ) : (
-          <Link className="back-btn" href="/editors" style={{ color: "var(--cyan)" }}>
+          <Link className="back-btn" href="/editors">
             ← 別の雑誌にする
           </Link>
         )}
@@ -268,19 +331,20 @@ export default function SubmitFlow({ editor, appUrl, rewriteId = "" }: { editor:
           <div className="odai">{odai ? `お題: ${odai}（3行でいいです）` : ""}</div>
         </div>
         {err && <p className="err">{err}</p>}
-        <button className="btn" type="button" disabled={!!problem} onClick={() => send()}>
+        <button className="btn" type="button" disabled={!!problem} onClick={() => sendAndRemember()}>
           {e.name}に送る{prev ? `（${prev.revision + 1}稿目）` : ""}
         </button>
         {prev && <p className="note" style={{ textAlign: "center" }}>表紙には1人1作まで。点数の高いほうが載ります。</p>}
         <div className="field">
-          <span className="label2">文章を持っていないときは、見本で試せます（表紙には載りません）</span>
+          <span className="label2">文章を持っていないときは、見本で試せます。1日1回だけです（表紙には載りません）</span>
           <div className="chips">
             {SAMPLES.map((s) => (
-              <button key={s.id} type="button" className="chip" onClick={() => send(s.id)}>
+              <button key={s.id} type="button" className="chip" disabled={sampleUsed} onClick={() => sendAndRemember(s.id)}>
                 {s.label}
               </button>
             ))}
           </div>
+          {sampleUsed && <p className="hint">見本は今日はもう使いました。自分の文章を送ってください。</p>}
         </div>
       </div>
     </div>

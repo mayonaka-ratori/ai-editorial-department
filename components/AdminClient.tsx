@@ -43,18 +43,33 @@ export default function AdminClient() {
     return (
       <div className="admin">
         <h2>管理</h2>
-        <div className="row">
+        <form
+          className="row"
+          onSubmit={(e) => {
+            e.preventDefault();
+            call({ action: "login", password: pw });
+          }}
+        >
           <input type="password" placeholder="合言葉" value={pw} onChange={(e) => setPw(e.target.value)} style={{ width: "auto", flex: 1 }} />
-          <button className="small-btn on" onClick={() => call({ action: "login", password: pw })}>
+          <button className="small-btn on" type="submit">
             入る
           </button>
-        </div>
+        </form>
         {msg && <p className="err">{msg}</p>}
       </div>
     );
   }
   const s = data.settings;
   const set = (key: string, value: string) => call({ action: "set", key, value });
+  // 数字の欄。数字以外なら保存せず、その場で知らせる。
+  const setNumber = (key: string, value: string) => {
+    const v = value.trim();
+    if (!/^\d+$/.test(v)) {
+      setMsg("数字を入れてください。");
+      return;
+    }
+    return set(key, v);
+  };
   const published = !!s.published_at;
 
   return (
@@ -68,17 +83,26 @@ export default function AdminClient() {
           <button className={`small-btn${s.accepting === "1" ? " on" : ""}`} onClick={() => set("accepting", "1")}>受付中</button>
           <button className={`small-btn${s.accepting !== "1" ? " on" : ""}`} onClick={() => set("accepting", "0")}>受付終了</button>
           <span className="note">今日 {data.used}回 / 上限</span>
-          <input type="text" defaultValue={s.daily_cap} onBlur={(e) => set("daily_cap", e.target.value)} style={{ width: 90, minWidth: 0, flex: "none" }} />
+          <input type="text" inputMode="numeric" defaultValue={s.daily_cap} onBlur={(e) => setNumber("daily_cap", e.target.value)} style={{ width: 90, minWidth: 0, flex: "none" }} />
         </div>
         <div className="row">
           <span className="note">同じ回線から1時間に</span>
-          <input type="text" defaultValue={s.ip_hour_cap} onBlur={(e) => set("ip_hour_cap", e.target.value.trim())} style={{ width: 90, minWidth: 0, flex: "none" }} />
+          <input type="text" inputMode="numeric" defaultValue={s.ip_hour_cap} onBlur={(e) => setNumber("ip_hour_cap", e.target.value)} style={{ width: 90, minWidth: 0, flex: "none" }} />
           <span className="note">回まで（0なら見ない）</span>
         </div>
         <p className="note">
           会場のWi-Fiや携帯回線は大勢が同じ回線を使うので、ふだんは0のままにしてください。
           1人が何度も送ってくるときだけ、200などを入れます。端末ごとの1時間に7回までは、この設定とは別にいつも効いています。
         </p>
+      </section>
+
+      <section>
+        <h3>中身の表示</h3>
+        <div className="row">
+          <button className={`small-btn${s.inside_display !== "model" ? " on" : ""}`} onClick={() => set("inside_display", "company")}>会社名だけ</button>
+          <button className={`small-btn${s.inside_display === "model" ? " on" : ""}`} onClick={() => set("inside_display", "model")}>モデル名まで</button>
+        </div>
+        <p className="note">雑誌を選ぶ画面の「CORE:」に出すものです。「モデル名まで」にすると「Claude（claude-sonnet-5）」のように、環境変数のモデル名も出ます。</p>
       </section>
 
       <section>

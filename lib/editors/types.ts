@@ -52,7 +52,8 @@ export interface EditorProfile {
   quirks: string[]; // 癖。毎回1つか2つ選んで指示文に入れる
   system: string; // 固定の指示文（この編集者ぶん）
   strictness: Record<"amai" | "futsu" | "kibishii", string>;
-  famousReply: (title: string) => string; // 有名作品だったときの決まった返事
+  famousReply: (title: string) => string; // 有名作品だったときの決まった返事（「次は」は言わない）
+  famousNext: string; // 有名作品だったときの「次は」の一文
   typeHints: Partial<Record<WorkType, string>>; // 作品の種類ごとの見るところ
 }
 

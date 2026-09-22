@@ -32,7 +32,7 @@ a{color:inherit}
 .orb{position:absolute;border-radius:50%;filter:blur(30px);opacity:.55;pointer-events:none}
 .mote{position:absolute;width:3px;height:3px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);opacity:.8;animation:rise 10s linear infinite}
 @keyframes rise{from{transform:translateY(0);opacity:0}15%{opacity:.9}to{transform:translateY(-420px);opacity:0}}
-.layer{position:absolute;inset:-6%;will-change:transform;transition:transform .12s ease-out;pointer-events:none}
+.layer{position:absolute;inset:-6%;will-change:transform;transition:transform .12s ease-out;pointer-events:none}.sp .layer.mid{opacity:.6}
 .sp.kurodo{background:radial-gradient(70% 50% at 50% 100%,rgba(255,138,61,.35),transparent 70%),linear-gradient(#0a0806,#151008)}
 .sp.kurodo::before{display:none}
 .sp.kurodo .back{background:repeating-linear-gradient(90deg,transparent 0 18px,rgba(255,138,61,.16) 18px 19px),repeating-linear-gradient(0deg,transparent 0 5px,rgba(255,138,61,.1) 5px 6px);-webkit-mask-image:linear-gradient(transparent,#000 25%,#000 75%,transparent);mask-image:linear-gradient(transparent,#000 25%,#000 75%,transparent)}
@@ -139,7 +139,7 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--cyan)}
 .counter{display:flex;justify-content:space-between;font-family:var(--num);font-size:12px;letter-spacing:.08em;color:var(--mute)}
 .chips{display:flex;gap:6px;flex-wrap:wrap}
 .chip{border:1px solid var(--line);background:rgba(255,255,255,.12);color:inherit;padding:4px 10px;font-size:12px}
-.chip.on{background:var(--cyan);color:#04101f}
+.chip.on{background:var(--cyan);color:#04101f}.chip:disabled{opacity:.4}
 .odai{font-size:12px;color:var(--cyan);min-height:1.2em}
 
 /* 送る演出 */
@@ -352,7 +352,7 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--cyan)}
 .tbl td,.tbl th{border-bottom:1px solid rgba(53,214,255,.2);padding:6px 4px;text-align:left;vertical-align:top}
 .small-btn{border:1px solid var(--line);background:transparent;color:var(--text);padding:4px 10px;font-size:12px}
 .small-btn.on{background:var(--cyan);color:#04101f}
-.small-btn.danger{border-color:#ea4335;color:#ff8a8a}
+.small-btn.danger{border-color:#ea4335;color:#ff8a8a}.small-btn.retry{margin-top:14px;border-color:var(--gold);color:var(--gold);padding:8px 14px;font-size:13px}
 
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.layer{transition:none}}
 

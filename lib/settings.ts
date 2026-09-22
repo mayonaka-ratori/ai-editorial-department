@@ -17,6 +17,8 @@ export const DEFAULTS: Record<string, string> = {
   strictness_sol: "futsu",
   published_at: "",
   issue_label: "",
+  // 雑誌を選ぶ画面の「CORE:」に出すもの。company なら会社名だけ、model ならモデル名まで。
+  inside_display: "company",
 };
 
 export async function getSettings(): Promise<Record<string, string>> {

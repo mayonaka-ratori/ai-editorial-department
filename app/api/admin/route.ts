@@ -25,7 +25,13 @@ export async function POST(req: Request) {
   if (action === "set") {
     const key = String(body.key ?? "");
     if (!(key in DEFAULTS)) return NextResponse.json({ ok: false, message: "知らない設定です。" });
-    await setSetting(key, String(body.value ?? ""));
+    let value = String(body.value ?? "").trim();
+    if (key === "daily_cap" || key === "ip_hour_cap") {
+      // 数字以外を入れると入口が受付終了になってしまうので、数字だけ受ける
+      if (!/^\d+$/.test(value)) return NextResponse.json({ ok: false, message: "数字を入れてください。" });
+      if (key === "daily_cap" && Number(value) < 1) value = DEFAULTS.daily_cap;
+    }
+    await setSetting(key, value);
     return NextResponse.json({ ok: true, settings: await getSettings() });
   }
   if (action === "hide") {

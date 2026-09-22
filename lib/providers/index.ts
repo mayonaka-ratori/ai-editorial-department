@@ -19,3 +19,12 @@ export function providerFor(editor: EditorKey): { provider: Provider; isMock: bo
   }
   return { provider: mockProvider(editor), isMock: true };
 }
+
+// 編集者ごとのモデル名（環境変数の値。空なら既定）。雑誌を選ぶ画面の「CORE:」に添えるために使う。
+export function modelNames(): Record<EditorKey, string> {
+  return {
+    kurodo: process.env.ANTHROPIC_MODEL?.trim() || "claude-sonnet-5",
+    nina: process.env.GEMINI_MODEL?.trim() || "gemini-3.7-flash",
+    sol: process.env.OPENAI_MODEL?.trim() || "gpt-5.6-luna",
+  };
+}
