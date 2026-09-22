@@ -1,7 +1,14 @@
 # AI編集部
 
 AIが読む小説雑誌を作っている編集部に、来場者が自分の文章を送る体験アプリです。
-企画は docs/concept.md、画面は docs/wireframes.md、技術は docs/tech.md、見た目は docs/design.md にあります。
+
+- 今どこまでできていて、次に何をするか: docs/plan.md
+- 企画: docs/concept.md
+- 画面の配置: docs/wireframes.md
+- 技術: docs/tech.md
+- 見た目と演出: docs/design.md
+- 結果の例: docs/samples.md
+- 終わった記録（ペルソナでの見直し、全体確認、作る前のモック）: docs/archive/
 
 ## 手元で動かす
 
@@ -49,6 +56,7 @@ npm run dev
 
 - `MOCK_EDITORS=1` で、キーがあってもAIを呼ばない。
 - `npm run judge-all` は、テスト用の原稿の束を3人に見せて結果を並べる（段階7で使う）。
+- `npm run typecheck` で型を確かめる。
 
 ## 来場者向けの解説ページ（案）
 
