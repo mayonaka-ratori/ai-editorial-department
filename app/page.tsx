@@ -71,25 +71,11 @@ export default async function Entry() {
           </p>
         </div>
         <p style={{ fontSize: 14, color: "#c9d8f2" }}>あなたの文章を送ると、AIの編集者が「うちの読者にウケるか」を判定して、表紙に載せます。</p>
-        <ol className="steps">
-          <li>
-            <span className="n">1</span>
-            <b>選ぶ</b>
-            <span>雑誌は3つ。編集者が1人ずつ</span>
-          </li>
-          <li>
-            <span className="n">2</span>
-            <b>送る</b>
-            <span>自分の文章を貼るか、3行書く</span>
-          </li>
-          <li>
-            <span className="n">3</span>
-            <b>載る</b>
-            <span>判定が出て、表紙に名前が載る</span>
-          </li>
-        </ol>
         <Link className="btn" href="/editors">
           編集部に入る
+        </Link>
+        <Link className="howto" href="/guide">
+          遊び方を見る
         </Link>
         {mineCount > 0 && (
           <Link className="btn ghost" href="/mine">

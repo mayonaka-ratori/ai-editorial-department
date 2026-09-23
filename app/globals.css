@@ -343,11 +343,30 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--cyan)}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.layer{transition:none}}
 
 /* 入口の3つの段 */
-.steps{list-style:none;margin:0;padding:0;display:grid;gap:8px}
-.steps li{display:grid;grid-template-columns:26px auto 1fr;align-items:center;gap:10px;font-size:13px;color:#c9d8f2}
-.steps li .n{width:26px;height:26px;display:grid;place-items:center;font-family:var(--num);font-weight:700;color:#04101f;background:var(--cyan);clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)}
-.steps li b{font-size:15px;color:var(--white);letter-spacing:.1em}
 .asks2{font-size:11px;line-height:1.7;color:var(--mute)}
+/* 遊び方（/guide） */
+.guide{gap:14px;padding-top:24px}
+.guide .lead{font-size:14px;color:#c9d8f2;margin-top:6px}
+.gsteps{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.gsteps li{display:grid;grid-template-columns:30px 1fr;gap:12px;padding:10px 12px;border:1px solid rgba(53,214,255,.3);background:rgba(12,20,38,.6)}
+.gsteps .n{width:30px;height:34px;display:grid;place-items:center;font-family:var(--num);font-weight:700;font-size:16px;color:#04101f;background:var(--cyan);clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%)}
+.gsteps b{display:block;font-size:16px;color:var(--white);letter-spacing:.08em}
+.gsteps p{font-size:13px;color:#c9d8f2;margin-top:2px}
+.gsteps .mags,.gsteps .ranks{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.gsteps .mags span{font-size:12px;padding:2px 8px;border:1px solid;font-weight:700}
+.gsteps .mags .k{color:var(--kurodo);border-color:var(--kurodo)}
+.gsteps .mags .n2{color:#fff;border-color:transparent;background:linear-gradient(90deg,var(--g-blue),var(--nina2),var(--g-red))}
+.gsteps .mags .s{color:var(--sol);border-color:var(--sol)}
+.gsteps .ranks span{font-size:12px;padding:1px 7px;background:rgba(53,214,255,.14);color:var(--white)}
+.gsteps .ranks .gold{background:var(--gold);color:#04101f;font-weight:700}
+.gsteps .ranks .human{background:transparent;border:1px dashed var(--mute);color:#c9d8f2}
+.gtip{border-left:3px solid var(--gold);padding:8px 12px;background:rgba(255,216,107,.08);font-size:14px}
+.gtip .label{color:var(--gold)}
+.gtip b{color:var(--gold)}
+/* .screen の overflow-x:hidden があるとボタンを下に固定できないので、はみ出しは clip で隠す */
+.screen.guide-page{overflow-x:clip}
+.guide .btn.go{position:sticky;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:5;box-shadow:0 8px 30px rgba(0,0,0,.6),0 0 24px rgba(53,214,255,.35)}
+.howto{font-size:13px;text-align:center;color:var(--cyan)}
 
 /* 自分の結果の一覧 */
 .mylist{display:grid;gap:8px}

@@ -35,7 +35,7 @@ MacBookの表紙 ─┘（10秒ごとに読みに来る）
 | 結果の画像 | Next.jsの画像生成（next/og） | 結果のURLをXに貼ったときに出る画像。日本語フォントはZen Kaku Gothic NewとRajdhaniのTTFを同梱する |
 | 大画面の表紙 | three.js（components/Stage3D.tsx） | 床の格子、光の粒、表紙の下の光はWebGLで描く。表紙は今までと同じHTMLを CSS3DRenderer で同じ空間に置くので、文字がにじまない。/screen を開いたときだけ読み込み、スマホの画面には入らない |
 | スマホの動き | CSSアニメーション | 投函、読まれていく文字、判子。部屋の奥行きはパソコンではマウスの位置で少しずれる。端末の傾きセンサーは使わない（iOSで許可のダイアログが出るため） |
-| QRコード | qrcode（npm） | 大画面の隅に出す |
+| QRコード | qrcode（npm） | 大画面の隅に出す。行き先は遊び方のページ（/guide） |
 
 Vercel、Neonは、あなたのアカウントで作ってもらう。
 私はコードを書き、置く手順を書く。
@@ -59,6 +59,7 @@ app/
   screen/page.tsx          ブースの大画面
   toc/page.tsx             表紙の画面に飛ばすだけ
   mine/page.tsx            この端末で送った結果の一覧
+  guide/page.tsx           遊び方（ブースのQRコードの行き先）
   admin/page.tsx           管理
   api/
     submit/route.ts        原稿を受け取って判定を返す
