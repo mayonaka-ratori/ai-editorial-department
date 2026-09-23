@@ -1,7 +1,7 @@
 # Codexへの指示（宣伝画像を作る。全部入り）
 
 リポジトリをつながずに使う版です。「---」の間を丸ごとCodexに貼り、参照画像のzip（promo-refs.zip）を一緒に添付してください。
-zipの中身は docs/guide-images と public/covers の画像です。
+zipの中身は docs/archive/guide-images と public/covers の画像です。
 
 ---
 

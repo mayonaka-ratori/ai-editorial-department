@@ -27,9 +27,9 @@ Xに投稿する宣伝画像を作るための指示文です。
 | public/covers/kurodo/bg.webp | 生成りの紙に橙の罫線。橙の四角の中で、本の上に座って本を読む炎の子 | 季刊フェーブルの表紙。炎の子は「AIの読者」の絵としても使える |
 | public/covers/nina/bg.webp、logo.webp、mascot.webp | パステルの水彩の地。GEMINIのロゴ。虹色のリボンに乗った毛玉のマスコット | GEMINIの表紙。マスコットは「AIの読者」の絵としても使える |
 | public/covers/sol/bg.webp | 太陽、月、地球と軌道の線が入った宇宙 | 月刊アストラの表紙 |
-| docs/guide-images/08-screen.jpg | ブースの大画面。3冊の表紙が浮かんでいる | 案Aの構図の見本 |
-| docs/guide-images/06-result-nina.jpg | 結果の画面。金色の六角形の印「巻頭」 | 案Cの構図の見本 |
-| docs/guide-images/05-reading-kurodo.jpg | 読んでいる間の画面。単語の四角が並んで光る | 案Dの構図の見本 |
+| docs/archive/guide-images/08-screen.jpg | ブースの大画面。3冊の表紙が浮かんでいる | 案Aの構図の見本 |
+| docs/archive/guide-images/06-result-nina.jpg | 結果の画面。金色の六角形の印「巻頭」 | 案Cの構図の見本 |
+| docs/archive/guide-images/05-reading-kurodo.jpg | 読んでいる間の画面。単語の四角が並んで光る | 案Dの構図の見本 |
 
 生成しなくても作れる案もある（案0）。まずそれを試して、足りなければ生成する。
 
@@ -49,7 +49,7 @@ Xに投稿する宣伝画像を作るための指示文です。
 
 一番早く、一番本物らしい。告知ツイートの1枚目はこれでよい。
 
-- 16:9: docs/guide-images/08-screen.jpg（大画面）をそのまま使い、左上の空いたところに文字を重ねる。
+- 16:9: docs/archive/guide-images/08-screen.jpg（大画面）をそのまま使い、左上の空いたところに文字を重ねる。
   実物のAPIをつないでから撮り直すと、表紙の作品名がばらばらになって本物らしくなる。
 - 1:1を3枚: スマホの結果画面（06-result-nina.jpg、06-result-kurodo.jpg、06-result-sol.jpg）の上のほう、引用から判子までを正方形に切り抜く。
   3枚並べると「同じ文章なのに、巻頭、特集、巻末」が一目でわかる。
